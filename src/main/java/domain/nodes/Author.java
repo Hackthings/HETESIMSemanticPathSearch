@@ -1,8 +1,23 @@
 package main.java.domain.nodes;
 
-public class Author extends Node {
+import java.util.ArrayList;
 
-    public Author(String name) {
-        super(name);
+public class Author extends Node {
+    private ArrayList<Paper> papers;
+
+    public Author(String name, int id) {
+        super(name, id);
+    }
+
+    public ArrayList<Paper> getPapers() {
+        return papers;
+    }
+
+    public void addPaper(Paper paper) {
+        papers.add(paper);
+    }
+
+    public void removePaper(Paper paper) {
+        papers.remove(paper);
     }
 }

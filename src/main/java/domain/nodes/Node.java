@@ -1,18 +1,14 @@
 package main.java.domain.nodes;
 
 public class Node {
-    int id;
-    String name;
-    static int maxId = 0;
+    private int id;
+    private String name;
+    private static int maxId;
 
-    public Node(String name) {
-        ++maxId;
-        id = maxId;
+    public Node(String name, int id) {
         this.name = name;
-    }
-
-    public int getId() {
-        return id;
+        this.id = id;
+        if (maxId < id) maxId = id;
     }
 
     public static int getMaxId() {
@@ -25,5 +21,9 @@ public class Node {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getId() {
+        return id;
     }
 }
