@@ -3,7 +3,7 @@ package main.java.domain.nodes;
 public class Node {
     int id;
     String name;
-    static int maxId;
+    static int maxId = 1;
 
     public Node(String name) {
         ++maxId;
