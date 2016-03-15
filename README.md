@@ -1,6 +1,6 @@
 #HETESIM Semantic Path Search#
 
-##PROP Project Group 42.3##
+##PROP Project 42.3 Group##
 
 #####Contributors:#####
 
