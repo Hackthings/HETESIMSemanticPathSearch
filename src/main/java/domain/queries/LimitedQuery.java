@@ -1,4 +1,4 @@
-package main.java.data.queries;
+package main.java.domain.queries;
 
 public class LimitedQuery extends Query {
     private int limit;

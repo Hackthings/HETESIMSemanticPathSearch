@@ -1,4 +1,4 @@
-package main.java.data.nodes;
+package main.java.domain.nodes;
 
 public class Node {
     int id;

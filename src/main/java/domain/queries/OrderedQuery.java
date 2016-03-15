@@ -1,4 +1,4 @@
-package main.java.data.queries;
+package main.java.domain.queries;
 
 public class OrderedQuery extends Query {
     private boolean upward;
