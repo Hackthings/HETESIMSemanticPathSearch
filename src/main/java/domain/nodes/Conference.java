@@ -1,26 +1,26 @@
 package main.java.domain.nodes;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Conference extends Node {
     private int year;
     private String continent;
-    private ArrayList<Paper> exposedPapers;
+    private HashMap<Integer, Paper> exposedPapers;
 
     public Conference(String name, int id) {
         super(name, id);
     }
 
-    public ArrayList<Paper> getExposedPapers() {
+    public HashMap<Integer, Paper> getExposedPapers() {
         return exposedPapers;
     }
 
-    public void addExposedPaper(Paper paper) {
-        exposedPapers.add(paper);
+    public void addExposedPaper(int id, Paper paper) {
+        exposedPapers.put(id, paper);
     }
 
-    public void removeExposedPaper(Paper paper) {
-        exposedPapers.remove(paper);
+    public void removeExposedPaper(int id) {
+        exposedPapers.remove(id);
     }
 
     public int getYear() {

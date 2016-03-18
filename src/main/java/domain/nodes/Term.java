@@ -1,23 +1,23 @@
 package main.java.domain.nodes;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Term extends Node {
-    public ArrayList<Paper> papersWhichTalkAboutThis;
+    public HashMap<Integer, Paper> papersWhichTalkAboutThis;
 
     public Term(String name, int id) {
         super(name, id);
     }
 
-    public ArrayList<Paper> getPapersWhichTalkAboutThis() {
+    public HashMap<Integer, Paper> getPapersWhichTalkAboutThis() {
         return papersWhichTalkAboutThis;
     }
 
-    public void addPaperWhichTalkAboutIt(Paper paper) {
-        papersWhichTalkAboutThis.add(paper);
+    public void addPaperWhichTalkAboutIt(int id, Paper paper) {
+        papersWhichTalkAboutThis.put(id, paper);
     }
 
-    public void removePaperWhichTalkAboutIt(Paper paper) {
-        papersWhichTalkAboutThis.remove(paper);
+    public void removePaperWhichTalkAboutIt(int id) {
+        papersWhichTalkAboutThis.remove(id);
     }
 }

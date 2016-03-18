@@ -1,23 +1,23 @@
 package main.java.domain.nodes;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Author extends Node {
-    private ArrayList<Paper> papers;
+    private HashMap<Integer, Paper> papers;
 
     public Author(String name, int id) {
         super(name, id);
     }
 
-    public ArrayList<Paper> getPapers() {
+    public HashMap<Integer, Paper> getPapers() {
         return papers;
     }
 
-    public void addPaper(Paper paper) {
-        papers.add(paper);
+    public void addPaper(int id, Paper paper) {
+        papers.put(id, paper);
     }
 
-    public void removePaper(Paper paper) {
-        papers.remove(paper);
+    public void removePaper(int id) {
+        papers.remove(id);
     }
 }
