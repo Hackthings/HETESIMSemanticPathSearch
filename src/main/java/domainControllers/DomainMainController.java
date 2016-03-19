@@ -7,6 +7,8 @@ import main.java.domain.nodes.Term;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class DomainMainController {
     HashMap<Integer, Author> authors;
@@ -18,11 +20,36 @@ public class DomainMainController {
     public DomainMainController() {}
 
     public int[][] getAuthorPaperMatrix() {
-        return null;
+        int[][] authorpaper = new int[500000][750000];  //rows authors id (till 500000),
+                                                        // columns paper id(till 750000)
+
+        for (Author aut : authors.values()) {
+
+            HashMap<Integer, Paper> autp = aut.getPapers();
+
+            for(Paper pap : autp.values()) {
+
+                authorpaper[aut.getId()][pap.getId()] = 1;
+            }
+        }
+
+        return authorpaper;
     }
 
     public int[][] getPaperAuthorMatrix() {
-        return null;
+        int[][] paperauthor = new int[750000][500000];  //rows authors id (till 500000),
+                                                        // columns paper id(till 750000)
+        for (Paper pap : papers.values()) {
+
+            HashMap<Integer, Author> pa = pap.getAuthors();
+
+            for(Author aut : pa.values()) {
+
+                paperauthor[aut.getId()][pap.getId()] = 1;
+            }
+        }
+
+        return paperauthor;
     }
 
     public int[][] getTermPaperMatrix() {
