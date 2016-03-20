@@ -17,17 +17,18 @@ public class DomainMainController {
     HashMap<Integer, Term> terms;
 
 
-    public DomainMainController() {}
+    public DomainMainController() {
+    }
 
     public int[][] getAuthorPaperMatrix() {
         int[][] authorpaper = new int[500000][750000];  //rows authors id (till 500000),
-                                                        // columns paper id(till 750000)
+        // columns paper id(till 750000)
 
         for (Author aut : authors.values()) {
 
             HashMap<Integer, Paper> autp = aut.getPapers();
 
-            for(Paper pap : autp.values()) {
+            for (Paper pap : autp.values()) {
 
                 authorpaper[aut.getId()][pap.getId()] = 1;
             }
@@ -38,12 +39,12 @@ public class DomainMainController {
 
     public int[][] getPaperAuthorMatrix() {
         int[][] paperauthor = new int[750000][500000];  //rows authors id (till 500000),
-                                                        // columns paper id(till 750000)
+        // columns paper id(till 750000)
         for (Paper pap : papers.values()) {
 
             HashMap<Integer, Author> pa = pap.getAuthors();
 
-            for(Author aut : pa.values()) {
+            for (Author aut : pa.values()) {
 
                 paperauthor[pap.getId()][aut.getId()] = 1;
             }
@@ -55,11 +56,11 @@ public class DomainMainController {
     public int[][] getTermPaperMatrix() {
         int[][] termpaper = new int[15000][750000];
 
-        for(Term term : terms.values()){
+        for (Term term : terms.values()) {
 
             HashMap<Integer, Paper> termpap = term.getPapersWhichTalkAboutThis();
 
-            for( Paper pap : termpap.values()){
+            for (Paper pap : termpap.values()) {
 
                 termpaper[term.getId()][pap.getId()] = 1;
             }
@@ -75,7 +76,7 @@ public class DomainMainController {
 
             HashMap<Integer, Term> papterm = pap.getTerms();
 
-            for( Term term : papterm.values()){
+            for (Term term : papterm.values()) {
 
                 paperterm[pap.getId()][term.getId()] = 1;
             }
@@ -87,11 +88,11 @@ public class DomainMainController {
     public int[][] geConferencePaperMatrix() {
         int[][] confpaper = new int[5000][750000];
 
-        for(Conference conf : conferences.values()){
+        for (Conference conf : conferences.values()) {
 
             HashMap<Integer, Paper> confpap = conf.getExposedPapers();
 
-            for( Paper pap : confpap.values()){
+            for (Paper pap : confpap.values()) {
 
                 confpaper[conf.getId()][pap.getId()] = 1;
             }
@@ -103,7 +104,7 @@ public class DomainMainController {
     public int[][] getPaperConferenceMatrix() {
         int[][] paperconf = new int[750000][5000];
 
-        for(Paper pap : papers.values()){
+        for (Paper pap : papers.values()) {
 
             Conference conf = pap.getConference();
 
