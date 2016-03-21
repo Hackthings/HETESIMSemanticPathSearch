@@ -5,10 +5,7 @@ import main.java.domain.nodes.Conference;
 import main.java.domain.nodes.Paper;
 import main.java.domain.nodes.Term;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class DomainMainController {
     HashMap<Integer, Author> authors;
@@ -16,12 +13,35 @@ public class DomainMainController {
     HashMap<Integer, Conference> conferences;
     HashMap<Integer, Term> terms;
 
+    int Authormaxid = 0;
+    int Papermaxid = 0;
+    int Conferencemaxid = 0;
+    int Termmaxid = 0;
+
 
     public DomainMainController() {
     }
 
+
+    public void setAuthormaxid (int id){
+        Authormaxid = id;
+    }
+
+    public void setPapermaxid (int id){
+        Papermaxid = id;
+    }
+
+    public void setConferencermaxid (int id){
+        Conferencemaxid = id;
+    }
+
+    public void setTermmaxid (int id){
+        Termmaxid = id;
+    }
+
     public int[][] getAuthorPaperMatrix() {
-        int[][] authorpaper = new int[500000][750000];  //rows authors id (till 500000),
+
+        int[][] authorpaper = new int[Authormaxid][Papermaxid];  //rows authors id (till 500000),
         // columns paper id(till 750000)
 
         for (Author aut : authors.values()) {
@@ -38,7 +58,7 @@ public class DomainMainController {
     }
 
     public int[][] getPaperAuthorMatrix() {
-        int[][] paperauthor = new int[750000][500000];  //rows authors id (till 500000),
+        int[][] paperauthor = new int[Papermaxid][Authormaxid];  //rows authors id (till 500000),
         // columns paper id(till 750000)
         for (Paper pap : papers.values()) {
 
@@ -54,7 +74,7 @@ public class DomainMainController {
     }
 
     public int[][] getTermPaperMatrix() {
-        int[][] termpaper = new int[15000][750000];
+        int[][] termpaper = new int[Termmaxid][Papermaxid];
 
         for (Term term : terms.values()) {
 
@@ -70,7 +90,7 @@ public class DomainMainController {
     }
 
     public int[][] getPaperTermMatrix() {
-        int[][] paperterm = new int[750000][15000];
+        int[][] paperterm = new int[Papermaxid][Termmaxid];
 
         for (Paper pap : papers.values()) {
 
@@ -86,7 +106,7 @@ public class DomainMainController {
     }
 
     public int[][] geConferencePaperMatrix() {
-        int[][] confpaper = new int[5000][750000];
+        int[][] confpaper = new int[Conferencemaxid][Papermaxid];
 
         for (Conference conf : conferences.values()) {
 
@@ -102,7 +122,7 @@ public class DomainMainController {
     }
 
     public int[][] getPaperConferenceMatrix() {
-        int[][] paperconf = new int[750000][5000];
+        int[][] paperconf = new int[Papermaxid][Conferencemaxid];
 
         for (Paper pap : papers.values()) {
 
