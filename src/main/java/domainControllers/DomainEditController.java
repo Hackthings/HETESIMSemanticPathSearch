@@ -5,7 +5,12 @@ import main.java.domain.nodes.Conference;
 import main.java.domain.nodes.Paper;
 import main.java.domain.nodes.Term;
 
-import java.util.HashMap;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class DomainEditController {
     HashMap<Integer, Author> authors;
@@ -15,31 +20,182 @@ public class DomainEditController {
 
     public DomainEditController() {}
 
-    public void readAuthorsFromFile(){}
+    public void readAuthorsFromFile(){
 
-    public void readPapersFromFile(){}
+        Path file = ...;
+        try (InputStream in = Files.newInputStream(file);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                // insert en el hashmap
+            }
+        } catch (IOException x) {
+            System.err.println(x);
+        }
+    }
 
-    public void readConferencesFromFile(){}
+    public void readPapersFromFile(){
+        Path file = ...;
+        try (InputStream in = Files.newInputStream(file);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                // insert en el hashmap
+            }
+        } catch (IOException x) {
+            System.err.println(x);
+        }
+    }
 
-    public void readTermsFromFile(){}
+    public void readConferencesFromFile(){
+        Path file = ...;
+        try (InputStream in = Files.newInputStream(file);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                // insert en el hashmap
+            }
+        } catch (IOException x) {
+            System.err.println(x);
+        }
+    }
 
 
-    public void writeAuthorToFile(Author author){}
+    public void readTermsFromFile(){
+        //Path file = Paths.get(string del path);
+        try (InputStream in = Files.newInputStream(file);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                // insert en el hashmap
+            }
+        } catch (IOException x) {
+            System.err.println(x);
+        }
+    }
 
-    public void writePaperToFile(Paper paper){}
 
-    public void writeConferenceToFile(Conference conference){}
+    public void writeAuthorToFile(Author author){
+        Charset charset = Charset.forName("US-ASCII");
+        //String s = que escriure;
+        //Path file = Paths.get(string del path);
+        try (BufferedWriter writer = Files.newBufferedWriter(file, charset)) {
+            writer.write(s, 0, s.length());
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+        //fer insert al hashmap
+    }
 
-    public void writeTermToFile(Term term){}
+    public void writePaperToFile(Paper paper){        Charset charset = Charset.forName("US-ASCII");
+        //String s = que escriure;
+        //Path file = Paths.get(string del path);
+        try (BufferedWriter writer = Files.newBufferedWriter(file, charset)) {
+            writer.write(s, 0, s.length());
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+        //fer insert al hashmap
+
+    }
+
+    public void writeConferenceToFile(Conference conference) {
+        Charset charset = Charset.forName("US-ASCII");
+        //String s = que escriure;
+        //Path file = Paths.get(string del path);
+        try (BufferedWriter writer = Files.newBufferedWriter(file, charset)) {
+            writer.write(s, 0, s.length());
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+        //fer insert al hashmap
+    }
+
+    public void writeTermToFile(Term term){
+        Charset charset = Charset.forName("US-ASCII");
+        //String s = que escriure;
+        //Path file = Paths.get(string del path);
+        try (BufferedWriter writer = Files.newBufferedWriter(file, charset)) {
+            writer.write(s, 0, s.length());
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+        //fer insert al hashmap
+    }
 
 
-    public void deleteAuthorFromFile(Author author){}
+    public void deleteAuthorFromFile(Author author){
 
-    public void deletePaperFromFile(Paper paper){}
+        //Path file = Paths.get(string del path);
+        File inputFile = new File(file);
+        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+        BufferedWriter writer = new BufferedWriter(new FileReader(inputFile));
 
-    public void deleteConferenceFromFile(Conference conference){}
+        String lineToRemove = ""; // "id nom" tret de l'objecte
+        String currentLine;
 
-    public void deleteTermFromFile(Term term){}
+        while((currentLine = reader.readLine()) != null) {
+            if(currentLine.equals(lineToRemove))
+                 writer.write(currentLine);
+        }
+        writer.close();
+        reader.close();
+    }
+
+    public void deletePaperFromFile(Paper paper){
+
+        //Path file = Paths.get(string del path);
+        File inputFile = new File(file);
+        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+        BufferedWriter writer = new BufferedWriter(new FileReader(inputFile));
+
+        String lineToRemove = ""; // "id nom" tret de l'objecte
+        String currentLine;
+
+        while((currentLine = reader.readLine()) != null) {
+            if(currentLine.equals(lineToRemove))
+                writer.write(currentLine);
+        }
+        writer.close();
+        reader.close();
+    }
+
+
+    public void deleteConferenceFromFile(Conference conference){
+        //Path file = Paths.get(string del path);
+        File inputFile = new File(file);
+        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+        BufferedWriter writer = new BufferedWriter(new FileReader(inputFile));
+
+        String lineToRemove = ""; // "id nom" tret de l'objecte
+        String currentLine;
+
+        while((currentLine = reader.readLine()) != null) {
+            if(currentLine.equals(lineToRemove))
+                writer.write(currentLine);
+        }
+        writer.close();
+        reader.close();
+    }
+
+    public void deleteTermFromFile(Term term){
+
+        //Path file = Paths.get(string del path);
+        File inputFile = new File(file);
+        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+        BufferedWriter writer = new BufferedWriter(new FileReader(inputFile));
+
+        String lineToRemove = ""; // "id nom" tret de l'objecte
+        String currentLine;
+
+        while((currentLine = reader.readLine()) != null) {
+            if(currentLine.equals(lineToRemove))
+                writer.write(currentLine);
+        }
+        writer.close();
+        reader.close();
+    }
+
 
 
 
