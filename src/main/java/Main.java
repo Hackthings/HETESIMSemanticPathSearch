@@ -20,8 +20,8 @@ public class Main {
             System.out.println("-2. Editar graf.");
             System.out.println("-3. Sortir.");
             option = sc.nextInt();
-            if (option == NEW_QUERY) ; // TODO: Implement globalController.newQuery();
-            else if (option == EDIT) ; // TODO: Implement globalController.editGraph();
+            if (option == NEW_QUERY) globalController.newQuery();
+            else if (option == EDIT) globalController.editGraph();
         } while (option != EXIT);
     }
 }
