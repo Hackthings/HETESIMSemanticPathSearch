@@ -41,6 +41,14 @@ public class DomainHetesimController {
         return normalized;
     }
 
+    private double[][] transpose(double [][] m){
+        double[][] temp = new double[m[0].length][m.length];
+        for (int i = 0; i < m.length; i++)
+            for (int j = 0; j < m[0].length; j++)
+                temp[j][i] = m[i][j];
+        return temp;
+    }
+
     public double[][] heteSim(String path) {
         double[][] auxiliarObjectL = new double[0][0];
         double[][] auxiliarObjectR = new double[0][0];
@@ -49,6 +57,7 @@ public class DomainHetesimController {
             char in = path.charAt(mid);
             char out = path.charAt(mid + 1);
             generateE(in, out, auxiliarObjectL, auxiliarObjectR);
+            int f = auxiliarObjectR.length;
         }
     }
 
@@ -68,7 +77,7 @@ public class DomainHetesimController {
             }
         }
         matrixL = new double[middleMatrix.length][links];
-        matrixR = new double[middleMatrix[0].length][links];
+        matrixR = new double[middleMatrix[0].length][links]; //needs to be transposed
         //add links
         int c = 0;
         for(int i = 0; i < middleMatrix.length; ++i){
@@ -79,8 +88,7 @@ public class DomainHetesimController {
                 }
             }
         }
-        matrixR = normalizeMatrix(matrixR);
-
+        matrixR = transpose(normalizeMatrix(matrixR)); //transpose and normalize
     }
 }
 
