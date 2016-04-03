@@ -8,6 +8,9 @@ public class DomainHetesimController {
     double[][] probConferencePaper;
     double[][] probPaperConference;
 
+    double[][] auxiliarObjectL;
+    double[][] auxiliarObjectR;
+
     public DomainHetesimController(int[][] authorPaper, int[][] paperAuthor, int[][] termPaper, int[][] paperTerm, int[][] conferencePaper, int[][] paperConference) {
         probAuthorPaper = normalizeMatrix(authorPaper);
         probPaperAuthor = normalizeMatrix(paperAuthor);
@@ -15,6 +18,9 @@ public class DomainHetesimController {
         probPaperTerm = normalizeMatrix(paperTerm);
         probConferencePaper = normalizeMatrix(conferencePaper);
         probPaperConference = normalizeMatrix(paperConference);
+
+        auxiliarObjectL = new double[0][0];
+        auxiliarObjectR = new double[0][0];
     }
 
     private double[][] normalizeMatrix(int[][] matrix) {
@@ -49,26 +55,74 @@ public class DomainHetesimController {
         return temp;
     }
 
+    private double[][] findMatrix(char source, char target){
+        if(source == 'A') return probAuthorPaper;
+        if(source == 'T') return probTermPaper;
+        if(source == 'C') return probConferencePaper;
+        if(target == 'A') return probPaperAuthor;
+        if(target == 'T') return probPaperTerm;
+        return probPaperConference;
+    }
+
+    private double[][] findMatrix(char source, char target, char side){
+        if(source == 'A') return probAuthorPaper;
+        if(source == 'T') return probTermPaper;
+        if(source == 'C') return probConferencePaper;
+        if(target == 'A') return probPaperAuthor;
+        if(target == 'T') return probPaperTerm;
+        if(target == 'C') return probPaperConference;
+        if(side == 'l') return auxiliarObjectL;
+        return auxiliarObjectR;
+    }
+
+    // return C = A * B
+    public static double[][] multiply(double[][] A, double[][] B) {
+        int mA = A.length;
+        int nA = A[0].length;
+        int mB = B.length;
+        int nB = B[0].length;
+        if (nA != mB) throw new RuntimeException("Illegal matrix dimensions.");
+        double[][] C = new double[mA][nB];
+        for (int i = 0; i < mA; i++)
+            for (int j = 0; j < nB; j++)
+                for (int k = 0; k < nA; k++)
+                    C[i][j] += A[i][k] * B[k][j];
+        return C;
+    }
+
     public double[][] heteSim(String path) {
         double[][] auxiliarObjectL = new double[0][0];
         double[][] auxiliarObjectR = new double[0][0];
+        String pl, pr;
+        //create auxiliary matrices (if needed) and split pl/pr
         if (path.length() % 2 == 0) {
             int mid = path.length() / 2;
-            char in = path.charAt(mid);
-            char out = path.charAt(mid + 1);
+            char in = path.charAt(mid-1);
+            char out = path.charAt(mid);
             generateE(in, out, auxiliarObjectL, auxiliarObjectR);
-            int f = auxiliarObjectR.length;
+            pl = path.substring(0, mid);
+            pl = pl.concat("E");
+            pr = "E";
+            pr = pr.concat(path.substring(mid));
         }
+        else{
+            int mid = path.length();
+            pl = path.substring(0, mid+1);
+            pr = path.substring(mid);
+        }
+        String pri = new StringBuilder(pr).reverse().toString(); //inverted path
+        //PMpl
+        double[][] pmPl = findMatrix(pl.charAt(0), pl.charAt(1), 'l');
+        for(int i = 2; i < pl.length(); ++i) pmPl = multiply(pmPl, findMatrix(pl.charAt(i-1), pl.charAt(i), 'l'));
+        //PMpri
+        double[][] pmPri = findMatrix(pri.charAt(0), pri.charAt(1), 'r');
+        for(int i = 2; i < pri.length(); ++i) pmPri = multiply(pmPri, findMatrix(pri.charAt(i-1), pri.charAt(i), 'r'));
+        double[][] result = multiply(pmPl, transpose(pmPri));
+        return result; //TODO: needs HeteSim normalization
     }
 
-    private void generateE(char in, char out, double[][] matrixL, double[][] matrixR){
-        double[][] middleMatrix;
-        if(in == 'A') middleMatrix = probAuthorPaper;
-        else if(in == 'T') middleMatrix = probTermPaper;
-        else if(in == 'C') middleMatrix = probConferencePaper;
-        else if(out == 'A') middleMatrix = probPaperAuthor;
-        else if(out == 'T') middleMatrix = probPaperTerm;
-        else middleMatrix = probPaperConference;
+    private void generateE(char source, char target, double[][] matrixL, double[][] matrixR){
+        double[][] middleMatrix = findMatrix(source, target);
         //count links
         int links = 0;
         for (double[] aMiddleMatrix : middleMatrix) {
@@ -77,7 +131,7 @@ public class DomainHetesimController {
             }
         }
         matrixL = new double[middleMatrix.length][links];
-        matrixR = new double[middleMatrix[0].length][links]; //needs to be transposed
+        matrixR = new double[middleMatrix[0].length][links];
         //add links
         int c = 0;
         for(int i = 0; i < middleMatrix.length; ++i){
@@ -88,7 +142,7 @@ public class DomainHetesimController {
                 }
             }
         }
-        matrixR = transpose(normalizeMatrix(matrixR)); //transpose and normalize
+        matrixR = normalizeMatrix(matrixR); //normalize
     }
 }
 
