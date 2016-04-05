@@ -75,7 +75,7 @@ public class DomainMainController {
         return paperterm;
     }
 
-    public int[][] geConferencePaperMatrix() {
+    public int[][] getConferencePaperMatrix() {
         int[][] confpaper = new int[conferenceMaxId][paperMaxId];
         for (Conference conf : conferences.values()) {
             HashMap<Integer, Paper> confpap = conf.getExposedPapers();
