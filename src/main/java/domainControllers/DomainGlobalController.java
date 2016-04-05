@@ -12,12 +12,13 @@ public class DomainGlobalController extends DomainMainController {
                                                                                 getPaperTermMatrix(),
                                                                                 getConferencePaperMatrix(),
                                                                                 getPaperConferenceMatrix());
-        hetesimController.newQuery();
+        //hetesimController.newQuery();
     }
 
     public void editGraph() {
         DomainEditController domainEditController = new DomainEditController();
         domainEditController.newEdit(authors,papers,terms,conferences,authorMaxId,paperMaxId,termMaxId,conferenceMaxId);
+        //Si veus aixo es que esta be
     }
 
 }
