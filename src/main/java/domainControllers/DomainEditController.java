@@ -17,8 +17,8 @@ public class DomainEditController {
     public DomainEditController() {}
 
     public void newEdit(HashMap<Integer, Author> authors, HashMap<Integer, Paper> papers,
-                        HashMap<Integer, Term> terms, HashMap<Integer, Conference> conferences,int auhtorMaxId,
-                        int paperMaxId, int termMaxId, int conferenceMaxId){
+                        HashMap<Integer, Term> terms, HashMap<Integer, Conference> conferences,
+                        int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId){
 
         ConsolePrinter print = new ConsolePrinter();
         print.printEditInsertOrDelete();
@@ -39,7 +39,10 @@ public class DomainEditController {
                     String relationedPapers[] = paperNames.split(";");
 
                     Author autor = new Author(objName,"MAXIDIDIDIDID");
-
+                    Paper relatedPaper;
+                    for(String p:relationedPapers){
+                        //add dels papers en l'autor
+                    }
 
                     break;
                 case("P"):
