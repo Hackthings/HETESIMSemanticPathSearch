@@ -50,8 +50,7 @@ public class DomainHetesimController {
     private double[][] transpose(double [][] m){
         double[][] temp = new double[m[0].length][m.length];
         for (int i = 0; i < m.length; i++)
-            for (int j = 0; j < m[0].length; j++)
-                temp[j][i] = m[i][j];
+            for (int j = 0; j < m[0].length; j++) temp[j][i] = m[i][j];
         return temp;
     }
 
@@ -85,9 +84,16 @@ public class DomainHetesimController {
         double[][] C = new double[mA][nB];
         for (int i = 0; i < mA; i++)
             for (int j = 0; j < nB; j++)
-                for (int k = 0; k < nA; k++)
-                    C[i][j] += A[i][k] * B[k][j];
+                for (int k = 0; k < nA; k++) C[i][j] += A[i][k] * B[k][j];
         return C;
+    }
+
+    public static double modulus(double[] v){
+        double sum = 0;
+        for (double aV : v) {
+            sum += aV*aV;
+        }
+        return Math.sqrt(sum);
     }
 
     public double[][] heteSim(String path) {
@@ -118,7 +124,15 @@ public class DomainHetesimController {
         double[][] pmPri = findMatrix(pri.charAt(0), pri.charAt(1), 'r');
         for(int i = 2; i < pri.length(); ++i) pmPri = multiply(pmPri, findMatrix(pri.charAt(i-1), pri.charAt(i), 'r'));
         double[][] result = multiply(pmPl, transpose(pmPri));
-        return result; //TODO: needs HeteSim normalization
+        double[] pla, prb;
+        for(int i = 0; i < result.length; ++i){
+            pla = pmPl[i];
+            for(int j = 0; j < result[0].length; ++j){
+                prb = pmPri[j];
+                result[i][j] /= (modulus(pla)*modulus(prb));
+            }
+        }
+        return result;
     }
 
     private void generateE(char source, char target, double[][] matrixL, double[][] matrixR){
