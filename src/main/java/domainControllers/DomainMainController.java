@@ -21,22 +21,6 @@ public class DomainMainController {
 
     public DomainMainController() {}
 
-    public void setAuthorMaxId (int maxId){ authorMaxId = maxId; }
-
-    public void setPaperMaxId (int maxId){ paperMaxId = maxId; }
-
-    public void setConferenceMaxId (int maxId){ conferenceMaxId = maxId; }
-
-    public void setTermMaxId (int maxId){ termMaxId = maxId; }
-
-    public int getAuthorMaxId() {return authorMaxId;}
-
-    public int getPaperMaxId() {return paperMaxId;}
-
-    public int getConferenceMaxId(){return conferenceMaxId;}
-
-    public int getTermMaxId() {return termMaxId;}
-
     public int[][] getAuthorPaperMatrix() {
         int[][] authorpaper = new int[authorMaxId][paperMaxId];  /* Rows: authors id (till 500000),
         Columns: paper id(till 750000) */

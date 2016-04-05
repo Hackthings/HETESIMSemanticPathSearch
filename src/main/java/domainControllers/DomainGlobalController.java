@@ -17,7 +17,7 @@ public class DomainGlobalController extends DomainMainController {
 
     public void editGraph() {
         DomainEditController domainEditController = new DomainEditController();
-        domainEditController.newEdit();
+        domainEditController.newEdit(authors,papers,terms,conferences,authorMaxId,paperMaxId,termMaxId,conferenceMaxId);
     }
 
 }
