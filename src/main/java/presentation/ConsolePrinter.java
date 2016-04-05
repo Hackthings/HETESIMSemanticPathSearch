@@ -11,6 +11,14 @@ public class ConsolePrinter {
     }
 
     public void printQueryInputMessage() {
-        System.out.println("Write your query: (example: APA == Author - Paper - Author");
+        System.out.println("Escriu la teva query: (exemple: APA == Author - Paper - Author");
+    }
+
+    public void printEditInsertOrDelete() {
+        System.out.println("Vols editar, insertar o eliminar? (Ed -> editar, In -> insertar, El -> eliminar");
+    }
+
+    public void printTypeInputEditMessage() {
+        System.out.println("Quin tipus d'objecte vols modificar? (A -> Author, P -> Paper, T -> Term, C -> Conference");
     }
 }

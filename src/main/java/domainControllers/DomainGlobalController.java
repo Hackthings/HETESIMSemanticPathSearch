@@ -27,8 +27,6 @@ public class DomainGlobalController extends DomainMainController {
     }
 
     public void editGraph() {
-        Scanner sc = new Scanner(System.in);
-
         // TODO: Implement when Ian finishes the DomainEditController.
     }
 
