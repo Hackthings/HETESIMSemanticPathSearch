@@ -8,8 +8,6 @@ import main.java.*;
 import main.java.presentation.ConsolePrinter;
 
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class DomainEditController {
@@ -82,29 +80,35 @@ public class DomainEditController {
 
     }
 
+    public void readAll(HashMap<Integer, Author> authors, HashMap<Integer, Paper> papers,
+                        HashMap<Integer, Term> terms, HashMap<Integer, Conference> conferences,
+                        int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId){}
+
     private void readAuthorsFromFile(HashMap<Integer, Author> authors){
-        File inputFile = new File("./authors.txt");
+        File inputFile = new File("/../data/authors.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
             String line = null;
             while ((line = reader.readLine()) != null) {
                 String[] aux = line.split(";");
                 int id = Integer.parseInt(aux[0]);
                 Author author = new Author(aux[1],id);
+                readAuthorRelations(author);
                 authors.put(id,author);
             }
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);        }
+        //ESCRIuRE LES RELACIONS
     }
 
     private void readPapersFromFile(HashMap<Integer, Paper> papers){
-        Path file = Paths.get("HETESIMSemanticPathSearch/src/data/NOMARXIU");
-        File inputFile = new File(file);
+        File inputFile = new File("/../data/authors.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line = null;
             while ((line = reader.readLine()) != null) {
                 String[] aux = line.split(";");
                 int id = Integer.parseInt(aux[0]);
                 Paper paper = new Paper(aux[1],id);
+                readPaperRelations(paper);
                 papers.put(id,paper);
             }
         } catch (IOException x) {
@@ -112,8 +116,7 @@ public class DomainEditController {
     }
 
     private void readConferencesFromFile(HashMap<Integer, Conference> conferences){
-        Path file = Paths.get("HETESIMSemanticPathSearch/src/data/NOMARXIU");
-        File inputFile = new File(file);
+        File inputFile = new File("/../data/conferences.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line = null;
             while ((line = reader.readLine()) != null) {
@@ -122,6 +125,7 @@ public class DomainEditController {
                 Conference conf = new Conference(aux[1],id);
                 conf.setYear(Integer.parseInt(aux[2]));
                 conf.setContinent(aux[3]);
+                readConferenceRelations(conf);
                 conferences.put(id,conf);
             }
         } catch (IOException x) {
@@ -129,15 +133,15 @@ public class DomainEditController {
     }
 
 
-    private void readTermsFromFile(){
-        Path file = Paths.get("HETESIMSemanticPathSearch/src/data/NOMARXIU");
-        File inputFile = new File(file);
+    private void readTermsFromFile(HashMap<Integer, Term> terms){
+        File inputFile = new File("/../datda/terms.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line = null;
             while ((line = reader.readLine()) != null) {
                 String[] aux = line.split(";");
                 int id = Integer.parseInt(aux[0]);
                 Term term = new Term(aux[1],id);
+                readTermRelations(term);
                 terms.put(id,term);
             }
         } catch (IOException x) {
@@ -145,65 +149,60 @@ public class DomainEditController {
     }
 
 
-    private void writeAuthorToFile(Author author, HashMap<Integer,Paper> papersRelatedWith){
-        Path file = Paths.get("HETESIMSemanticPathSearch/src/data/NOMARXIU");
+    private void writeAuthorToFile(Author author, HashMap<Integer,Author> authors){
         String wrauthor = Integer.toString(author.getId()) + ";" + author.getName();
-        File inputFile = new File(file);
+        File inputFile = new File("/../datda/authors.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))){
             writer.write(wrauthor, 0, wrauthor.length());
+            writeAuthorRelations(author);
+            authors.put(author.getId(),author);
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
-        authors.put(author.getId(),author);
     }
 
-    public void writePaperToFile(Paper paper, HashMap<Integer,Author> authorsRelatedWith, HashMap<Integer, Term> termsRelatedWith,
-                                 Conference conference){
-        Path file = Paths.get("HETESIMSemanticPathSearch/src/data/NOMARXIU");
+    public void writePaperToFile(Paper paper, HashMap<Integer,Paper> papers){
         String wrpaper = Integer.toString(paper.getId()) + ";" + paper.getName();
-        File inputFile = new File(file);
+        File inputFile = new File("/../data/papers.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))){
             writer.write(wrpaper, 0, wrpaper.length());
+            writePaperRelations(paper);
+            papers.put(paper.getId(), paper);
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
-        for(Author author:authorsRelatedWith.values()) paper.addAuthor(author.getId(), author);
-        for(Term term:termsRelatedWith.values())  paper.addTerm(term.getId(), term);
-        papers.put(paper.getId(), paper);
     }
 
-    public void writeConferenceToFile(Conference conference, HashMap<Integer,Paper> exposedPapers) {
-        Path file = Paths.get("HETESIMSemanticPathSearch/src/data/NOMARXIU");
+    public void writeConferenceToFile(Conference conference,HashMap<Integer,Conference> conferences) {
         String wrconf = Integer.toString(conference.getId()) + ";" + conference.getName() +
                 ";" + conference.getYear() + ";" + conference.getContinent();
-        File inputFile = new File(file);
+        File inputFile = new File("/../data/conferences.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))){
             writer.write(wrconf, 0, wrconf.length());
+            writeConferenceRelations(conference);
+            conferences.put(conference.getId(), conference);
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
-        for(Paper paper:exposedPapers.values()) conference.addExposedPaper(paper.getId(),paper);
-        conferences.put(conference.getId(), conference);
     }
 
-    private void writeTermToFile(Term term, HashMap<Integer,Paper> papersWhichTalkAboutIt){
-        Path file = Paths.get("HETESIMSemanticPathSearch/src/data/NOMARXIU");
+    private void writeTermToFile(Term term, HashMap<Integer,Term> terms){
         String wrterm = Integer.toString(term.getId()) + ";" + term.getName();
-        File inputFile = new File(file);
+        File inputFile = new File("/../data/terms.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
             writer.write(wrterm, 0, wrterm.length());
+            writeTermRelations(term);
+            terms.put(term.getId(), term);
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
-        for(Paper paper:papersWhichTalkAboutIt.values()) term.addPaperWhichTalkAboutIt(paper.getId(),paper);
-        terms.put(term.getId(), term);
+
 
     }
 
 
-    private void deleteAuthorFromFile(Author author){
-        Path file = Paths.get("HETESIMSemanticPathSearch/src/data/NOMARXIU");
-        File inputFile = new File(file);
+    private void deleteAuthorFromFile(Author author ,HashMap<Integer,Author> authors){
+        File inputFile = new File("/../data/authors.txt");
 
        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
             BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
@@ -215,15 +214,15 @@ public class DomainEditController {
                if (currentLine.equals(lineToRemove))
                    writer.write("");
            }
+           //BUSCAR L?AUTOR I ESBORRARLO DEL HASHMAP I LES SEVES RELACIONS
        } catch(IOException x){
            System.err.format("IOExeption: %s%n", x);
        }
     }
 
-    private void deletePaperFromFile(Paper paper){
+    private void deletePaperFromFile(Paper paper, HashMap<Integer,Paper> papers){
 
-        Path file = "HETESIMSemanticPathSearch/src/data/NOMARXIU";
-        File inputFile = new File(file);
+        File inputFile = new File("/../data/papers.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile));) {
             String lineToRemove = Integer.toString(paper.getId()) + ";" + paper.getName();
@@ -233,6 +232,7 @@ public class DomainEditController {
                 if (currentLine.equals(lineToRemove))
                     writer.write("");
             }
+            //BUSCAR EL PAPER I ESBORRARLO DEL HASHMAP I LES SEVES RELACIONS
         }
         catch(IOException x){
             System.err.format("IOExeption: %s%n", x);
@@ -240,9 +240,8 @@ public class DomainEditController {
     }
 
 
-    private void deleteConferenceFromFile(Conference conference){
-        Path file = "HETESIMSemanticPathSearch/src/data/NOMARXIU";
-        File inputFile = new File(file);
+    private void deleteConferenceFromFile(Conference conference, HashMap<Integer,Conference> Conferences){
+        File inputFile = new File("/../data/conferences.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
@@ -254,16 +253,15 @@ public class DomainEditController {
                 if (currentLine.equals(lineToRemove))
                     writer.write("");
             }
+            //BUSCAR LA CONFERENCIA I ESBORRARLA DEL HASHMAP I LES SEVES RELACIONS
         }
         catch (IOException x) {
             System.err.format("IOExeption: %s%n", x);
         }
     }
 
-    private void deleteTermFromFile(Term term){
-
-        Path file = "HETESIMSemanticPathSearch/src/data/NOMARXIU";
-        File inputFile = new File(file);
+    private void deleteTermFromFile(Term term, HashMap<Integer,Term> terms){
+        File inputFile = new File("/../data/terms.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
@@ -274,16 +272,15 @@ public class DomainEditController {
                 if (currentLine.equals(lineToRemove))
                     writer.write("");
             }
+            //BuSCAR EL TERM I ESBORRARLO DEL HASHMAP I LES SEVES RELACIONS
         }
         catch (IOException x){
             System.err.format("IOExeption: %s%n", x);
         }
     }
 
-    private void editAuthorFromFile(Author author, String key, String value){
-
-        Path file = "HETESIMSemanticPathSearch/src/data/NOMARXIU";
-        File inputFile = new File(file);
+    private void editAuthorFromFile(Author author, HashMap<Integer,Author> author, String key, String value){
+        File inputFile = new File("/../data/authors.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
@@ -298,6 +295,7 @@ public class DomainEditController {
                 if (currentLine.equals(lineToRemove))
                     writer.write(wrauthor);
             }
+            //EDITAR DEL HASHMAP
         }
         catch(IOException x) {
             System.err.format("IOExeption: %s%n", x);
@@ -306,8 +304,7 @@ public class DomainEditController {
 
 
     private void editPaperFromFile(Paper paper, String key, String value) {
-        Path file = "HETESIMSemanticPathSearch/src/data/NOMARXIU";
-        File inputFile = new File(file);
+        File inputFile = new File("/../data/papers.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
@@ -322,6 +319,7 @@ public class DomainEditController {
                 if (currentLine.equals(lineToRemove))
                     writer.write(wrpaper);
             }
+            //EDITAR DEL HASHMAP
         }
         catch(IOException x){
             System.err.format("IOExeption: %s%n", x);
@@ -329,8 +327,8 @@ public class DomainEditController {
     }
 
 
-    private void editConferenceFromFile(Conference conference, String key, String value){ Path file = "HETESIMSemanticPathSearch/src/data/NOMARXIU";
-        File inputFile = new File(file);
+    private void editConferenceFromFile(Conference conference, String key, String value){
+        File inputFile = new File("/../data/conferences.txt");
 
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
@@ -371,8 +369,7 @@ public class DomainEditController {
 
 
     private void editTermFromFile(Term term, String key, String value){
-        Path file = "HETESIMSemanticPathSearch/src/data/NOMARXIU";
-        File inputFile = new File(file);
+        File inputFile = new File("/../data/terms.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
@@ -392,6 +389,17 @@ public class DomainEditController {
             System.err.format("IOExeption: %s%n", x);
         }
     }
+
+    private void readAuthorRelations(Author author){}
+    private void readPaperRelations(Paper paper){}
+    private void readConferenceRelations(Conference conference){}
+    private void readTermRelations(Term term){}
+
+    private void writeAuthorRelations(Author author){}
+    private void writePaperRelations(Paper paper){}
+    private void writeConferenceRelations(Conference conference){}
+    private void writeTermRelations(Term term){}
+
 
 
 }
