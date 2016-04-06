@@ -36,7 +36,7 @@ public class DomainEditController {
                     String paperNames = aux.nextLine();
                     String relationedPapers[] = paperNames.split(";");
 
-                    Author autor = new Author(objName,"MAXIDIDIDIDID");
+                    Author autor = new Author(objName,authorMaxId+1);
                     Paper relatedPaper;
                     for(String p:relationedPapers){
                         //add dels papers en l'autor
@@ -279,7 +279,7 @@ public class DomainEditController {
         }
     }
 
-    private void editAuthorFromFile(Author author, HashMap<Integer,Author> author, String key, String value){
+    private void editAuthorFromFile(Author author, HashMap<Integer,Author> authors, String key, String value){
         File inputFile = new File("/../data/authors.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
@@ -336,7 +336,7 @@ public class DomainEditController {
             String lineToRemove = Integer.toString(conference.getId()) + ";" + conference.getName()
                     + ";" + conference.getYear() + ";" + conference.getContinent();
             String currentLine;
-            String wrconf;
+            String wrconf = null;
 
             switch (key) {
                 case "nom":
