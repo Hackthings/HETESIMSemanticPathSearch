@@ -10,9 +10,9 @@ import main.java.presentation.ConsolePrinter;
 import java.io.*;
 import java.util.*;
 
-public class DomainEditController {
+public class DomainPersistanceController {
 
-    public DomainEditController() {}
+    public DomainPersistanceController() {}
 
     public void newEdit(HashMap<Integer, Author> authors, HashMap<Integer, Paper> papers,
                         HashMap<Integer, Term> terms, HashMap<Integer, Conference> conferences,

@@ -12,7 +12,7 @@ public class DomainMainController {
     private HashMap<Integer, Paper> papers;
     private HashMap<Integer, Conference> conferences;
     private HashMap<Integer, Term> terms;
-    private DomainEditController editController;
+    private DomainPersistanceController persistanceController;
 
     private int authorMaxId;
     private int paperMaxId;
@@ -21,12 +21,12 @@ public class DomainMainController {
 
 
     public DomainMainController() {
-        editController = new DomainEditController();
+        persistanceController = new DomainPersistanceController();
         authorMaxId = 0;
         paperMaxId = 0;
         conferenceMaxId = 0;
         termMaxId = 0;
-        editController.readAll(authors, papers, terms, conferences, authorMaxId, paperMaxId, termMaxId, conferenceMaxId);
+        persistanceController.readAll(authors, papers, terms, conferences, authorMaxId, paperMaxId, termMaxId, conferenceMaxId);
     }
 
     public void newQuery() {
@@ -34,8 +34,8 @@ public class DomainMainController {
     }
 
     public void editGraph() {
-        DomainEditController domainEditController = new DomainEditController();
-        domainEditController.newEdit(authors,papers,terms,conferences,authorMaxId,paperMaxId,termMaxId,conferenceMaxId);
+        DomainPersistanceController domainPersistanceController = new DomainPersistanceController();
+        domainPersistanceController.newEdit(authors,papers,terms,conferences,authorMaxId,paperMaxId,termMaxId,conferenceMaxId);
 
     }
 
