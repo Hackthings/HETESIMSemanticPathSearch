@@ -14,6 +14,11 @@ public class DomainPersistanceController {
 
     public DomainPersistanceController() {}
 
+    public void readAll(HashMap<Integer, Author> authors, HashMap<Integer, Paper> papers,
+                        HashMap<Integer, Term> terms, HashMap<Integer, Conference> conferences,
+                        int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId){}
+
+
     public void newEdit(HashMap<Integer, Author> authors, HashMap<Integer, Paper> papers,
                         HashMap<Integer, Term> terms, HashMap<Integer, Conference> conferences,
                         int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId){
@@ -79,10 +84,6 @@ public class DomainPersistanceController {
         }
 
     }
-
-    public void readAll(HashMap<Integer, Author> authors, HashMap<Integer, Paper> papers,
-                        HashMap<Integer, Term> terms, HashMap<Integer, Conference> conferences,
-                        int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId){}
 
     private void readAuthorsFromFile(HashMap<Integer, Author> authors){
         File inputFile = new File("/../data/authors.txt");
