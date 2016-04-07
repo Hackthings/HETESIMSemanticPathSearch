@@ -1,6 +1,6 @@
 package main.java;
 
-import main.java.domainControllers.DomainGlobalController;
+import main.java.domainControllers.DomainMainController;
 import main.java.presentation.ConsolePrinter;
 
 import java.util.Scanner;
@@ -15,14 +15,14 @@ public class Main {
         ConsolePrinter consolePrinter = new ConsolePrinter();
 
         Scanner sc = new Scanner(System.in);
-        DomainGlobalController globalController = new DomainGlobalController();
+        DomainMainController mainController = new DomainMainController();
 
         int option;
         do {
             consolePrinter.printMenu();
             option = sc.nextInt();
-            if (option == NEW_QUERY) globalController.newQuery();
-            else if (option == EDIT) globalController.editGraph();
+            if (option == NEW_QUERY) mainController.newQuery();
+            else if (option == EDIT) mainController.editGraph();
         } while (option != EXIT);
     }
 }

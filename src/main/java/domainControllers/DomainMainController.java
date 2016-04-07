@@ -8,22 +8,41 @@ import main.java.domain.nodes.Term;
 import java.util.*;
 
 public class DomainMainController {
-    HashMap<Integer, Author> authors;
-    HashMap<Integer, Paper> papers;
-    HashMap<Integer, Conference> conferences;
-    HashMap<Integer, Term> terms;
+    private HashMap<Integer, Author> authors;
+    private HashMap<Integer, Paper> papers;
+    private HashMap<Integer, Conference> conferences;
+    private HashMap<Integer, Term> terms;
+    private DomainEditController editController;
 
-    int authorMaxId = 0;
-    int paperMaxId = 0;
-    int conferenceMaxId = 0;
-    int termMaxId = 0;
+    private int authorMaxId;
+    private int paperMaxId;
+    private int conferenceMaxId;
+    private int termMaxId;
 
 
-    public DomainMainController() {}
+    public DomainMainController() {
+        editController = new DomainEditController();
+        authorMaxId = 0;
+        paperMaxId = 0;
+        conferenceMaxId = 0;
+        termMaxId = 0;
+        editController.readAll(authors, papers, terms, conferences, authorMaxId, paperMaxId, termMaxId, conferenceMaxId);
+    }
 
+    public void newQuery() {
+        //hetesimController.newQuery();
+    }
+
+    public void editGraph() {
+        DomainEditController domainEditController = new DomainEditController();
+        domainEditController.newEdit(authors,papers,terms,conferences,authorMaxId,paperMaxId,termMaxId,conferenceMaxId);
+
+    }
+
+    /*
     public int[][] getAuthorPaperMatrix() {
-        int[][] authorpaper = new int[authorMaxId][paperMaxId];  /* Rows: authors id (till 500000),
-        Columns: paper id(till 750000) */
+        int[][] authorpaper = new int[authorMaxId][paperMaxId];  // Rows: authors id (till 500000),
+        // Columns: paper id(till 750000)
         for (Author aut : authors.values()) {
             HashMap<Integer, Paper> autp = aut.getPapers();
             for (Paper pap : autp.values()) {
@@ -34,8 +53,8 @@ public class DomainMainController {
     }
 
     public int[][] getPaperAuthorMatrix() {
-        int[][] paperauthor = new int[paperMaxId][authorMaxId];  /* Rows: authors id (till 500000),
-        Columns: paper id(till 750000) */
+        int[][] paperauthor = new int[paperMaxId][authorMaxId];  // Rows: authors id (till 500000),
+        // Columns: paper id(till 750000)
         for (Paper pap : papers.values()) {
             HashMap<Integer, Author> pa = pap.getAuthors();
             for (Author aut : pa.values()) {
@@ -85,5 +104,5 @@ public class DomainMainController {
             paperconf[pap.getId()][conf.getId()] = 1;
         }
         return paperconf;
-    }
+    } */
 }
