@@ -45,8 +45,8 @@ public class DomainPersistanceController {
                         String relationedPapers[] = paperNames.split(";");
                         Paper relatedPaper;
                         for (String p : relationedPapers) {
-                            for(Integer id:authors.keySet()){
-                                if(authors.get(id).getName().equals(p)){
+                            for(Integer id:papers.keySet()){
+                                if(papers.get(id).getName().equals(p)){
                                     relatedPaper = new Paper(p,id);
                                     author.addPaper(id,relatedPaper);
                                     break;
@@ -56,12 +56,111 @@ public class DomainPersistanceController {
                     }
                     authors.put(authorMaxId,author);
                     writeAuthorToFile(author);
+                    writeAuthorRelations(author);
                     break;
                 case("P"):
+                    System.out.print("Quin nom te ");
+                    objName = aux.nextLine();
+                    paperMaxId = paperMaxId + 1;
+                    Paper paper = new Paper(objName, paperMaxId);
+                    //Autors relacionats
+                    System.out.print("Te relacio amb algun Autor? (0 -> no en te, nom dels autors separats per ; )");
+                    String authorNames = aux.nextLine();
+                    System.out.print("Te relacio amb algun Tema? (0 -> no en te, nom dels autors separats per ; )"); //Per a que no es noti si triga molt
+                    if(!authorNames.equals("0")) {
+                        String relationedAuthors[] = authorNames.split(";");
+                        Author relatedAuthor;
+                        for (String a : relationedAuthors) {
+                            for(Integer id:authors.keySet()){
+                                if(authors.get(id).getName().equals(a)){
+                                    relatedAuthor = new Author(a,id);
+                                    paper.addAuthor(id,relatedAuthor);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    //temas relacionats
+                    String termNames = aux.nextLine();
+                    System.out.print("Te relacio amb alguna Conferencia? (0 -> no en te, indica el nom )");
+                    if(!termNames.equals("0")) {
+                        String relationedTerms[] = termNames.split(";");
+                        Term relatedTerm;
+                        for (String t : relationedTerms) {
+                            for(Integer id:terms.keySet()){
+                                if(terms.get(id).getName().equals(t)){
+                                    relatedTerm = new Term(t,id);
+                                    paper.addTerm(id,relatedTerm);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    //Conferencia relacionada
+                    String confName = aux.nextLine();
+                    if(!confName.equals("0")) {
+                        Conference relatedConference;
+                        for (Integer id : conferences.keySet()) {
+                            if (conferences.get(id).getName().equals(confName)) {
+                                relatedConference = new Conference (confName, id);
+                                paper.setConference(relatedConference);
+                                break;
+                            }
+                        }
+                    }
+
+
+                    papers.put(authorMaxId,paper);
+                    writePaperToFile(paper);
+                    writePaperRelations(paper);
                     break;
                 case("T"):
+                    System.out.print("Quin nom te ");
+                    objName = aux.nextLine();
+                    System.out.print("Te relacio amb algun Paper? (0 -> no en te, nom dels Papers separats per ; )");
+                    paperNames = aux.nextLine();
+                    termMaxId = termMaxId + 1;
+                    Term term = new Term(objName, termMaxId);
+                    if(!paperNames.equals("0")) {
+                        String relationedPapers[] = paperNames.split(";");
+                        Paper relatedPaper;
+                        for (String p : relationedPapers) {
+                            for(Integer id:papers.keySet()){
+                                if(papers.get(id).getName().equals(p)){
+                                    relatedPaper = new Paper(p,id);
+                                    term.addPaperWhichTalkAboutIt(id,relatedPaper);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    terms.put(termMaxId,term);
+                    writeTermToFile(term);
+                    writeTermRelations(term);
                     break;
                 case("C"):
+                    System.out.print("Quin nom te ");
+                    objName = aux.nextLine();
+                    System.out.print("Te relacio amb algun Paper? (0 -> no en te, nom dels Papers separats per ; )");
+                    paperNames = aux.nextLine();
+                    conferenceMaxId = conferenceMaxId + 1;
+                    Conference conf = new Conference(objName, conferenceMaxId);
+                    if(!paperNames.equals("0")) {
+                        String relationedPapers[] = paperNames.split(";");
+                        Paper relatedPaper;
+                        for (String p : relationedPapers) {
+                            for(Integer id:papers.keySet()){
+                                if(papers.get(id).getName().equals(p)){
+                                    relatedPaper = new Paper(p,id);
+                                    conf.addExposedPaper(id,relatedPaper);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    conferences.put(conferenceMaxId,conf);
+                    writeConferenceToFile(conf);
+                    writeConferenceRelations(conf);
                     break;
             }
                 break;
