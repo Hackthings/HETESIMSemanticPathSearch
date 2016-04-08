@@ -37,16 +37,25 @@ public class DomainPersistanceController {
                 case("A"):
                     System.out.print("Quin nom te ");
                     objName = aux.nextLine();
-                    System.out.print("Te relacio amb algun Paper? (0 -> no en te, nomdelsPapers separats per ;)");
+                    System.out.print("Te relacio amb algun Paper? (0 -> no en te, nomdelsPapers separats per ; )");
                     String paperNames = aux.nextLine();
-                    String relationedPapers[] = paperNames.split(";");
-
-                    Author autor = new Author(objName,authorMaxId+1);
-                    Paper relatedPaper;
-                    for(String p:relationedPapers){
-                        //add dels papers en l'autor
+                    authorMaxId = authorMaxId + 1;
+                    Author author = new Author(objName, authorMaxId);
+                    if(!paperNames.equals("0")) {
+                        String relationedPapers[] = paperNames.split(";");
+                        Paper relatedPaper;
+                        for (String p : relationedPapers) {
+                            for(Integer id:authors.keySet()){
+                                if(authors.get(id).getName().equals(p)){
+                                    relatedPaper = new Paper(p,id);
+                                    author.addPaper(id,relatedPaper);
+                                    break;
+                                }
+                            }
+                        }
                     }
-
+                    authors.put(authorMaxId,author);
+                    writeAuthorToFile(author);
                     break;
                 case("P"):
                     break;
@@ -150,50 +159,42 @@ public class DomainPersistanceController {
     }
 
 
-    private void writeAuthorToFile(Author author, HashMap<Integer,Author> authors){
+    private void writeAuthorToFile(Author author){
         String wrauthor = Integer.toString(author.getId()) + ";" + author.getName();
         File inputFile = new File("/../datda/authors.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))){
             writer.write(wrauthor, 0, wrauthor.length());
-            writeAuthorRelations(author);
-            authors.put(author.getId(),author);
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
     }
 
-    public void writePaperToFile(Paper paper, HashMap<Integer,Paper> papers){
+    public void writePaperToFile(Paper paper){
         String wrpaper = Integer.toString(paper.getId()) + ";" + paper.getName();
         File inputFile = new File("/../data/papers.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))){
             writer.write(wrpaper, 0, wrpaper.length());
-            writePaperRelations(paper);
-            papers.put(paper.getId(), paper);
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
     }
 
-    public void writeConferenceToFile(Conference conference,HashMap<Integer,Conference> conferences) {
+    public void writeConferenceToFile(Conference conference) {
         String wrconf = Integer.toString(conference.getId()) + ";" + conference.getName() +
                 ";" + conference.getYear() + ";" + conference.getContinent();
         File inputFile = new File("/../data/conferences.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))){
             writer.write(wrconf, 0, wrconf.length());
-            writeConferenceRelations(conference);
-            conferences.put(conference.getId(), conference);
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
     }
 
-    private void writeTermToFile(Term term, HashMap<Integer,Term> terms){
+    private void writeTermToFile(Term term){
         String wrterm = Integer.toString(term.getId()) + ";" + term.getName();
         File inputFile = new File("/../data/terms.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
             writer.write(wrterm, 0, wrterm.length());
-            writeTermRelations(term);
-            terms.put(term.getId(), term);
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
@@ -202,7 +203,7 @@ public class DomainPersistanceController {
     }
 
 
-    private void deleteAuthorFromFile(Author author ,HashMap<Integer,Author> authors){
+    private void deleteAuthorFromFile(Author author){
         File inputFile = new File("/../data/authors.txt");
 
        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
@@ -215,13 +216,12 @@ public class DomainPersistanceController {
                if (currentLine.equals(lineToRemove))
                    writer.write("");
            }
-           //BUSCAR L?AUTOR I ESBORRARLO DEL HASHMAP I LES SEVES RELACIONS
        } catch(IOException x){
            System.err.format("IOExeption: %s%n", x);
        }
     }
 
-    private void deletePaperFromFile(Paper paper, HashMap<Integer,Paper> papers){
+    private void deletePaperFromFile(Paper paper){
 
         File inputFile = new File("/../data/papers.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
@@ -233,7 +233,6 @@ public class DomainPersistanceController {
                 if (currentLine.equals(lineToRemove))
                     writer.write("");
             }
-            //BUSCAR EL PAPER I ESBORRARLO DEL HASHMAP I LES SEVES RELACIONS
         }
         catch(IOException x){
             System.err.format("IOExeption: %s%n", x);
@@ -241,7 +240,7 @@ public class DomainPersistanceController {
     }
 
 
-    private void deleteConferenceFromFile(Conference conference, HashMap<Integer,Conference> Conferences){
+    private void deleteConferenceFromFile(Conference conference){
         File inputFile = new File("/../data/conferences.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
@@ -254,14 +253,13 @@ public class DomainPersistanceController {
                 if (currentLine.equals(lineToRemove))
                     writer.write("");
             }
-            //BUSCAR LA CONFERENCIA I ESBORRARLA DEL HASHMAP I LES SEVES RELACIONS
         }
         catch (IOException x) {
             System.err.format("IOExeption: %s%n", x);
         }
     }
 
-    private void deleteTermFromFile(Term term, HashMap<Integer,Term> terms){
+    private void deleteTermFromFile(Term term){
         File inputFile = new File("/../data/terms.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
@@ -273,14 +271,13 @@ public class DomainPersistanceController {
                 if (currentLine.equals(lineToRemove))
                     writer.write("");
             }
-            //BuSCAR EL TERM I ESBORRARLO DEL HASHMAP I LES SEVES RELACIONS
         }
         catch (IOException x){
             System.err.format("IOExeption: %s%n", x);
         }
     }
 
-    private void editAuthorFromFile(Author author, HashMap<Integer,Author> authors, String key, String value){
+    private void editAuthorFromFile(Author author, String key, String value){
         File inputFile = new File("/../data/authors.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
@@ -296,7 +293,6 @@ public class DomainPersistanceController {
                 if (currentLine.equals(lineToRemove))
                     writer.write(wrauthor);
             }
-            //EDITAR DEL HASHMAP
         }
         catch(IOException x) {
             System.err.format("IOExeption: %s%n", x);
@@ -320,7 +316,7 @@ public class DomainPersistanceController {
                 if (currentLine.equals(lineToRemove))
                     writer.write(wrpaper);
             }
-            //EDITAR DEL HASHMAP
+
         }
         catch(IOException x){
             System.err.format("IOExeption: %s%n", x);
