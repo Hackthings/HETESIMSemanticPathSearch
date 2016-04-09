@@ -16,7 +16,12 @@ public class DomainPersistanceController {
 
     public void readAll(HashMap<Integer, Author> authors, HashMap<Integer, Paper> papers,
                         HashMap<Integer, Term> terms, HashMap<Integer, Conference> conferences,
-                        int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId){}
+                        int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId){
+        readAuthorsFromFile(authors);
+        readPapersFromFile(papers);
+        readConferencesFromFile(conferences);
+        readTermsFromFile(terms);
+    }
 
 
     public void newEdit(HashMap<Integer, Author> authors, HashMap<Integer, Paper> papers,
@@ -43,12 +48,13 @@ public class DomainPersistanceController {
                     Author author = new Author(objName, authorMaxId);
                     if(!paperNames.equals("0")) {
                         String relationedPapers[] = paperNames.split(";");
-                        Paper relatedPaper;
                         for (String p : relationedPapers) {
                             for(Integer id:papers.keySet()){
-                                if(papers.get(id).getName().equals(p)){
-                                    relatedPaper = new Paper(p,id);
+                                Paper relatedPaper = papers.get(id);
+                                if(relatedPaper.getName().equals(p)){
+                                    relatedPaper.addAuthor(author.getId(),author);
                                     author.addPaper(id,relatedPaper);
+                                    writeNewRelationPaperAuthor(relatedPaper,author);
                                     break;
                                 }
                             }
@@ -69,12 +75,13 @@ public class DomainPersistanceController {
                     System.out.print("Te relacio amb algun Tema? (0 -> no en te, nom dels autors separats per ; )"); //Per a que no es noti si triga molt
                     if(!authorNames.equals("0")) {
                         String relationedAuthors[] = authorNames.split(";");
-                        Author relatedAuthor;
                         for (String a : relationedAuthors) {
                             for(Integer id:authors.keySet()){
-                                if(authors.get(id).getName().equals(a)){
-                                    relatedAuthor = new Author(a,id);
+                                Author relatedAuthor = authors.get(id);
+                                if(relatedAuthor.getName().equals(a)){
+                                    relatedAuthor.addPaper(paper.getId(),paper);
                                     paper.addAuthor(id,relatedAuthor);
+                                    writeNewRelationPaperAuthor(paper,relatedAuthor);
                                     break;
                                 }
                             }
@@ -85,12 +92,13 @@ public class DomainPersistanceController {
                     System.out.print("Te relacio amb alguna Conferencia? (0 -> no en te, indica el nom )");
                     if(!termNames.equals("0")) {
                         String relationedTerms[] = termNames.split(";");
-                        Term relatedTerm;
                         for (String t : relationedTerms) {
                             for(Integer id:terms.keySet()){
-                                if(terms.get(id).getName().equals(t)){
-                                    relatedTerm = new Term(t,id);
+                                Term relatedTerm = terms.get(id);
+                                if(relatedTerm.getName().equals(t)){
+                                    relatedTerm.addPaperWhichTalkAboutIt(paper.getId(),paper);
                                     paper.addTerm(id,relatedTerm);
+                                    writeNewRelationPaperTerm(paper,relatedTerm);
                                     break;
                                 }
                             }
@@ -99,11 +107,12 @@ public class DomainPersistanceController {
                     //Conferencia relacionada
                     String confName = aux.nextLine();
                     if(!confName.equals("0")) {
-                        Conference relatedConference;
                         for (Integer id : conferences.keySet()) {
-                            if (conferences.get(id).getName().equals(confName)) {
-                                relatedConference = new Conference (confName, id);
+                            Conference relatedConference = conferences.get(id);
+                            if (relatedConference.getName().equals(confName)) {
+                                relatedConference.addExposedPaper(paper.getId(),paper);
                                 paper.setConference(relatedConference);
+                                writeNewRelationPaperConf(paper,relatedConference);
                                 break;
                             }
                         }
@@ -123,12 +132,13 @@ public class DomainPersistanceController {
                     Term term = new Term(objName, termMaxId);
                     if(!paperNames.equals("0")) {
                         String relationedPapers[] = paperNames.split(";");
-                        Paper relatedPaper;
                         for (String p : relationedPapers) {
                             for(Integer id:papers.keySet()){
-                                if(papers.get(id).getName().equals(p)){
-                                    relatedPaper = new Paper(p,id);
+                                Paper relatedPaper = papers.get(id);
+                                if(relatedPaper.getName().equals(p)){
+                                    relatedPaper.addTerm(term.getId(),term);
                                     term.addPaperWhichTalkAboutIt(id,relatedPaper);
+                                    writeNewRelationPaperTerm(relatedPaper,term);
                                     break;
                                 }
                             }
@@ -153,6 +163,7 @@ public class DomainPersistanceController {
                                 if(papers.get(id).getName().equals(p)){
                                     relatedPaper = new Paper(p,id);
                                     conf.addExposedPaper(id,relatedPaper);
+                                    writeNewRelationPaperConf(relatedPaper, conf);
                                     break;
                                 }
                             }
@@ -194,7 +205,7 @@ public class DomainPersistanceController {
     }
 
     private void readAuthorsFromFile(HashMap<Integer, Author> authors){
-        File inputFile = new File("/../data/authors.txt");
+        File inputFile = new File("/../data/author.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
             String line = null;
             while ((line = reader.readLine()) != null) {
@@ -206,11 +217,10 @@ public class DomainPersistanceController {
             }
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);        }
-        //ESCRIuRE LES RELACIONS
     }
 
     private void readPapersFromFile(HashMap<Integer, Paper> papers){
-        File inputFile = new File("/../data/authors.txt");
+        File inputFile = new File("/../data/paper.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line = null;
             while ((line = reader.readLine()) != null) {
@@ -225,7 +235,7 @@ public class DomainPersistanceController {
     }
 
     private void readConferencesFromFile(HashMap<Integer, Conference> conferences){
-        File inputFile = new File("/../data/conferences.txt");
+        File inputFile = new File("/../data/conf.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line = null;
             while ((line = reader.readLine()) != null) {
@@ -243,7 +253,7 @@ public class DomainPersistanceController {
 
 
     private void readTermsFromFile(HashMap<Integer, Term> terms){
-        File inputFile = new File("/../datda/terms.txt");
+        File inputFile = new File("/../datda/term.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line = null;
             while ((line = reader.readLine()) != null) {
@@ -260,7 +270,7 @@ public class DomainPersistanceController {
 
     private void writeAuthorToFile(Author author){
         String wrauthor = Integer.toString(author.getId()) + ";" + author.getName();
-        File inputFile = new File("/../datda/authors.txt");
+        File inputFile = new File("/../datda/author.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))){
             writer.write(wrauthor, 0, wrauthor.length());
         } catch (IOException x) {
@@ -270,7 +280,7 @@ public class DomainPersistanceController {
 
     public void writePaperToFile(Paper paper){
         String wrpaper = Integer.toString(paper.getId()) + ";" + paper.getName();
-        File inputFile = new File("/../data/papers.txt");
+        File inputFile = new File("/../data/paper.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))){
             writer.write(wrpaper, 0, wrpaper.length());
         } catch (IOException x) {
@@ -281,7 +291,7 @@ public class DomainPersistanceController {
     public void writeConferenceToFile(Conference conference) {
         String wrconf = Integer.toString(conference.getId()) + ";" + conference.getName() +
                 ";" + conference.getYear() + ";" + conference.getContinent();
-        File inputFile = new File("/../data/conferences.txt");
+        File inputFile = new File("/../data/conf.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))){
             writer.write(wrconf, 0, wrconf.length());
         } catch (IOException x) {
@@ -291,7 +301,7 @@ public class DomainPersistanceController {
 
     private void writeTermToFile(Term term){
         String wrterm = Integer.toString(term.getId()) + ";" + term.getName();
-        File inputFile = new File("/../data/terms.txt");
+        File inputFile = new File("/../data/term.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
             writer.write(wrterm, 0, wrterm.length());
         } catch (IOException x) {
@@ -303,7 +313,7 @@ public class DomainPersistanceController {
 
 
     private void deleteAuthorFromFile(Author author){
-        File inputFile = new File("/../data/authors.txt");
+        File inputFile = new File("/../data/author.txt");
 
        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
             BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
@@ -322,7 +332,7 @@ public class DomainPersistanceController {
 
     private void deletePaperFromFile(Paper paper){
 
-        File inputFile = new File("/../data/papers.txt");
+        File inputFile = new File("/../data/paper.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile));) {
             String lineToRemove = Integer.toString(paper.getId()) + ";" + paper.getName();
@@ -340,7 +350,7 @@ public class DomainPersistanceController {
 
 
     private void deleteConferenceFromFile(Conference conference){
-        File inputFile = new File("/../data/conferences.txt");
+        File inputFile = new File("/../data/conf.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
@@ -359,7 +369,7 @@ public class DomainPersistanceController {
     }
 
     private void deleteTermFromFile(Term term){
-        File inputFile = new File("/../data/terms.txt");
+        File inputFile = new File("/../data/term.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
@@ -377,7 +387,7 @@ public class DomainPersistanceController {
     }
 
     private void editAuthorFromFile(Author author, String key, String value){
-        File inputFile = new File("/../data/authors.txt");
+        File inputFile = new File("/../data/author.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
@@ -400,7 +410,7 @@ public class DomainPersistanceController {
 
 
     private void editPaperFromFile(Paper paper, String key, String value) {
-        File inputFile = new File("/../data/papers.txt");
+        File inputFile = new File("/../data/paper.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
@@ -424,7 +434,7 @@ public class DomainPersistanceController {
 
 
     private void editConferenceFromFile(Conference conference, String key, String value){
-        File inputFile = new File("/../data/conferences.txt");
+        File inputFile = new File("/../data/conference.txt");
 
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
@@ -465,7 +475,7 @@ public class DomainPersistanceController {
 
 
     private void editTermFromFile(Term term, String key, String value){
-        File inputFile = new File("/../data/terms.txt");
+        File inputFile = new File("/../data/term.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
@@ -495,6 +505,12 @@ public class DomainPersistanceController {
     private void writePaperRelations(Paper paper){}
     private void writeConferenceRelations(Conference conference){}
     private void writeTermRelations(Term term){}
+
+    private void writeNewRelationPaperAuthor(Paper paper, Author author){}
+    private void writeNewRelationPaperTerm(Paper paper, Term term){}
+    private void writeNewRelationPaperConf(Paper paper, Conference conf){}
+
+
 
 
 
