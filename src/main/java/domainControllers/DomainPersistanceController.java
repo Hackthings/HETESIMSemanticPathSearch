@@ -182,28 +182,66 @@ public class DomainPersistanceController {
                         String oldAuthorName = scan.nextLine();
                         System.out.print("Indica el nou nom");
                         String newAuthorName = scan.nextLine();
-                        boolean exists;
+                        boolean existsAuthor;
                         for(Author a : authors.values()){
                             if (a.getName().equals(oldAuthorName)) {
-                                exists = true;
+                                existsAuthor = true;
                                 a.setName(newAuthorName);
                                 editAuthorFromFile(a, newAuthorName);
                                 HashMap<Integer,Paper> authorPapers = a.getPapers();
                                 for(Paper p : authorPapers.values()){
-                                    HashMap<Integer,Author> paperAuthors = p.getAuthors();
-                                    for(Author b : paperAuthors.values()){
-                                        if(b.getName().equals(oldAuthorName)) b.setName(newAuthorName);
-                                    }
+                                    Author b = p.getAuthorByName(oldAuthorName);
+                                    b.setName(newAuthorName);
                                 }
                                 break;
                             }
                         }
 
-                        if(!exists) System.out.print("L'autor amb nom " + oldAuthorName + " no existeix");
+                        if(!existsAuthor) System.out.print("L'autor amb nom " + oldAuthorName + " no existeix");
                         break;
                     case("P"):
+                        System.out.print("Quin paper vols canviar? (indica el nom)");
+                        String oldPaperName = scan.nextLine();
+                        System.out.print("Indica el nou nom");
+                        String newPaperName = scan.nextLine();
+                        boolean existsPaper;
+                        for(Paper p : papers.values()){
+                            if(p.getName().equals(oldPaperName)){
+                                existsPaper = true;
+                                p.setName(newPaperName);
+                                editPaperFromFile(p,newPaperName);
+                                HashMap<Integer,Author> paperAuthors = p.getAuthors();
+                                for(Author a : paperAuthors.values()){
+                                    Paper l = a.getPaperByName(oldAuthorName);
+                                    l.setName(newPaperName);
+                                }
+                                HashMap<Integer,Term> paperTerms = p.getTerms();
+                                //LLO MATEIX QUJE A DALT
+                            }
+                        }
+
                         break;
                     case("T"):
+                        System.out.print("Quin tema vols canviar? (indica el nom)");
+                        String oldTermName = scan.nextLine();
+                        System.out.print("Indica el nou nom");
+                        String newTermName = scan.nextLine();
+                        boolean existsTerm;
+                        for(Term t : terms.values()){
+                            if (t.getName().equals(oldTermName)) {
+                                existsTerm = true;
+                                t.setName(newTermName);
+                                editTermFromFile(t, newTermName);
+                                HashMap<Integer,Paper> termPapers = t.getPapersWhichTalkAboutThis();
+                                for(Paper p : termPapers.values()){
+                                    Term s = p.getTermByName(oldTermName);
+                                    s.setName(newTermName);
+                                }
+                                break;
+                            }
+                        }
+
+                        if(!existsTerm) System.out.print("L'autor amb nom " + oldTermName + " no existeix");
                         break;
                     case("C"):
                         break;
@@ -415,7 +453,6 @@ public class DomainPersistanceController {
 
             String lineToRemove = Integer.toString(author.getId()) + ";" + author.getName();
             String currentLine;
-
             String wrauthor = Integer.toString(author.getId()) + ";" + name;
 
             while ((currentLine = reader.readLine()) != null) {
@@ -429,17 +466,14 @@ public class DomainPersistanceController {
     }
 
 
-    private void editPaperFromFile(Paper paper, String key, String value) {
+    private void editPaperFromFile(Paper paper, String value) {
         File inputFile = new File("/../data/paper.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
             String lineToRemove = Integer.toString(paper.getId()) + ";" + paper.getName();
             String currentLine;
-            String wrpaper;
-
-            if (key.equals("nom")) wrpaper = Integer.toString(paper.getId()) + ";" + value;
-            else wrpaper = value + ";" + paper.getName();
+            String wrpaper = Integer.toString(paper.getId()) + ";" + value;
 
             while ((currentLine = reader.readLine()) != null) {
                 if (currentLine.equals(lineToRemove))
@@ -494,17 +528,14 @@ public class DomainPersistanceController {
     }
 
 
-    private void editTermFromFile(Term term, String key, String value){
+    private void editTermFromFile(Term term, String value){
         File inputFile = new File("/../data/term.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
             String lineToRemove = Integer.toString(term.getId()) + ";" + term.getName();
             String currentLine;
-            String wrterm;
-
-            if (key.equals("nom")) wrterm = Integer.toString(term.getId()) + ";" + value;
-            else wrterm = value + ";" + term.getName();
+            String wrterm = Integer.toString(term.getId()) + ";" + value;
 
             while ((currentLine = reader.readLine()) != null) {
                 if (currentLine.equals(lineToRemove))
