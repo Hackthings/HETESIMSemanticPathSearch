@@ -17,11 +17,9 @@ public class Term extends Node {
         papersWhichTalkAboutThis.put(id, paper);
     }
 
-    public Paper getPaperByName (String name){
-
-        for(Paper p : papersWhichTalkAboutThis.values()){
-            if(p.getName().equals(name)) return p;
-        }
+    public Paper getPaper (int id){
+        Paper p = papersWhichTalkAboutThis.get(id);
+        if(p != null) return p;
         return null;
     }
 

@@ -190,7 +190,7 @@ public class DomainPersistanceController {
                                 editAuthorFromFile(a, newAuthorName);
                                 HashMap<Integer,Paper> authorPapers = a.getPapers();
                                 for(Paper p : authorPapers.values()){
-                                    Author b = p.getAuthorByName(oldAuthorName);
+                                    Author b = p.getAuthor(a.getId());
                                     b.setName(newAuthorName);
                                 }
                                 break;
@@ -206,20 +206,27 @@ public class DomainPersistanceController {
                         String newPaperName = scan.nextLine();
                         boolean existsPaper;
                         for(Paper p : papers.values()){
-                            if(p.getName().equals(oldPaperName)){
+                            if(p.getName().equals(oldPaperName)){ //Paper a modificar
                                 existsPaper = true;
                                 p.setName(newPaperName);
                                 editPaperFromFile(p,newPaperName);
                                 HashMap<Integer,Author> paperAuthors = p.getAuthors();
                                 for(Author a : paperAuthors.values()){
-                                    Paper l = a.getPaperByName(oldAuthorName);
+                                    Paper l = a.getPaper(p.getId()); //Paper a modificar en el hashmap de l'autor
                                     l.setName(newPaperName);
                                 }
                                 HashMap<Integer,Term> paperTerms = p.getTerms();
-                                //LLO MATEIX QUJE A DALT
+                                for(Term t : paperTerms.values()){
+                                    Paper l = t.getPaper(p.getId());
+                                    l.setName(newPaperName);
+                                }
+                                Conference c = p.getConference();
+                                Paper l = c.getPaperByName(oldPaperName);
+                                l.setName(newPaperName);
+                                break;
                             }
                         }
-
+                        if(!existsPaper) System.out.print("El paper amb nom " + oldPaperName + " no existeix");
                         break;
                     case("T"):
                         System.out.print("Quin tema vols canviar? (indica el nom)");
@@ -234,22 +241,39 @@ public class DomainPersistanceController {
                                 editTermFromFile(t, newTermName);
                                 HashMap<Integer,Paper> termPapers = t.getPapersWhichTalkAboutThis();
                                 for(Paper p : termPapers.values()){
-                                    Term s = p.getTermByName(oldTermName);
+                                    Term s = p.getTerm(t.getId());
                                     s.setName(newTermName);
                                 }
                                 break;
                             }
                         }
-
-                        if(!existsTerm) System.out.print("L'autor amb nom " + oldTermName + " no existeix");
+                        if(!existsTerm) System.out.print("El tema amb nom " + oldTermName + " no existeix");
                         break;
                     case("C"):
+
                         break;
                 }
                 break;
             case("El"):
                 switch(objectType){
                     case("A"):
+                        System.out.print("Quin Autor vols eliminar? (indica el nom)");
+                        String authorName = scan.nextLine();
+                        boolean existsAuthor;
+                        for(Author a : authors.values()){
+                            if(a.getName().equals(authorName)){
+                                existsAuthor = true;
+                                deleteAuthorFromFile(a);
+                                deleteAuthorRelationsOnFile(a);
+                                HashMap<Integer,Paper> authorPapers = a.getPapers();
+                                for(Paper p : authorPapers.values()){
+                                    p.removeAuthor(a.getId());
+                                }
+                                authors.remove(a.getId());
+                                break;
+                            }
+                        }
+                        if(!existsAuthor) System.out.print("El author amb nom " + authorName + " no existeix");
                         break;
                     case("P"):
                         break;
@@ -306,6 +330,7 @@ public class DomainPersistanceController {
                 conf.setContinent(aux[3]);
                 readConferenceRelations(conf);
                 conferences.put(id,conf);
+                //conferences2.put(String,conf);
             }
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);        }
@@ -556,6 +581,12 @@ public class DomainPersistanceController {
     private void writePaperRelations(Paper paper){}
     private void writeConferenceRelations(Conference conference){}
     private void writeTermRelations(Term term){}
+
+    private void deleteAuthorRelationsOnFile(Author author){}
+    private void deletePaperRelationsOnFile(Paper paper){}
+    private void deleteConferenceRelationsOnFile(Conference conference){}
+    private void deleteTermRelationsOnFile(Term term){}
+
 
     private void writeNewRelationPaperAuthor(Paper paper, Author author){}
     private void writeNewRelationPaperTerm(Paper paper, Term term){}

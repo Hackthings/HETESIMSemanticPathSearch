@@ -13,11 +13,9 @@ public class Author extends Node {
         return papers;
     }
 
-    public Paper getPaperByName (String name){
-
-        for(Paper p : papers.values()){
-            if(p.getName().equals(name)) return p;
-        }
+    public Paper getPaper (int id){
+        Paper p = papers.get(id);
+        if(p != null) return p;
         return null;
     }
 
