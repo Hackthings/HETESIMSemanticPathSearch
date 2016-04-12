@@ -39,70 +39,86 @@ public class DomainMainController {
 
     }
 
-    /*
-    public int[][] getAuthorPaperMatrix() {
-        int[][] authorpaper = new int[authorMaxId][paperMaxId];  // Rows: authors id (till 500000),
-        // Columns: paper id(till 750000)
+
+    public HashMap<Integer, HashMap<Integer, Double>> getAuthorPaperMatrix() {
+
+        HashMap<Integer, HashMap<Integer, Double>> authorPaper = new HashMap<Integer, HashMap<Integer, Double>>();
+
         for (Author aut : authors.values()) {
-            HashMap<Integer, Paper> autp = aut.getPapers();
-            for (Paper pap : autp.values()) {
-                authorpaper[aut.getId()][pap.getId()] = 1;
+            HashMap<Integer, Paper> papersOfAuthor = aut.getPapers();
+            HashMap<Integer, Double> papersOfAuthorIDs = new HashMap<Integer, Double>();
+            for (Paper paper : papersOfAuthor.values()) {
+                papersOfAuthorIDs.put(paper.getId(),1.0);
             }
+            authorPaper.put(aut.getId(),papersOfAuthorIDs);
         }
-        return authorpaper;
+        return authorPaper;
     }
 
-    public int[][] getPaperAuthorMatrix() {
-        int[][] paperauthor = new int[paperMaxId][authorMaxId];  // Rows: authors id (till 500000),
-        // Columns: paper id(till 750000)
+
+    public HashMap<Integer, HashMap<Integer, Double>> getPaperAuthorMatrix() {
+        HashMap<Integer, HashMap<Integer, Double>> paperAuthor = new HashMap<Integer, HashMap<Integer, Double>>();
+
         for (Paper pap : papers.values()) {
-            HashMap<Integer, Author> pa = pap.getAuthors();
-            for (Author aut : pa.values()) {
-                paperauthor[pap.getId()][aut.getId()] = 1;
+            HashMap<Integer, Author> authorsOfPaper = pap.getAuthors();
+            HashMap<Integer, Double> authorsOfPaperIDs = new HashMap<Integer, Double>();
+            for (Author author : authorsOfPaper.values()) {
+                authorsOfPaperIDs.put(author.getId(),1.0);
             }
+            paperAuthor.put(pap.getId(),authorsOfPaperIDs);
         }
-        return paperauthor;
+        return paperAuthor;
     }
 
-    public int[][] getTermPaperMatrix() {
-        int[][] termpaper = new int[termMaxId][paperMaxId];
+    public HashMap<Integer, HashMap<Integer, Double>> getTermPaperMatrix() {
+        HashMap<Integer, HashMap<Integer, Double>> termPaper = new HashMap<Integer, HashMap<Integer, Double>>();
         for (Term term : terms.values()) {
-            HashMap<Integer, Paper> termpap = term.getPapersWhichTalkAboutThis();
-            for (Paper pap : termpap.values()) {
-                termpaper[term.getId()][pap.getId()] = 1;
+            HashMap<Integer, Paper> papersOfTerm = term.getPapersWhichTalkAboutThis();
+            HashMap<Integer, Double> papersOfTermIDs = new HashMap<Integer, Double>();
+            for (Paper pap : papersOfTerm.values()) {
+                papersOfTermIDs.put(term.getId(),1.0);
             }
+            termPaper.put(term.getId(),papersOfTermIDs);
         }
-        return termpaper;
+        return termPaper;
     }
 
-    public int[][] getPaperTermMatrix() {
-        int[][] paperterm = new int[paperMaxId][termMaxId];
+    public HashMap<Integer, HashMap<Integer, Double>> getPaperTermMatrix() {
+        HashMap<Integer, HashMap<Integer, Double>> paperTerm = new HashMap<Integer, HashMap<Integer, Double>>();
         for (Paper pap : papers.values()) {
-            HashMap<Integer, Term> papterm = pap.getTerms();
-            for (Term term : papterm.values()) {
-                paperterm[pap.getId()][term.getId()] = 1;
+            HashMap<Integer, Term> termsOfPapers = pap.getTerms();
+            HashMap<Integer, Double> termsOfPaperIDs = new HashMap<Integer, Double>();
+            for (Term term : termsOfPapers.values()) {
+                termsOfPaperIDs.put(term.getId(),1.0);
             }
+            paperTerm.put(pap.getId(),termsOfPaperIDs);
         }
-        return paperterm;
+        return paperTerm;
     }
 
-    public int[][] getConferencePaperMatrix() {
-        int[][] confpaper = new int[conferenceMaxId][paperMaxId];
+    public HashMap<Integer, HashMap<Integer, Double>> getConferencePaperMatrix() {
+        HashMap<Integer, HashMap<Integer, Double>> confPaper = new HashMap<Integer, HashMap<Integer, Double>>();
         for (Conference conf : conferences.values()) {
-            HashMap<Integer, Paper> confpap = conf.getExposedPapers();
-            for (Paper pap : confpap.values()) {
-                confpaper[conf.getId()][pap.getId()] = 1;
+            HashMap<Integer, Paper> papersOfConf = conf.getExposedPapers();
+            HashMap<Integer, Double> papersOfConfIDs = new HashMap<Integer, Double>();
+            for (Paper pap : papersOfConf.values()) {
+                papersOfConfIDs.put(pap.getId(),1.0);
             }
+            confPaper.put(conf.getId(),papersOfConfIDs);
         }
-        return confpaper;
+        return confPaper;
     }
 
-    public int[][] getPaperConferenceMatrix() {
-        int[][] paperconf = new int[paperMaxId][conferenceMaxId];
+    public HashMap<Integer, HashMap<Integer, Double>> getPaperConferenceMatrix() {
+        HashMap<Integer, HashMap<Integer, Double>> paperConf = new HashMap<Integer, HashMap<Integer, Double>>();
         for (Paper pap : papers.values()) {
             Conference conf = pap.getConference();
-            paperconf[pap.getId()][conf.getId()] = 1;
+            HashMap<Integer, Double> confOfPaperID = new HashMap<Integer, Double>();
+
+            confOfPaperID.put(conf.getId(),1.0);
+
+            paperConf.put(pap.getId(),confOfPaperID);
         }
-        return paperconf;
-    } */
+        return paperConf;
+    }
 }
