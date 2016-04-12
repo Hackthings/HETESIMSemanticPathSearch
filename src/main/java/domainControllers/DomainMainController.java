@@ -1,5 +1,6 @@
 package main.java.domainControllers;
 
+import main.java.utils.Pair;
 import main.java.domain.nodes.Author;
 import main.java.domain.nodes.Conference;
 import main.java.domain.nodes.Paper;
@@ -40,15 +41,16 @@ public class DomainMainController {
     }
 
 
-    public HashMap<Integer, HashMap<Integer, Double>> getAuthorPaperMatrix() {
+    public HashMap<Integer,ArrayList<Pair<Integer,Double>>> getAuthorPaperMatrix() {
 
-        HashMap<Integer, HashMap<Integer, Double>> authorPaper = new HashMap<Integer, HashMap<Integer, Double>>();
+        HashMap<Integer, ArrayList<Pair<Integer, Double>>> authorPaper = new HashMap<>();
 
         for (Author aut : authors.values()) {
             HashMap<Integer, Paper> papersOfAuthor = aut.getPapers();
-            HashMap<Integer, Double> papersOfAuthorIDs = new HashMap<Integer, Double>();
+            ArrayList<Pair<Integer,Double>> papersOfAuthorIDs = new ArrayList<>();
             for (Paper paper : papersOfAuthor.values()) {
-                papersOfAuthorIDs.put(paper.getId(),1.0);
+                Pair<Integer,Double> parID= new Pair(paper.getId(),1.0);
+                papersOfAuthorIDs.add(parID);
             }
             authorPaper.put(aut.getId(),papersOfAuthorIDs);
         }
@@ -56,66 +58,71 @@ public class DomainMainController {
     }
 
 
-    public HashMap<Integer, HashMap<Integer, Double>> getPaperAuthorMatrix() {
-        HashMap<Integer, HashMap<Integer, Double>> paperAuthor = new HashMap<Integer, HashMap<Integer, Double>>();
+    public HashMap<Integer, ArrayList<Pair<Integer, Double>>> getPaperAuthorMatrix() {
+        HashMap<Integer, ArrayList<Pair<Integer, Double>>> paperAuthor = new HashMap<>();
 
         for (Paper pap : papers.values()) {
             HashMap<Integer, Author> authorsOfPaper = pap.getAuthors();
-            HashMap<Integer, Double> authorsOfPaperIDs = new HashMap<Integer, Double>();
+            ArrayList<Pair<Integer,Double>> authorsOfPaperIDs = new ArrayList<>();
             for (Author author : authorsOfPaper.values()) {
-                authorsOfPaperIDs.put(author.getId(),1.0);
+                Pair<Integer,Double> parID= new Pair(author.getId(),1.0);
+                authorsOfPaperIDs.add(parID);
             }
             paperAuthor.put(pap.getId(),authorsOfPaperIDs);
         }
         return paperAuthor;
     }
 
-    public HashMap<Integer, HashMap<Integer, Double>> getTermPaperMatrix() {
-        HashMap<Integer, HashMap<Integer, Double>> termPaper = new HashMap<Integer, HashMap<Integer, Double>>();
+    public HashMap<Integer, ArrayList<Pair<Integer, Double>>> getTermPaperMatrix() {
+        HashMap<Integer, ArrayList<Pair<Integer, Double>>> termPaper = new HashMap<>();
         for (Term term : terms.values()) {
             HashMap<Integer, Paper> papersOfTerm = term.getPapersWhichTalkAboutThis();
-            HashMap<Integer, Double> papersOfTermIDs = new HashMap<Integer, Double>();
+            ArrayList<Pair<Integer,Double>> papersOfTermIDs = new ArrayList<>();
             for (Paper pap : papersOfTerm.values()) {
-                papersOfTermIDs.put(term.getId(),1.0);
+                Pair<Integer,Double> parID= new Pair(pap.getId(),1.0);
+                papersOfTermIDs.add(parID);
             }
             termPaper.put(term.getId(),papersOfTermIDs);
         }
         return termPaper;
     }
 
-    public HashMap<Integer, HashMap<Integer, Double>> getPaperTermMatrix() {
-        HashMap<Integer, HashMap<Integer, Double>> paperTerm = new HashMap<Integer, HashMap<Integer, Double>>();
+    public HashMap<Integer, ArrayList<Pair<Integer, Double>>> getPaperTermMatrix() {
+        HashMap<Integer, ArrayList<Pair<Integer, Double>>> paperTerm = new HashMap<>();
         for (Paper pap : papers.values()) {
             HashMap<Integer, Term> termsOfPapers = pap.getTerms();
-            HashMap<Integer, Double> termsOfPaperIDs = new HashMap<Integer, Double>();
+            ArrayList<Pair<Integer,Double>> termsOfPaperIDs = new ArrayList<>();
             for (Term term : termsOfPapers.values()) {
-                termsOfPaperIDs.put(term.getId(),1.0);
+                Pair<Integer,Double> parID= new Pair(term.getId(),1.0);
+                termsOfPaperIDs.add(parID);
             }
             paperTerm.put(pap.getId(),termsOfPaperIDs);
         }
         return paperTerm;
     }
 
-    public HashMap<Integer, HashMap<Integer, Double>> getConferencePaperMatrix() {
-        HashMap<Integer, HashMap<Integer, Double>> confPaper = new HashMap<Integer, HashMap<Integer, Double>>();
+    public HashMap<Integer, ArrayList<Pair<Integer, Double>>> getConferencePaperMatrix() {
+        HashMap<Integer, ArrayList<Pair<Integer, Double>>> confPaper = new HashMap<>();
         for (Conference conf : conferences.values()) {
             HashMap<Integer, Paper> papersOfConf = conf.getExposedPapers();
-            HashMap<Integer, Double> papersOfConfIDs = new HashMap<Integer, Double>();
+            ArrayList<Pair<Integer,Double>> papersOfConfIDs = new ArrayList<>();
             for (Paper pap : papersOfConf.values()) {
-                papersOfConfIDs.put(pap.getId(),1.0);
+                Pair<Integer,Double> parID= new Pair(pap.getId(),1.0);
+                papersOfConfIDs.add(parID);
             }
             confPaper.put(conf.getId(),papersOfConfIDs);
         }
         return confPaper;
     }
 
-    public HashMap<Integer, HashMap<Integer, Double>> getPaperConferenceMatrix() {
-        HashMap<Integer, HashMap<Integer, Double>> paperConf = new HashMap<Integer, HashMap<Integer, Double>>();
+    public HashMap<Integer, ArrayList<Pair<Integer, Double>>> getPaperConferenceMatrix() {
+        HashMap<Integer, ArrayList<Pair<Integer, Double>>> paperConf = new HashMap<>();
         for (Paper pap : papers.values()) {
             Conference conf = pap.getConference();
-            HashMap<Integer, Double> confOfPaperID = new HashMap<Integer, Double>();
+            ArrayList<Pair<Integer,Double>> confOfPaperID = new ArrayList<>();
 
-            confOfPaperID.put(conf.getId(),1.0);
+            Pair<Integer,Double> parID= new Pair(conf.getId(),1.0);
+            confOfPaperID.add(parID);
 
             paperConf.put(pap.getId(),confOfPaperID);
         }
