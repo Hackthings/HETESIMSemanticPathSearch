@@ -39,8 +39,23 @@ public class Paper extends Node {
         return authors;
     }
 
+    public Author getAuthorByName (String name){
+
+        for(Author a : authors.values()){
+            if(a.getName().equals(name)) return a;
+        }
+        return null;
+    }
+
     public HashMap<Integer, Term> getTerms() {
         return terms;
+    }
+
+    public Term getTermByName (String name){
+        for(Term t : terms.values()){
+            if(t.getName().equals(name)) return t;
+        }
+        return null;
     }
 
 }

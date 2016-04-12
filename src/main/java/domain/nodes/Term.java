@@ -17,6 +17,14 @@ public class Term extends Node {
         papersWhichTalkAboutThis.put(id, paper);
     }
 
+    public Paper getPaperByName (String name){
+
+        for(Paper p : papersWhichTalkAboutThis.values()){
+            if(p.getName().equals(name)) return p;
+        }
+        return null;
+    }
+
     public void removePaperWhichTalkAboutIt(int id) {
         papersWhichTalkAboutThis.remove(id);
     }

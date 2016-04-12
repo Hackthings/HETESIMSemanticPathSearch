@@ -178,6 +178,28 @@ public class DomainPersistanceController {
             case("Ed"):
                 switch(objectType){
                     case("A"):
+                        System.out.print("Quin autor vols canviar? (indica el nom)");
+                        String oldAuthorName = scan.nextLine();
+                        System.out.print("Indica el nou nom");
+                        String newAuthorName = scan.nextLine();
+                        boolean exists;
+                        for(Author a : authors.values()){
+                            if (a.getName().equals(oldAuthorName)) {
+                                exists = true;
+                                a.setName(newAuthorName);
+                                editAuthorFromFile(a, newAuthorName);
+                                HashMap<Integer,Paper> authorPapers = a.getPapers();
+                                for(Paper p : authorPapers.values()){
+                                    HashMap<Integer,Author> paperAuthors = p.getAuthors();
+                                    for(Author b : paperAuthors.values()){
+                                        if(b.getName().equals(oldAuthorName)) b.setName(newAuthorName);
+                                    }
+                                }
+                                break;
+                            }
+                        }
+
+                        if(!exists) System.out.print("L'autor amb nom " + oldAuthorName + " no existeix");
                         break;
                     case("P"):
                         break;
@@ -386,17 +408,15 @@ public class DomainPersistanceController {
         }
     }
 
-    private void editAuthorFromFile(Author author, String key, String value){
+    private void editAuthorFromFile(Author author, String name){
         File inputFile = new File("/../data/author.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
             String lineToRemove = Integer.toString(author.getId()) + ";" + author.getName();
             String currentLine;
-            String wrauthor;
 
-            if (key.equals("nom")) wrauthor = Integer.toString(author.getId()) + ";" + value;
-            else wrauthor = value + ";" + author.getName();
+            String wrauthor = Integer.toString(author.getId()) + ";" + name;
 
             while ((currentLine = reader.readLine()) != null) {
                 if (currentLine.equals(lineToRemove))

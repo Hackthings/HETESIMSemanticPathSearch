@@ -10,9 +10,17 @@ public class Conference extends Node {
     public Conference(String name, int id) {
         super(name, id);
     }
-
+    
     public HashMap<Integer, Paper> getExposedPapers() {
         return exposedPapers;
+    }
+
+    public Paper getPaperByName (String name){
+
+        for(Paper p : exposedPapers.values()){
+            if(p.getName().equals(name)) return p;
+        }
+        return null;
     }
 
     public void addExposedPaper(int id, Paper paper) {
