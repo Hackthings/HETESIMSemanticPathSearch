@@ -10,7 +10,7 @@ public class Conference extends Node {
     public Conference(String name, int id) {
         super(name, id);
     }
-    
+       
     public HashMap<Integer, Paper> getExposedPapers() {
         return exposedPapers;
     }
