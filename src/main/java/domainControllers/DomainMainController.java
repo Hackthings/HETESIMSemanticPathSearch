@@ -9,10 +9,14 @@ import main.java.domain.nodes.Term;
 import java.util.*;
 
 public class DomainMainController {
-    private HashMap<Integer, Author> authors;
-    private HashMap<Integer, Paper> papers;
-    private HashMap<Integer, Conference> conferences;
-    private HashMap<Integer, Term> terms;
+    private HashMap<Integer, Author> authorsById;
+    private HashMap<Integer, Paper> papersById;
+    private HashMap<Integer, Conference> conferencesById;
+    private HashMap<Integer, Term> termsById;
+    private HashMap<Integer, Author> authorsByName;
+    private HashMap<Integer, Paper> papersByName;
+    private HashMap<Integer, Conference> conferencesByName;
+    private HashMap<Integer, Term> termsByName;
     private DomainPersistanceController persistanceController;
 
     private int authorMaxId;
@@ -27,7 +31,7 @@ public class DomainMainController {
         paperMaxId = 0;
         conferenceMaxId = 0;
         termMaxId = 0;
-        persistanceController.readAll(authors, papers, terms, conferences, authorMaxId, paperMaxId, termMaxId, conferenceMaxId);
+        persistanceController.readAll(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName, authorMaxId, paperMaxId, termMaxId, conferenceMaxId);
     }
 
     public void newQuery() {
@@ -36,8 +40,7 @@ public class DomainMainController {
 
     public void editGraph() {
         DomainPersistanceController domainPersistanceController = new DomainPersistanceController();
-        domainPersistanceController.newEdit(authors,papers,terms,conferences,authorMaxId,paperMaxId,termMaxId,conferenceMaxId);
-
+        domainPersistanceController.newEdit(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName,termsByName, authorMaxId, paperMaxId, termMaxId, conferenceMaxId);
     }
 
 
@@ -45,7 +48,7 @@ public class DomainMainController {
 
         HashMap<Integer, ArrayList<Pair<Integer, Double>>> authorPaper = new HashMap<>();
 
-        for (Author aut : authors.values()) {
+        for (Author aut : authorsById.values()) {
             HashMap<Integer, Paper> papersOfAuthor = aut.getPapers();
             ArrayList<Pair<Integer,Double>> papersOfAuthorIDs = new ArrayList<>();
             for (Paper paper : papersOfAuthor.values()) {
@@ -61,7 +64,7 @@ public class DomainMainController {
     public HashMap<Integer, ArrayList<Pair<Integer, Double>>> getPaperAuthorMatrix() {
         HashMap<Integer, ArrayList<Pair<Integer, Double>>> paperAuthor = new HashMap<>();
 
-        for (Paper pap : papers.values()) {
+        for (Paper pap : papersById.values()) {
             HashMap<Integer, Author> authorsOfPaper = pap.getAuthors();
             ArrayList<Pair<Integer,Double>> authorsOfPaperIDs = new ArrayList<>();
             for (Author author : authorsOfPaper.values()) {
@@ -75,7 +78,7 @@ public class DomainMainController {
 
     public HashMap<Integer, ArrayList<Pair<Integer, Double>>> getTermPaperMatrix() {
         HashMap<Integer, ArrayList<Pair<Integer, Double>>> termPaper = new HashMap<>();
-        for (Term term : terms.values()) {
+        for (Term term : termsById.values()) {
             HashMap<Integer, Paper> papersOfTerm = term.getPapersWhichTalkAboutThis();
             ArrayList<Pair<Integer,Double>> papersOfTermIDs = new ArrayList<>();
             for (Paper pap : papersOfTerm.values()) {
@@ -89,7 +92,7 @@ public class DomainMainController {
 
     public HashMap<Integer, ArrayList<Pair<Integer, Double>>> getPaperTermMatrix() {
         HashMap<Integer, ArrayList<Pair<Integer, Double>>> paperTerm = new HashMap<>();
-        for (Paper pap : papers.values()) {
+        for (Paper pap : papersById.values()) {
             HashMap<Integer, Term> termsOfPapers = pap.getTerms();
             ArrayList<Pair<Integer,Double>> termsOfPaperIDs = new ArrayList<>();
             for (Term term : termsOfPapers.values()) {
@@ -103,7 +106,7 @@ public class DomainMainController {
 
     public HashMap<Integer, ArrayList<Pair<Integer, Double>>> getConferencePaperMatrix() {
         HashMap<Integer, ArrayList<Pair<Integer, Double>>> confPaper = new HashMap<>();
-        for (Conference conf : conferences.values()) {
+        for (Conference conf : conferencesById.values()) {
             HashMap<Integer, Paper> papersOfConf = conf.getExposedPapers();
             ArrayList<Pair<Integer,Double>> papersOfConfIDs = new ArrayList<>();
             for (Paper pap : papersOfConf.values()) {
@@ -117,7 +120,7 @@ public class DomainMainController {
 
     public HashMap<Integer, ArrayList<Pair<Integer, Double>>> getPaperConferenceMatrix() {
         HashMap<Integer, ArrayList<Pair<Integer, Double>>> paperConf = new HashMap<>();
-        for (Paper pap : papers.values()) {
+        for (Paper pap : papersById.values()) {
             Conference conf = pap.getConference();
             ArrayList<Pair<Integer,Double>> confOfPaperID = new ArrayList<>();
 
