@@ -14,19 +14,23 @@ public class DomainPersistanceController {
 
     public DomainPersistanceController() {}
 
-    public void readAll(HashMap<Integer, Author> authors, HashMap<Integer, Paper> papers,
-                        HashMap<Integer, Term> terms, HashMap<Integer, Conference> conferences,
-                        int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId){
-        readAuthorsFromFile(authors);
-        readPapersFromFile(papers);
-        readConferencesFromFile(conferences);
-        readTermsFromFile(terms);
+    public void readAll(HashMap<Integer, Author> authorsById,HashMap<Integer, Paper> papersById,
+                        HashMap<Integer, Conference> conferencesById,HashMap<Integer, Term> termsById,
+                        HashMap<Integer, Author> authorsByName,HashMap<Integer, Paper> papersByName,
+                        HashMap<Integer, Conference> conferencesByName,
+                        HashMap<Integer, Term> termsByName, int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId){
+        readAuthorsFromFile(authorsById, authorsByName);
+        readPapersFromFile(papersById, papersByName);
+        readConferencesFromFile(conferencesById, conferencesByName);
+        readTermsFromFile(termsById, termsByName);
     }
 
 
-    public void newEdit(HashMap<Integer, Author> authors, HashMap<Integer, Paper> papers,
-                        HashMap<Integer, Term> terms, HashMap<Integer, Conference> conferences,
-                        int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId){
+    public void newEdit(HashMap<Integer, Author> authorsById,HashMap<Integer, Paper> papersById,
+                        HashMap<Integer, Conference> conferencesById,HashMap<Integer, Term> termsById,
+                        HashMap<Integer, Author> authorsByName,HashMap<Integer, Paper> papersByName,
+                        HashMap<Integer, Conference> conferencesByName,
+                        HashMap<Integer, Term> termsByName, int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId){
 
         ConsolePrinter print = new ConsolePrinter();
         print.printEditInsertOrDelete();
@@ -34,246 +38,39 @@ public class DomainPersistanceController {
         String editType = scan.nextLine();
         print.printTypeInputEditMessage();
         String objectType = scan.nextLine();
+
         switch(editType){
             case("In"): //agefir
                 Scanner aux = new Scanner(System.in);
                 String objName;
-                switch(objectType){
-                case("A"):
-                    System.out.print("Quin nom te ");
-                    objName = aux.nextLine();
-                    System.out.print("Te relacio amb algun Paper? (0 -> no en te, nomdelsPapers separats per ; )");
-                    String paperNames = aux.nextLine();
-                    authorMaxId = authorMaxId + 1;
-                    Author author = new Author(objName, authorMaxId);
-                    if(!paperNames.equals("0")) {
-                        String relationedPapers[] = paperNames.split(";");
-                        for (String p : relationedPapers) {
-                            for(Integer id:papers.keySet()){
-                                Paper relatedPaper = papers.get(id);
-                                if(relatedPaper.getName().equals(p)){
-                                    relatedPaper.addAuthor(author.getId(),author);
-                                    author.addPaper(id,relatedPaper);
-                                    writeNewRelationPaperAuthor(relatedPaper,author);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    authors.put(authorMaxId,author);
-                    writeAuthorToFile(author);
-                    writeAuthorRelations(author);
-                    break;
-                case("P"):
-                    System.out.print("Quin nom te ");
-                    objName = aux.nextLine();
-                    paperMaxId = paperMaxId + 1;
-                    Paper paper = new Paper(objName, paperMaxId);
-                    //Autors relacionats
-                    System.out.print("Te relacio amb algun Autor? (0 -> no en te, nom dels autors separats per ; )");
-                    String authorNames = aux.nextLine();
-                    System.out.print("Te relacio amb algun Tema? (0 -> no en te, nom dels autors separats per ; )"); //Per a que no es noti si triga molt
-                    if(!authorNames.equals("0")) {
-                        String relationedAuthors[] = authorNames.split(";");
-                        for (String a : relationedAuthors) {
-                            for(Integer id:authors.keySet()){
-                                Author relatedAuthor = authors.get(id);
-                                if(relatedAuthor.getName().equals(a)){
-                                    relatedAuthor.addPaper(paper.getId(),paper);
-                                    paper.addAuthor(id,relatedAuthor);
-                                    writeNewRelationPaperAuthor(paper,relatedAuthor);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    //temas relacionats
-                    String termNames = aux.nextLine();
-                    System.out.print("Te relacio amb alguna Conferencia? (0 -> no en te, indica el nom )");
-                    if(!termNames.equals("0")) {
-                        String relationedTerms[] = termNames.split(";");
-                        for (String t : relationedTerms) {
-                            for(Integer id:terms.keySet()){
-                                Term relatedTerm = terms.get(id);
-                                if(relatedTerm.getName().equals(t)){
-                                    relatedTerm.addPaperWhichTalkAboutIt(paper.getId(),paper);
-                                    paper.addTerm(id,relatedTerm);
-                                    writeNewRelationPaperTerm(paper,relatedTerm);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    //Conferencia relacionada
-                    String confName = aux.nextLine();
-                    if(!confName.equals("0")) {
-                        for (Integer id : conferences.keySet()) {
-                            Conference relatedConference = conferences.get(id);
-                            if (relatedConference.getName().equals(confName)) {
-                                relatedConference.addExposedPaper(paper.getId(),paper);
-                                paper.setConference(relatedConference);
-                                writeNewRelationPaperConf(paper,relatedConference);
-                                break;
-                            }
-                        }
-                    }
-
-
-                    papers.put(authorMaxId,paper);
-                    writePaperToFile(paper);
-                    writePaperRelations(paper);
-                    break;
-                case("T"):
-                    System.out.print("Quin nom te ");
-                    objName = aux.nextLine();
-                    System.out.print("Te relacio amb algun Paper? (0 -> no en te, nom dels Papers separats per ; )");
-                    paperNames = aux.nextLine();
-                    termMaxId = termMaxId + 1;
-                    Term term = new Term(objName, termMaxId);
-                    if(!paperNames.equals("0")) {
-                        String relationedPapers[] = paperNames.split(";");
-                        for (String p : relationedPapers) {
-                            for(Integer id:papers.keySet()){
-                                Paper relatedPaper = papers.get(id);
-                                if(relatedPaper.getName().equals(p)){
-                                    relatedPaper.addTerm(term.getId(),term);
-                                    term.addPaperWhichTalkAboutIt(id,relatedPaper);
-                                    writeNewRelationPaperTerm(relatedPaper,term);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    terms.put(termMaxId,term);
-                    writeTermToFile(term);
-                    writeTermRelations(term);
-                    break;
-                case("C"):
-                    System.out.print("Quin nom te ");
-                    objName = aux.nextLine();
-                    System.out.print("Te relacio amb algun Paper? (0 -> no en te, nom dels Papers separats per ; )");
-                    paperNames = aux.nextLine();
-                    conferenceMaxId = conferenceMaxId + 1;
-                    Conference conf = new Conference(objName, conferenceMaxId);
-                    if(!paperNames.equals("0")) {
-                        String relationedPapers[] = paperNames.split(";");
-                        Paper relatedPaper;
-                        for (String p : relationedPapers) {
-                            for(Integer id:papers.keySet()){
-                                if(papers.get(id).getName().equals(p)){
-                                    relatedPaper = new Paper(p,id);
-                                    conf.addExposedPaper(id,relatedPaper);
-                                    writeNewRelationPaperConf(relatedPaper, conf);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    conferences.put(conferenceMaxId,conf);
-                    writeConferenceToFile(conf);
-                    writeConferenceRelations(conf);
-                    break;
-            }
-                break;
-            case("Ed"):
-                switch(objectType){
-                    case("A"):
-                        System.out.print("Quin autor vols canviar? (indica el nom)");
-                        String oldAuthorName = scan.nextLine();
-                        System.out.print("Indica el nou nom");
-                        String newAuthorName = scan.nextLine();
-                        boolean existsAuthor;
-                        for(Author a : authors.values()){
-                            if (a.getName().equals(oldAuthorName)) {
-                                existsAuthor = true;
-                                a.setName(newAuthorName);
-                                editAuthorFromFile(a, newAuthorName);
-                                HashMap<Integer,Paper> authorPapers = a.getPapers();
-                                for(Paper p : authorPapers.values()){
-                                    Author b = p.getAuthor(a.getId());
-                                    b.setName(newAuthorName);
-                                }
-                                break;
-                            }
-                        }
-
-                        if(!existsAuthor) System.out.print("L'autor amb nom " + oldAuthorName + " no existeix");
+                switch(objectType) {
+                    case ("A"):
                         break;
-                    case("P"):
-                        System.out.print("Quin paper vols canviar? (indica el nom)");
-                        String oldPaperName = scan.nextLine();
-                        System.out.print("Indica el nou nom");
-                        String newPaperName = scan.nextLine();
-                        boolean existsPaper;
-                        for(Paper p : papers.values()){
-                            if(p.getName().equals(oldPaperName)){ //Paper a modificar
-                                existsPaper = true;
-                                p.setName(newPaperName);
-                                editPaperFromFile(p,newPaperName);
-                                HashMap<Integer,Author> paperAuthors = p.getAuthors();
-                                for(Author a : paperAuthors.values()){
-                                    Paper l = a.getPaper(p.getId()); //Paper a modificar en el hashmap de l'autor
-                                    l.setName(newPaperName);
-                                }
-                                HashMap<Integer,Term> paperTerms = p.getTerms();
-                                for(Term t : paperTerms.values()){
-                                    Paper l = t.getPaper(p.getId());
-                                    l.setName(newPaperName);
-                                }
-                                Conference c = p.getConference();
-                                Paper l = c.getPaperByName(oldPaperName);
-                                l.setName(newPaperName);
-                                break;
-                            }
-                        }
-                        if(!existsPaper) System.out.print("El paper amb nom " + oldPaperName + " no existeix");
+                    case ("P"):
                         break;
-                    case("T"):
-                        System.out.print("Quin tema vols canviar? (indica el nom)");
-                        String oldTermName = scan.nextLine();
-                        System.out.print("Indica el nou nom");
-                        String newTermName = scan.nextLine();
-                        boolean existsTerm;
-                        for(Term t : terms.values()){
-                            if (t.getName().equals(oldTermName)) {
-                                existsTerm = true;
-                                t.setName(newTermName);
-                                editTermFromFile(t, newTermName);
-                                HashMap<Integer,Paper> termPapers = t.getPapersWhichTalkAboutThis();
-                                for(Paper p : termPapers.values()){
-                                    Term s = p.getTerm(t.getId());
-                                    s.setName(newTermName);
-                                }
-                                break;
-                            }
-                        }
-                        if(!existsTerm) System.out.print("El tema amb nom " + oldTermName + " no existeix");
+                    case ("T"):
                         break;
-                    case("C"):
-
+                    case ("C"):
                         break;
                 }
                 break;
+
+            case("Ed"):
+                switch(objectType){
+                    case("A"):
+                        break;
+                    case("P"):
+                        break;
+                    case("T"):
+                        break;
+                    case("C"):
+                        break;
+                }
+                break;
+
             case("El"):
                 switch(objectType){
                     case("A"):
-                        System.out.print("Quin Autor vols eliminar? (indica el nom)");
-                        String authorName = scan.nextLine();
-                        boolean existsAuthor;
-                        for(Author a : authors.values()){
-                            if(a.getName().equals(authorName)){
-                                existsAuthor = true;
-                                deleteAuthorFromFile(a);
-                                deleteAuthorRelationsOnFile(a);
-                                HashMap<Integer,Paper> authorPapers = a.getPapers();
-                                for(Paper p : authorPapers.values()){
-                                    p.removeAuthor(a.getId());
-                                }
-                                authors.remove(a.getId());
-                                break;
-                            }
-                        }
-                        if(!existsAuthor) System.out.print("El author amb nom " + authorName + " no existeix");
                         break;
                     case("P"):
                         break;
@@ -288,7 +85,7 @@ public class DomainPersistanceController {
 
     }
 
-    private void readAuthorsFromFile(HashMap<Integer, Author> authors){
+    private void readAuthorsFromFile(HashMap<Integer, Author> authorsById, HashMap<String,Author> authorsByName){
         File inputFile = new File("/../data/author.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
             String line = null;
@@ -296,14 +93,14 @@ public class DomainPersistanceController {
                 String[] aux = line.split(";");
                 int id = Integer.parseInt(aux[0]);
                 Author author = new Author(aux[1],id);
-                readAuthorRelations(author);
-                authors.put(id,author);
+                authorsById.put(id,author);
+                authorsByName.put(aux[1],author);
             }
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);        }
     }
 
-    private void readPapersFromFile(HashMap<Integer, Paper> papers){
+    private void readPapersFromFile(HashMap<Integer, Paper> papersById, HashMap<String,Paper> papersByName){
         File inputFile = new File("/../data/paper.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line = null;
@@ -311,14 +108,14 @@ public class DomainPersistanceController {
                 String[] aux = line.split(";");
                 int id = Integer.parseInt(aux[0]);
                 Paper paper = new Paper(aux[1],id);
-                readPaperRelations(paper);
-                papers.put(id,paper);
+                papersById.put(id,paper);
+                papersByName.put(aux[1], paper);
             }
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);        }
     }
 
-    private void readConferencesFromFile(HashMap<Integer, Conference> conferences){
+    private void readConferencesFromFile(HashMap<Integer, Conference> conferencesById, HashMap<String,Conference> conferencesByName){
         File inputFile = new File("/../data/conf.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line = null;
@@ -328,16 +125,15 @@ public class DomainPersistanceController {
                 Conference conf = new Conference(aux[1],id);
                 conf.setYear(Integer.parseInt(aux[2]));
                 conf.setContinent(aux[3]);
-                readConferenceRelations(conf);
-                conferences.put(id,conf);
-                //conferences2.put(String,conf);
+                conferencesById.put(id,conf);
+                conferencesByName.put(aux[1], conf);
             }
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);        }
     }
 
 
-    private void readTermsFromFile(HashMap<Integer, Term> terms){
+    private void readTermsFromFile(HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName){
         File inputFile = new File("/../datda/term.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line = null;
@@ -345,8 +141,8 @@ public class DomainPersistanceController {
                 String[] aux = line.split(";");
                 int id = Integer.parseInt(aux[0]);
                 Term term = new Term(aux[1],id);
-                readTermRelations(term);
-                terms.put(id,term);
+                termsById.put(id,term);
+                termsByName.put(aux[1], term);
             }
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);        }
@@ -572,10 +368,28 @@ public class DomainPersistanceController {
         }
     }
 
-    private void readAuthorRelations(Author author){}
-    private void readPaperRelations(Paper paper){}
-    private void readConferenceRelations(Conference conference){}
-    private void readTermRelations(Term term){}
+    private void readPaperAuthorRelations( HashMap<Integer, Paper> papersById, HashMap<String,Paper> papersByName,HashMap<Integer, Author> authorsById, HashMap<String,Author> authorsByNameHashMap){
+        File inputFile = new File("/../data/paper_author.txt");
+        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
+            String line;
+            Paper p;
+            Author a;
+            while((line = reader.readLine()) != null){
+                String aux[] = line.split(";");
+                p = papersById.get(Integer.parseInt(aux[0]));
+                a = authorsById.get(Integer.parseInt(aux[1]));
+
+                p.addAuthor(a);
+                a.addPaper(p);
+
+            }
+        }
+        catch (IOException x){
+            System.err.format("IOException: %s%s", x);
+        }
+    }
+    private void readConferenceRelations(HashMap<Integer, Conference> conferencesById, HashMap<String,Conference> conferencesByName){}
+    private void readTermRelations(HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName){}
 
     private void writeAuthorRelations(Author author){}
     private void writePaperRelations(Paper paper){}

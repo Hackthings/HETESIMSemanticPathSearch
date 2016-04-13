@@ -65,7 +65,7 @@ public class DomainMainController {
         HashMap<Integer, ArrayList<Pair<Integer, Double>>> paperAuthor = new HashMap<>();
 
         for (Paper pap : papersById.values()) {
-            HashMap<Integer, Author> authorsOfPaper = pap.getAuthors();
+            HashMap<Integer, Author> authorsOfPaper = pap.getAuthorsById();
             ArrayList<Pair<Integer,Double>> authorsOfPaperIDs = new ArrayList<>();
             for (Author author : authorsOfPaper.values()) {
                 Pair<Integer,Double> parID= new Pair(author.getId(),1.0);
@@ -93,7 +93,7 @@ public class DomainMainController {
     public HashMap<Integer, ArrayList<Pair<Integer, Double>>> getPaperTermMatrix() {
         HashMap<Integer, ArrayList<Pair<Integer, Double>>> paperTerm = new HashMap<>();
         for (Paper pap : papersById.values()) {
-            HashMap<Integer, Term> termsOfPapers = pap.getTerms();
+            HashMap<Integer, Term> termsOfPapers = pap.getTermsById();
             ArrayList<Pair<Integer,Double>> termsOfPaperIDs = new ArrayList<>();
             for (Term term : termsOfPapers.values()) {
                 Pair<Integer,Double> parID= new Pair(term.getId(),1.0);
