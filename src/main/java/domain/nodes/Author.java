@@ -3,27 +3,45 @@ package main.java.domain.nodes;
 import java.util.HashMap;
 
 public class Author extends Node {
-    private HashMap<Integer, Paper> papers;
+    private HashMap<Integer, Paper> papersById;
+    private HashMap<String, Paper> papersByName;
 
     public Author(String name, int id) {
         super(name, id);
     }
 
-    public HashMap<Integer, Paper> getPapers() {
-        return papers;
+    public HashMap<Integer, Paper> getPapersById() {
+        return papersById;
     }
 
-    public Paper getPaper (int id){
-        Paper p = papers.get(id);
+    public HashMap<String, Paper> getPapersByName() {
+        return papersByName;
+    }
+
+
+    public Paper getPaperById (int id){
+        Paper p = papersById.get(id);
         if(p != null) return p;
         return null;
     }
 
-    public void addPaper(int id, Paper paper) {
-        papers.put(id, paper);
+    public Paper getPaperByName (String name){
+        Paper p = papersByName.get(name);
+        if(p != null) return p;
+        return null;
     }
 
-    public void removePaper(int id) {
-        papers.remove(id);
+    public void addPaper(Paper paper) {
+        papersById.put(paper.getId(), paper);
+        papersByName.put(paper.getName(),paper);
     }
+
+    public void removePaperById(int id) {
+        papersById.remove(id);
+    }
+
+    public void removePaperByName(String name) {
+        papersByName.remove(name);
+    }
+
 }
