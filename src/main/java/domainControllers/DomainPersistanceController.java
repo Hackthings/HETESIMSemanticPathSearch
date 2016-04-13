@@ -16,13 +16,13 @@ public class DomainPersistanceController {
 
     public void readAll(HashMap<Integer, Author> authorsById,HashMap<Integer, Paper> papersById,
                         HashMap<Integer, Conference> conferencesById,HashMap<Integer, Term> termsById,
-                        HashMap<Integer, Author> authorsByName,HashMap<Integer, Paper> papersByName,
-                        HashMap<Integer, Conference> conferencesByName,
-                        HashMap<Integer, Term> termsByName, int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId){
-        readAuthorsFromFile(authorsById, authorsByName);
-        readPapersFromFile(papersById, papersByName);
-        readConferencesFromFile(conferencesById, conferencesByName);
-        readTermsFromFile(termsById, termsByName);
+                        HashMap<String, Author> authorsByName,HashMap<String, Paper> papersByName,
+                        HashMap<String, Conference> conferencesByName,
+                        HashMap<String, Term> termsByName, int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId){
+        readAuthorsFromFile(authorsById, authorsByName,authorMaxId);
+        readPapersFromFile(papersById, papersByName,paperMaxId);
+        readConferencesFromFile(conferencesById, conferencesByName,termMaxId);
+        readTermsFromFile(termsById, termsByName,conferenceMaxId);
     }
 
 
@@ -85,13 +85,15 @@ public class DomainPersistanceController {
 
     }
 
-    private void readAuthorsFromFile(HashMap<Integer, Author> authorsById, HashMap<String,Author> authorsByName){
+    private void readAuthorsFromFile(HashMap<Integer, Author> authorsById, HashMap<String,Author> authorsByName,int authorMaxId){
         File inputFile = new File("/../data/author.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
             String line = null;
+            authorMaxId = 0;
             while ((line = reader.readLine()) != null) {
                 String[] aux = line.split(";");
                 int id = Integer.parseInt(aux[0]);
+                if(id > authorMaxId) authorMaxId = id;
                 Author author = new Author(aux[1],id);
                 authorsById.put(id,author);
                 authorsByName.put(aux[1],author);
@@ -100,13 +102,14 @@ public class DomainPersistanceController {
             System.err.format("IOException: %s%n", x);        }
     }
 
-    private void readPapersFromFile(HashMap<Integer, Paper> papersById, HashMap<String,Paper> papersByName){
+    private void readPapersFromFile(HashMap<Integer, Paper> papersById, HashMap<String,Paper> papersByName, int paperMaxId){
         File inputFile = new File("/../data/paper.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line = null;
             while ((line = reader.readLine()) != null) {
                 String[] aux = line.split(";");
                 int id = Integer.parseInt(aux[0]);
+                if(id > paperMaxId) paperMaxId = id;
                 Paper paper = new Paper(aux[1],id);
                 papersById.put(id,paper);
                 papersByName.put(aux[1], paper);
@@ -115,13 +118,14 @@ public class DomainPersistanceController {
             System.err.format("IOException: %s%n", x);        }
     }
 
-    private void readConferencesFromFile(HashMap<Integer, Conference> conferencesById, HashMap<String,Conference> conferencesByName){
+    private void readConferencesFromFile(HashMap<Integer, Conference> conferencesById, HashMap<String,Conference> conferencesByName, int conferenceMaxId){
         File inputFile = new File("/../data/conf.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line = null;
             while ((line = reader.readLine()) != null) {
                 String[] aux = line.split(";");
                 int id = Integer.parseInt(aux[0]);
+                if(id > conferenceMaxId) conferenceMaxId = id;
                 Conference conf = new Conference(aux[1],id);
                 conf.setYear(Integer.parseInt(aux[2]));
                 conf.setContinent(aux[3]);
@@ -133,13 +137,15 @@ public class DomainPersistanceController {
     }
 
 
-    private void readTermsFromFile(HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName){
+    private void readTermsFromFile(HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName, int termMaxId){
         File inputFile = new File("/../datda/term.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line = null;
             while ((line = reader.readLine()) != null) {
                 String[] aux = line.split(";");
                 int id = Integer.parseInt(aux[0]);
+                if(id > termMaxId) termMaxId = id;
+
                 Term term = new Term(aux[1],id);
                 termsById.put(id,term);
                 termsByName.put(aux[1], term);
@@ -368,7 +374,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private void readPaperAuthorRelations( HashMap<Integer, Paper> papersById, HashMap<String,Paper> papersByName,HashMap<Integer, Author> authorsById, HashMap<String,Author> authorsByNameHashMap){
+    private void readPaperAuthorRelations( HashMap<Integer, Paper> papersById,HashMap<Integer, Author> authorsById){
         File inputFile = new File("/../data/paper_author.txt");
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line;
@@ -381,15 +387,50 @@ public class DomainPersistanceController {
 
                 p.addAuthor(a);
                 a.addPaper(p);
-
             }
         }
         catch (IOException x){
-            System.err.format("IOException: %s%s", x);
+            System.err.format("IOException: %s%n", x);
         }
     }
-    private void readConferenceRelations(HashMap<Integer, Conference> conferencesById, HashMap<String,Conference> conferencesByName){}
-    private void readTermRelations(HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName){}
+    private void readConferenceRelations( HashMap<Integer, Paper> papersById,HashMap<Integer, Conference> conferencesById){
+        File inputFile = new File("/../data/paper_confr.txt");
+        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
+            String line;
+            Paper p;
+            Conference c;
+            while((line = reader.readLine()) != null){
+                String aux[] = line.split(";");
+                p = papersById.get(Integer.parseInt(aux[0]));
+                c = conferencesById.get(Integer.parseInt(aux[1]));
+
+                p.setConference(c);
+                c.addExposedPaper(p);
+            }
+        }
+        catch (IOException x){
+            System.err.format("IOException: %s%n", x);
+        }
+    }
+    private void readTermRelations(HashMap<Integer, Paper> papersById, HashMap<Integer, Term> termsById){
+        File inputFile = new File("/../data/paper_term.txt");
+        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
+            String line;
+            Paper p;
+            Term t;
+            while((line = reader.readLine()) != null){
+                String aux[] = line.split(";");
+                p = papersById.get(Integer.parseInt(aux[0]));
+                t = termsById.get(Integer.parseInt(aux[1]));
+
+                p.addTerm(t);
+                t.addPaperWhichTalkAboutIt(p);
+            }
+        }
+        catch (IOException x){
+            System.err.format("IOException: %s%n", x);
+        }
+    }
 
     private void writeAuthorRelations(Author author){}
     private void writePaperRelations(Paper paper){}
