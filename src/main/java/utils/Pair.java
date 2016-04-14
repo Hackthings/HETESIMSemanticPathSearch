@@ -1,25 +1,25 @@
 package main.java.utils;
 
 public class Pair<K,V> {
-    private K key;
-    private V value;
+    private K first;
+    private V second;
 
-    public Pair(K key, V value){
-        this.key=key;
-        this.value=value;
-    }
-
-    public K getKey(){
-        return key;
+    public Pair(K first, V second){
+        this.first=first;
+        this.second=second;
     }
 
-    public V getValue(){
-        return value;
+    public K getFirst(){
+        return first;
     }
-    public void setKey(K key){
-        this.key=key;
+
+    public V getSecond(){
+        return second;
     }
-    public void setValue(V value){
-        this.value=value;
+    public void setFirst(K first){
+        this.first=first;
+    }
+    public void setSecond(V second){
+        this.second=second;
     }
 }
