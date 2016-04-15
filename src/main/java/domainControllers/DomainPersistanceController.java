@@ -34,30 +34,30 @@ public class DomainPersistanceController {
                         HashMap<Integer, Conference> conferencesByName,
                         HashMap<Integer, Term> termsByName, int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId){
 
-        ConsolePrinter print = new ConsolePrinter();
-        print.printEditInsertOrDelete();
+
+        System.out.println("Vols editar, insertar o eliminar? (Ed -> editar, In -> insertar, El -> eliminar");
         Scanner scan = new Scanner(System.in);
         String editType = scan.nextLine();
-        print.printTypeInputEditMessage();
+        System.out.println("Quin tipus d'objecte vols modificar? (A -> Author, P -> Paper, T -> Term, C -> Conference");
         String objectType = scan.nextLine();
 
         switch(editType){
             case("In"): //agefir
-                Scanner aux = new Scanner(System.in);
-                String objName;
+
                 switch(objectType) {
-                    case ("A"):
+                    case ("A"): //Author
                         break;
-                    case ("P"):
+                    case ("P"): //Paper
                         break;
-                    case ("T"):
+                    case ("T"): //Term
                         break;
-                    case ("C"):
+                    case ("C"): //Conference
                         break;
                 }
                 break;
 
-            case("Ed"):
+            case("Ed"): //Editar
+
                 switch(objectType){
                     case("A"):
                         break;
@@ -70,7 +70,8 @@ public class DomainPersistanceController {
                 }
                 break;
 
-            case("El"):
+            case("El"): // Eliminar
+
                 switch(objectType){
                     case("A"):
                         break;
