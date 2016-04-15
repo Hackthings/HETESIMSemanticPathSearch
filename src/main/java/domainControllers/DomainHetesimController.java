@@ -1,5 +1,7 @@
 package main.java.domainControllers;
 
+import main.java.utils.Matrix;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 

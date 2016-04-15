@@ -158,7 +158,7 @@ public class DomainPersistanceController {
     private void writeAuthorToFile(Author author){
         String wrauthor = Integer.toString(author.getId()) + ";" + author.getName();
         File inputFile = new File("/../datda/author.txt");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
             writer.write(wrauthor, 0, wrauthor.length());
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
@@ -168,7 +168,7 @@ public class DomainPersistanceController {
     public void writePaperToFile(Paper paper){
         String wrpaper = Integer.toString(paper.getId()) + ";" + paper.getName();
         File inputFile = new File("/../data/paper.txt");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
             writer.write(wrpaper, 0, wrpaper.length());
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
@@ -179,7 +179,7 @@ public class DomainPersistanceController {
         String wrconf = Integer.toString(conference.getId()) + ";" + conference.getName() +
                 ";" + conference.getYear() + ";" + conference.getContinent();
         File inputFile = new File("/../data/conf.txt");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
             writer.write(wrconf, 0, wrconf.length());
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
@@ -189,7 +189,7 @@ public class DomainPersistanceController {
     private void writeTermToFile(Term term){
         String wrterm = Integer.toString(term.getId()) + ";" + term.getName();
         File inputFile = new File("/../data/term.txt");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))) {
             writer.write(wrterm, 0, wrterm.length());
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
@@ -202,176 +202,46 @@ public class DomainPersistanceController {
     private void deleteAuthorFromFile(Author author){
         File inputFile = new File("/../data/author.txt");
 
-       try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
-
-           String lineToRemove = Integer.toString(author.getId()) + ";" + author.getName();
-           String currentLine;
-
-           while ((currentLine = reader.readLine()) != null) {
-               if (currentLine.equals(lineToRemove))
-                   writer.write("");
-           }
-       } catch(IOException x){
-           System.err.format("IOExeption: %s%n", x);
-       }
     }
 
     private void deletePaperFromFile(Paper paper){
 
         File inputFile = new File("/../data/paper.txt");
-        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile));) {
-            String lineToRemove = Integer.toString(paper.getId()) + ";" + paper.getName();
-            String currentLine;
 
-            while ((currentLine = reader.readLine()) != null) {
-                if (currentLine.equals(lineToRemove))
-                    writer.write("");
-            }
-        }
-        catch(IOException x){
-            System.err.format("IOExeption: %s%n", x);
-        }
     }
 
 
     private void deleteConferenceFromFile(Conference conference){
         File inputFile = new File("/../data/conf.txt");
-        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
-            String lineToRemove = Integer.toString(conference.getId()) + ";" + conference.getName()
-                    + ";" + conference.getYear() + ";" + conference.getContinent();
-            String currentLine;
-
-            while ((currentLine = reader.readLine()) != null) {
-                if (currentLine.equals(lineToRemove))
-                    writer.write("");
-            }
-        }
-        catch (IOException x) {
-            System.err.format("IOExeption: %s%n", x);
-        }
     }
 
     private void deleteTermFromFile(Term term){
         File inputFile = new File("/../data/term.txt");
-        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
-            String lineToRemove = Integer.toString(term.getId()) + ";" + term.getName();
-            String currentLine;
-
-            while ((currentLine = reader.readLine()) != null) {
-                if (currentLine.equals(lineToRemove))
-                    writer.write("");
-            }
-        }
-        catch (IOException x){
-            System.err.format("IOExeption: %s%n", x);
-        }
     }
 
     private void editAuthorFromFile(Author author, String name){
         File inputFile = new File("/../data/author.txt");
-        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
-            String lineToRemove = Integer.toString(author.getId()) + ";" + author.getName();
-            String currentLine;
-            String wrauthor = Integer.toString(author.getId()) + ";" + name;
-
-            while ((currentLine = reader.readLine()) != null) {
-                if (currentLine.equals(lineToRemove))
-                    writer.write(wrauthor);
-            }
-        }
-        catch(IOException x) {
-            System.err.format("IOExeption: %s%n", x);
-        }
     }
 
 
     private void editPaperFromFile(Paper paper, String value) {
         File inputFile = new File("/../data/paper.txt");
-        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
-            String lineToRemove = Integer.toString(paper.getId()) + ";" + paper.getName();
-            String currentLine;
-            String wrpaper = Integer.toString(paper.getId()) + ";" + value;
-
-            while ((currentLine = reader.readLine()) != null) {
-                if (currentLine.equals(lineToRemove))
-                    writer.write(wrpaper);
-            }
-
-        }
-        catch(IOException x){
-            System.err.format("IOExeption: %s%n", x);
-        }
     }
 
 
     private void editConferenceFromFile(Conference conference, String key, String value){
         File inputFile = new File("/../data/conference.txt");
 
-        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
-
-            String lineToRemove = Integer.toString(conference.getId()) + ";" + conference.getName()
-                    + ";" + conference.getYear() + ";" + conference.getContinent();
-            String currentLine;
-            String wrconf = null;
-
-            switch (key) {
-                case "nom":
-                    wrconf = Integer.toString(conference.getId()) + ";" + value
-                            + ";" + conference.getYear() + ";" + conference.getContinent();
-                    break;
-                case "id":
-                    wrconf = value + ";" + conference.getName()
-                            + ";" + conference.getYear() + ";" + conference.getContinent();
-                    break;
-                case "any":
-                    wrconf = Integer.toString(conference.getId()) + ";" + conference.getName()
-                            + ";" + value + ";" + conference.getContinent();
-                    break;
-                case "continent":
-                    wrconf = Integer.toString(conference.getId()) + ";" + conference.getName()
-                            + ";" + conference.getYear() + ";" + value;
-                    break;
-            }
-
-            while ((currentLine = reader.readLine()) != null) {
-                if (currentLine.equals(lineToRemove))
-                    writer.write(wrconf);
-            }
-        }
-        catch (IOException x){
-            System.err.format("IOExeption: %s%n", x);
-        }
     }
 
 
     private void editTermFromFile(Term term, String value){
         File inputFile = new File("/../data/term.txt");
-        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
-            String lineToRemove = Integer.toString(term.getId()) + ";" + term.getName();
-            String currentLine;
-            String wrterm = Integer.toString(term.getId()) + ";" + value;
-
-            while ((currentLine = reader.readLine()) != null) {
-                if (currentLine.equals(lineToRemove))
-                    writer.write(wrterm);
-            }
-        }
-        catch(IOException x){
-            System.err.format("IOExeption: %s%n", x);
-        }
     }
 
     private void readPaperAuthorRelations( HashMap<Integer, Paper> papersById,HashMap<Integer, Author> authorsById){
