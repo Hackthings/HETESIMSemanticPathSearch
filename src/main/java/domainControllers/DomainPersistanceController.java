@@ -19,10 +19,12 @@ public class DomainPersistanceController {
                         HashMap<String, Author> authorsByName,HashMap<String, Paper> papersByName,
                         HashMap<String, Conference> conferencesByName,
                         HashMap<String, Term> termsByName, int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId){
+
         readAuthorsFromFile(authorsById, authorsByName,authorMaxId);
         readPapersFromFile(papersById, papersByName,paperMaxId);
         readConferencesFromFile(conferencesById, conferencesByName,termMaxId);
         readTermsFromFile(termsById, termsByName,conferenceMaxId);
+
     }
 
 
@@ -160,6 +162,7 @@ public class DomainPersistanceController {
         File inputFile = new File("/../datda/author.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
             writer.write(wrauthor, 0, wrauthor.length());
+            writer.newLine();
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
@@ -170,6 +173,7 @@ public class DomainPersistanceController {
         File inputFile = new File("/../data/paper.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
             writer.write(wrpaper, 0, wrpaper.length());
+            writer.newLine();
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
@@ -181,6 +185,7 @@ public class DomainPersistanceController {
         File inputFile = new File("/../data/conf.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
             writer.write(wrconf, 0, wrconf.length());
+            writer.newLine();
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
@@ -191,6 +196,7 @@ public class DomainPersistanceController {
         File inputFile = new File("/../data/term.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))) {
             writer.write(wrterm, 0, wrterm.length());
+            writer.newLine();
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
@@ -302,21 +308,129 @@ public class DomainPersistanceController {
         }
     }
 
-    private void writeAuthorRelations(Author author){}
-    private void writePaperRelations(Paper paper){}
-    private void writeConferenceRelations(Conference conference){}
-    private void writeTermRelations(Term term){}
+    private void writeAuthorRelations(Author author){
+        File inputFile = new File("/../data/paper_author.txt");
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
+            String authorId = Integer.toString(author.getId());
+            for(Paper p : author.getPapersById().values()){
+                String relationToWrite = Integer.toString(p.getId()) + ";" + authorId;
+                writer.write(relationToWrite,0,relationToWrite.length());
+                writer.newLine();
+            }
+        }
+        catch (IOException x){
+            System.err.format("IOException : %s%n", x);
+        }
+    }
+
+    private void writePaperRelations(Paper paper){
+        //Escriu la relació amb els autors
+        File inputFile = new File("/../data/paper_author.txt");
+        String paperId = Integer.toString(paper.getId());
+        try( BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
+            for(Author a : paper.getAuthorsById().values()){
+                String relationToWrite = paperId + ";" + Integer.toString(a.getId());
+                writer.write(relationToWrite,0,relationToWrite.length());
+                writer.newLine();
+            }
+        }
+        catch (IOException x){
+            System.err.format("IOException : %s%n", x);
+        }
+        //Escriu les relacions amb els termes
+        inputFile = new File("/../data/paper_Term.txt");
+        try( BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
+            for(Term t : paper.getTermsById().values()){
+                String relationToWrite = paperId + ";" + Integer.toString(t.getId());
+                writer.write(relationToWrite,0,relationToWrite.length());
+                writer.newLine();
+            }
+        }
+        catch (IOException x){
+            System.err.format("IOException : %s%n", x);
+        }
+        //Escriu la relacio amb al conferencia
+        inputFile = new File("/../data/paper_conf.txt");
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
+            String relationToWrite = paperId + ";" + Integer.toString(paper.getConference().getId());
+            writer.write(relationToWrite,0,relationToWrite.length());
+            writer.newLine();
+        }
+        catch (IOException x){
+            System.err.format("IOException : %s%n", x);
+        }
+    }
+
+    private void writeConferenceRelations(Conference conference){
+        File inputFile = new File("/../data/paper_conf.txt");
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
+            String confId = Integer.toString(conference.getId());
+            for(Paper p : conference.getExposedPapersById().values()){
+                String relationToWrite = Integer.toString(p.getId()) + ";" + confId;
+                writer.write(relationToWrite,0,relationToWrite.length());
+                writer.newLine();
+            }
+        }
+        catch (IOException x){
+            System.err.format("IOException : %s%n", x);
+        }
+    }
+    private void writeTermRelations(Term term){
+        File inputFile = new File("/../data/paper_term.txt");
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
+            String termId = Integer.toString(term.getId());
+            for(Paper p : term.getPapersWhichTalkAboutThisById().values()){
+                String relationToWrite = Integer.toString(p.getId()) + ";" + termId;
+                writer.write(relationToWrite,0,relationToWrite.length());
+                writer.newLine();
+            }
+        }
+        catch (IOException x){
+            System.err.format("IOException : %s%n", x);
+        }
+    }
+
+
+    private void writeNewRelationPaperAuthor(Paper paper, Author author){
+        File inputFile = new File("/../data/paper_author.txt");
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
+            String paperId = Integer.toString(paper.getId());
+            String relationToWrite = paperId + ";" + Integer.toString(author.getId());
+            writer.write(relationToWrite,0,relationToWrite.length());
+            writer.newLine();
+        }
+        catch (IOException x){
+            System.err.format("IOException : %s%n", x);
+        }
+    }
+
+    private void writeNewRelationPaperTerm(Paper paper, Term term){
+        File inputFile = new File("/../data/paper_term.txt");
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
+            String relationToWrite = Integer.toString(paper.getId()) + ";" + Integer.toString(term.getId());
+            writer.write(relationToWrite,0,relationToWrite.length());
+            writer.newLine();
+        }
+        catch (IOException x){
+            System.err.format("IOException : %s%n", x);
+        }
+    }
+
+    private void writeNewRelationPaperConf(Paper paper, Conference conf) {
+        File inputFile = new File("/../data/paper_conf.txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile, true))) {
+            String relationToWrite = Integer.toString(paper.getId()) + ";" + Integer.toString(conf.getId());
+            writer.write(relationToWrite, 0, relationToWrite.length());
+            writer.newLine();
+        } catch (IOException x) {
+            System.err.format("IOException : %s%n", x);
+        }
+    }
 
     private void deleteAuthorRelationsOnFile(Author author){}
     private void deletePaperRelationsOnFile(Paper paper){}
     private void deleteConferenceRelationsOnFile(Conference conference){}
     private void deleteTermRelationsOnFile(Term term){}
-
-
-    private void writeNewRelationPaperAuthor(Paper paper, Author author){}
-    private void writeNewRelationPaperTerm(Paper paper, Term term){}
-    private void writeNewRelationPaperConf(Paper paper, Conference conf){}
-
 
 
 
