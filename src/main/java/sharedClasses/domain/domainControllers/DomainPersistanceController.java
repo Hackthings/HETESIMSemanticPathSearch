@@ -30,9 +30,9 @@ public class DomainPersistanceController {
 
     public void newEdit(HashMap<Integer, Author> authorsById, HashMap<Integer, Paper> papersById,
                         HashMap<Integer, Conference> conferencesById, HashMap<Integer, Term> termsById,
-                        HashMap<Integer, Author> authorsByName, HashMap<Integer, Paper> papersByName,
-                        HashMap<Integer, Conference> conferencesByName,
-                        HashMap<Integer, Term> termsByName, int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId) {
+                        HashMap<String, Author> authorsByName, HashMap<String, Paper> papersByName,
+                        HashMap<String, Conference> conferencesByName,
+                        HashMap<String, Term> termsByName, int authorMaxId, int paperMaxId, int termMaxId, int conferenceMaxId) {
 
 
         System.out.println("Vols editar, insertar o eliminar? (Ed -> editar, In -> insertar, El -> eliminar");

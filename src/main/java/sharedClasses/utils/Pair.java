@@ -1,5 +1,4 @@
-package Matrix;
-
+package main.java.sharedClasses.utils;
 
 public class Pair<Integer,Double> {
     private int first;    //Primer element del parell: clau

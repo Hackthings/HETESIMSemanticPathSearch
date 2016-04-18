@@ -1,6 +1,7 @@
 package main.java.ownClasses.domain.domainControllers;
 
 import main.java.sharedClasses.utils.Matrix;
+import main.java.sharedClasses.utils.Pair;
 
 import java.util.ArrayList;
 
@@ -50,7 +51,7 @@ public class DomainHetesimController {
     public static double modulus(ArrayList<Pair<Integer, Double>> v){
         double sum = 0;
         for (Pair<Integer, Double> aV : v) {
-            sum += aV.second*aV.second;
+            sum += aV.getSecond()*aV.getSecond();
         }
         return Math.sqrt(sum);
     }
