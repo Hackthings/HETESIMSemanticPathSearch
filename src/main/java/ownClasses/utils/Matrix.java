@@ -1,4 +1,4 @@
-package main.java.utils;
+package main.java.ownClasses.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package main.java.domain.queries;
+package main.java.ownClasses.domain.queries;
 
 public class IntervaledQuery extends Query {
     private double firstRelevance;

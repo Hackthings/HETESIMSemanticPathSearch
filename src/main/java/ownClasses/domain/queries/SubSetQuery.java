@@ -1,4 +1,4 @@
-package main.java.domain.queries;
+package main.java.ownClasses.domain.queries;
 
 public class SubSetQuery extends Query {
     private String restriction;

@@ -1,9 +1,8 @@
-package main.java.domainControllers;
+package main.java.ownClasses.domain.domainControllers;
 
-import main.java.utils.Matrix;
+import main.java.ownClasses.utils.Matrix;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class DomainHetesimController {
     Matrix probAuthorPaper;

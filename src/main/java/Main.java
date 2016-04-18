@@ -1,7 +1,7 @@
 package main.java;
 
-import main.java.domainControllers.DomainMainController;
-import main.java.presentation.ConsolePrinter;
+import main.java.ownClasses.domain.domainControllers.DomainMainController;
+import main.java.ownClasses.presentation.ConsolePrinter;
 
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package main.java.domain.nodes;
+package main.java.sharedClasses.domain.nodes;
 
 public class Node {
     private int id;

@@ -1,4 +1,4 @@
-package main.java.domainControllers;
+package main.java.ownClasses.domain.domainControllers;
 
 public class DomainHetesimControllerOLD {
     double[][] probAuthorPaper;

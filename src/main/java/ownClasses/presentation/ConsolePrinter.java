@@ -1,4 +1,4 @@
-package main.java.presentation;
+package main.java.ownClasses.presentation;
 
 public class ConsolePrinter {
 

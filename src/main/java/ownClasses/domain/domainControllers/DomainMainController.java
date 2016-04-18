@@ -1,10 +1,11 @@
-package main.java.domainControllers;
+package main.java.ownClasses.domain.domainControllers;
 
-import main.java.utils.Pair;
-import main.java.domain.nodes.Author;
-import main.java.domain.nodes.Conference;
-import main.java.domain.nodes.Paper;
-import main.java.domain.nodes.Term;
+import main.java.ownClasses.utils.Pair;
+import main.java.sharedClasses.domain.domainControllers.DomainPersistanceController;
+import main.java.sharedClasses.domain.nodes.Author;
+import main.java.sharedClasses.domain.nodes.Conference;
+import main.java.sharedClasses.domain.nodes.Paper;
+import main.java.sharedClasses.domain.nodes.Term;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package main.java.utils;
+package main.java.ownClasses.utils;
 
 public class Pair<K,V> {
     private K first;
