@@ -1,6 +1,6 @@
 package main.java.ownClasses.domain.domainControllers;
 
-import main.java.ownClasses.utils.Matrix;
+import main.java.sharedClasses.utils.Matrix;
 
 import java.util.ArrayList;
 
