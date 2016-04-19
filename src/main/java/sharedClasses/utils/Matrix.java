@@ -73,6 +73,11 @@ public class Matrix {
         } else return -1;
     }
 
+    //TODO divideix totes les files per el nombre de valors
+    //Pre: la matriu conte nomes 1s i 0s (no cal tirar excepcio)
+    public Matrix normalize(){
+
+    }
 
     //Pre: Cert
     //Post: Retorna la matriu transposada.
