@@ -1,6 +1,5 @@
 package main.java.ownClasses.domain.domainControllers;
 
-import main.java.sharedClasses.utils.Pair;
 import main.java.sharedClasses.domain.domainControllers.DomainPersistanceController;
 import main.java.sharedClasses.domain.nodes.Author;
 import main.java.sharedClasses.domain.nodes.Conference;
