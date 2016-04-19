@@ -79,7 +79,6 @@ public class DomainHetesimController {
         ArrayList<Integer> rows = pmPl.rows();
         ArrayList<Integer> columns = pmPri.rows();
         for(int i = 0; i < rows.size(); ++i){
-            columns =
             for(int j = 0; j < result[0].length; ++j){
 
                 result[i][j] /= (modulus(pla)*modulus(prb));
