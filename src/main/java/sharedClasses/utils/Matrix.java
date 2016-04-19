@@ -14,9 +14,8 @@ public class Matrix {
     //Pre: Cert
     //Post: Crea una matriu buida i inicialitza el pair
     public Matrix() {
-        this.matrix = new HashMap<Integer, ArrayList<Pair<Integer,Double>>>();
-
-        p = new Pair<Integer,Double>(0,0.0);
+        this.matrix = new HashMap<Integer, ArrayList<Pair<Integer, Double>>>();
+        p = new Pair<Integer, Double>(0,0.0);
     }
 
     //Pre: Cert
@@ -66,7 +65,7 @@ public class Matrix {
         if (this.matrix.containsKey(i)) {
             ArrayList<Pair<Integer, Double>> list = this.matrix.get(i);
             if (list.contains(j)) {
-                p = list.get(i);    //Esta malament
+                p = list.get(i);
                 return p.getSecond();
 
             } else return -1;
@@ -95,12 +94,15 @@ public class Matrix {
     //Post: retorna la matriu producte del paràmetre implícit amb m
     public Matrix multiply(Matrix m){
         Matrix mult = new Matrix();
-        Iterator<Integer> it = this.matrix.keySet().iterator();
-        double valor = 0;
         for (int x = 0; x < rows(); ++x) {
             for (int y = 0; y < m.colums(x); y++) {
+                double valor = 0;
                 for (int z = 0; z < colums(x); z++) {
-                    valor += getValue(x, z)*m.getValue(z, y);
+                    double val1 = getValue(x, z);
+                    double val2 = m.getValue(z, y);
+                    if (val1 == -1) val1 = 0;
+                    if (val2 == -1) val2 = 0;
+                    valor += val1*val2;
                 }
                 mult.addValue(x, y, valor);
             }
