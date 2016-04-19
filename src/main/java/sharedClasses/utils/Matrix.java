@@ -7,7 +7,6 @@ import java.util.Iterator;
 
 
 public class Matrix {
-    private Pair<Integer, Double> p; //Objecte de la classe Pair
     private HashMap<Integer, ArrayList<Pair<Integer, Double>>> matrix; //aquest es el format de la matriu que va dir el borja, podem discutir altres si us es mes facil o ho creieu millor. En la nostra practica Double sera segurament Double
 
     //Constructora de la classe
@@ -15,7 +14,6 @@ public class Matrix {
     //Post: Crea una matriu buida i inicialitza el pair
     public Matrix() {
         this.matrix = new HashMap<Integer, ArrayList<Pair<Integer, Double>>>();
-        p = new Pair<Integer, Double>(0,0.0);
     }
 
     //Pre: Cert
@@ -51,7 +49,7 @@ public class Matrix {
     public void addValue(int i, int j, double value){
         //TODO si value es 0 comprovar si cal eliminar la fila
         if (this.matrix.containsKey(i)) {
-            p = new Pair<Integer,Double>(j, value);
+            Pair<Integer, Double> p = new Pair<Integer,Double>(j, value);
             this.matrix.get(i).add(j, p);
         } else {
             addRow(i);
@@ -66,7 +64,7 @@ public class Matrix {
         if (this.matrix.containsKey(i)) {
             ArrayList<Pair<Integer, Double>> list = this.matrix.get(i);
             if (list.contains(j)) {
-                p = list.get(i);
+                Pair<Integer, Double> p = list.get(i);
                 return p.getSecond();
 
             } else return -1;
