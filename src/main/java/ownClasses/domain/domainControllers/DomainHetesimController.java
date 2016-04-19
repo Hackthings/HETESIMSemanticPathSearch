@@ -1,9 +1,8 @@
-package main.java.ownClasses.domain.domainControllers;
+package main.java.domainControllers;
 
 import main.java.sharedClasses.utils.Matrix;
-import main.java.sharedClasses.utils.Pair;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DomainHetesimController {
     Matrix probAuthorPaper;
@@ -24,8 +23,8 @@ public class DomainHetesimController {
         probConferencePaper = conferencePaper.normalize();
         probPaperConference = paperConference.normalize();
 
-        auxiliarObjectL = new Matrix;
-        auxiliarObjectR = new Matrix;
+        auxiliarObjectL = new Matrix();
+        auxiliarObjectR = new Matrix();
     }
 
     private Matrix findMatrix(char source, char target){
@@ -46,14 +45,6 @@ public class DomainHetesimController {
         if(target == 'C') return probPaperConference;
         if(side == 'l') return auxiliarObjectL;
         return auxiliarObjectR;
-    }
-
-    public static double modulus(ArrayList<Pair<Integer, Double>> v){
-        double sum = 0;
-        for (Pair<Integer, Double> aV : v) {
-            sum += aV.getSecond()*aV.getSecond();
-        }
-        return Math.sqrt(sum);
     }
 
     public Matrix heteSim(String path) {
@@ -82,33 +73,41 @@ public class DomainHetesimController {
         Matrix pmPri = findMatrix(pri.charAt(0), pri.charAt(1), 'r');
         for(int i = 2; i < pri.length(); ++i) pmPri = pmPri.multiply(findMatrix(pri.charAt(i-1), pri.charAt(i), 'r'));
         Matrix result = pmPl.multiply(pmPri.transpose());
-        ArrayList<Pair<Integer, Double>> pla, prb;
         //TODO
-        for(int i = 0; i < result.length; ++i){
-            pla = pmPl[i];
-            for(int j = 0; j < result[0].length; ++j){
-                prb = pmPri[j];
-                result[i][j] /= (modulus(pla)*modulus(prb));
+
+
+        ArrayList<Integer> rows = pmPl.rows();
+        ArrayList<Integer> columns = pmPri.rows();
+        Double rmod = 0.0;
+        Double cmod = 0.0;
+        for(Integer row : rows){
+            rmod = pmPl.modulus(row);
+            for(Integer column : columns){
+                cmod = pmPri.modulus(column);
+                result.addValue(row, column, result.getValue(row, column)/(rmod*cmod));
             }
         }
         return result;
     }
 
-    private void generateE(char source, char target, double[][] matrixL, double[][] matrixR){
-        double[][] middleMatrix = findMatrix(source, target);
+    private void generateE(char source, char target, Matrix matrixL, Matrix matrixR){
+        Matrix middleMatrix = findMatrix(source, target);
         //count links
-        int links = 0;
-        for (double[] aMiddleMatrix : middleMatrix) {
-            for (double e : aMiddleMatrix) {
-                if(e != 0) links++;
-            }
-        }
-        matrixL = new double[middleMatrix.length][links];
-        matrixR = new double[middleMatrix[0].length][links];
+        /*int links = 0;
+        for(Integer row : middleMatrix.rows()){
+            links += middleMatrix.colums(row).size();
+        }*/
+        matrixL = new Matrix();
+        matrixR = new Matrix();
         //add links
         int c = 0;
+        for(int row : middleMatrix.rows()){
+            for(int column : middleMatrix.columns(row)){
+
+            }
+        }
         for(int i = 0; i < middleMatrix.length; ++i){
-            for(int j = 0; j < middleMatrix[0].length; ++i){
+            for(int j = 0; j < middleMatrix[0].length; ++j){
                 if(middleMatrix[i][j] != 0){
                     matrixL[i][c] = middleMatrix[i][j];
                     matrixR[j][c] = 1; //not yet normalized
