@@ -132,7 +132,33 @@ public class DomainPersistanceController {
                         //afegirTermes();
                         break;
                     case ("T"): //Term
+                        System.out.println("Introduïu el nom de l'autor");
+                        String nameTerm = scan.nextLine();
+                        Term t = new Term(nameTerm,authorMaxId+1);
+                        if (termsByName.get(t.getName()) != null) {
+                            System.err.println("Aquest autor ja existeix");
+                            break;
+                        }
+                        termsByName.put(t.getName(), t);
+                        termsById.put(t.getId(),t);
+                        writeTermToFile(t);
+                        System.out.println("En quants articles ha participat?");
+                        numArt = scan.nextInt();
+                        scan.nextLine();
+                        for (int i = 0; i < numArt; ++i) {
+                            System.out.println("Introduïu el nom de l'article");
+                            String nameArt = scan.nextLine();
+
+                            try {
+                                p = papersByName.get(nameArt);
+                                t.addPaperWhichTalkAboutIt(p);
+                                writeNewRelationPaperTerm(p,t);
+                            }catch(NullPointerException e) {
+                                System.err.println("L'article no existeix");
+                            }
+                        }
                         break;
+
                     case ("C"): //Conference
                         System.out.println("Introduïu el nom de l'article");
                         String confName = scan.nextLine();
@@ -230,15 +256,26 @@ public class DomainPersistanceController {
                                 Paper p = (Paper) it.next();
                                 p.removeAuthor(a);
                                 if(p.getAuthorsById().size() < 1) {
+                                    papersById.remove(p.getId());
+                                    papersByName.remove(p.getName());
+                                    deletePaperFromFile(p);
                                     //RECOMENÇAR UN PROCES DE ELIMINAR PAPER
                                     Collection<Term> auxiliart = p.getTermsById().values();
                                     Conference auxiliarc = p.getConference();
                                     auxiliarc.removeExposedPaperById(p.getId());
-                                    if(auxiliarc.getExposedPapersById().size() < 1) deleteConferenceFromFile(auxiliarc);
+                                    if(auxiliarc.getExposedPapersById().size() < 1){
+                                        conferencesById.remove(auxiliarc.getId());
+                                        conferencesByName.remove(auxiliarc.getName());
+                                        deleteConferenceFromFile(auxiliarc);
+                                    }
                                     for(Iterator itt = auxiliart.iterator(); itt.hasNext();){
                                         Term t = (Term) itt.next();
                                         t.removePaperWhichTalkAboutItById(p.getId());
-                                        if(t.getPapersWhichTalkAboutThisById().size() < 1) deleteTermFromFile(t);
+                                        if(t.getPapersWhichTalkAboutThisById().size() < 1) {
+                                            termsById.remove(t.getId());
+                                            termsByName.remove(t.getName());
+                                            deleteTermFromFile(t);
+                                        }
                                     }
                                 }
                             }
@@ -262,16 +299,28 @@ public class DomainPersistanceController {
                             Collection<Term> auxiliart = p.getTermsById().values();
                             Conference auxiliarc = p.getConference();
                             auxiliarc.removeExposedPaperById(p.getId());
-                            if(auxiliarc.getExposedPapersById().size() < 1) deleteConferenceFromFile(auxiliarc);
+                            if(auxiliarc.getExposedPapersById().size() < 1){
+                                conferencesById.remove(auxiliarc.getId());
+                                conferencesByName.remove(auxiliarc.getName());
+                                deleteConferenceFromFile(auxiliarc);
+                            }
                             for(Iterator ita = auxiliara.iterator(); ita.hasNext();){
                                 Author a = (Author) ita.next();
                                 a.removePaperById(p.getId());
-                                if(a.getPapersById().size() < 1) deleteAuthorFromFile(a);
+                                if(a.getPapersById().size() < 1){
+                                    authorsById.remove(a.getId());
+                                    authorsByName.remove(a.getName());
+                                    deleteAuthorFromFile(a);
+                                }
                             }
                             for(Iterator itt = auxiliart.iterator(); itt.hasNext();){
                                 Term t = (Term) itt.next();
                                 t.removePaperWhichTalkAboutItById(p.getId());
-                                if(t.getPapersWhichTalkAboutThisById().size() < 1) deleteTermFromFile(t);
+                                if(t.getPapersWhichTalkAboutThisById().size() < 1){
+                                    termsById.remove(t.getId());
+                                    termsByName.remove(t.getName());
+                                    deleteTermFromFile(t);
+                                }
                             }
                             //eliminar paper
                             deletePaperFromFile(p);
@@ -284,8 +333,7 @@ public class DomainPersistanceController {
                         }
                         break;
                     case("T"):
-                        System.out.println("això no té sentit");
-                        /*try {
+                        try {
                             System.out.println("Introdueix el nom del terme a esborrar)");
                             name = scan.nextLine();
                             Term t = termsByName.get(name);
@@ -303,7 +351,7 @@ public class DomainPersistanceController {
                             termsById.remove(id);
                         }catch (NullPointerException ex){
                             System.out.println("Aquest terme no existeix.");
-                        }*/
+                        }
                         break;
                     case("C"):
                         try {
@@ -554,6 +602,8 @@ public class DomainPersistanceController {
             //Rename the new file to the filename the original file had.
             if (!tempFile.renameTo(inputFile))
                 System.out.println("Could not rename file");
+
+            deleteConferenceRelationsOnFile(conference);
         }
 
         catch (IOException ex) {
@@ -591,6 +641,8 @@ public class DomainPersistanceController {
             //Rename the new file to the filename the original file had.
             if (!tempFile.renameTo(inputFile))
                 System.out.println("Could not rename file");
+
+            deleteTermRelationsOnFile(term);
         }
 
         catch (IOException ex) {
