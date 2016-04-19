@@ -18,18 +18,18 @@ public class Matrix {
 
     //Pre: Cert
     //TODO Post: Retorna un vector amb les files valides
-    public int rows() {
-        return this.matrix.size();
+    public ArrayList<Integer> rows() {
+        //return this.matrix.size();
     }
 
     //Pre: Cert
     //TODO Post: Retorna un vector amb les columnes valides de la fila key
-    public int colums(int key) {
-        if (this.matrix.isEmpty()) return 0;
+    public ArrayList<Integer> colums(int key) {
+        /*if (this.matrix.isEmpty()) return 0;
         else {
             ArrayList<Pair<Integer,Double>> tmp = this.matrix.get(key);
             return tmp.size();
-        }
+        }*/
     }
 
     //Pre: Cert

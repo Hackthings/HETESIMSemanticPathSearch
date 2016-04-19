@@ -23,8 +23,8 @@ public class DomainHetesimController {
         probConferencePaper = conferencePaper.normalize();
         probPaperConference = paperConference.normalize();
 
-        auxiliarObjectL = new Matrix;
-        auxiliarObjectR = new Matrix;
+        auxiliarObjectL = new Matrix();
+        auxiliarObjectR = new Matrix();
     }
 
     private Matrix findMatrix(char source, char target){
@@ -76,17 +76,19 @@ public class DomainHetesimController {
         //TODO
 
 
-        for(int i = 0; i < result.length; ++i){
-            modpla = pmPl[i];
+        ArrayList<Integer> rows = pmPl.rows();
+        ArrayList<Integer> columns = pmPri.rows();
+        for(int i = 0; i < rows.size(); ++i){
+            columns =
             for(int j = 0; j < result[0].length; ++j){
-                prb = pmPri[j];
+
                 result[i][j] /= (modulus(pla)*modulus(prb));
             }
         }
         return result;
     }
 
-    private void generateE(char source, char target, double[][] matrixL, double[][] matrixR){
+    private void generateE(char source, char target, Matrix matrixL, Matrix matrixR){
         double[][] middleMatrix = findMatrix(source, target);
         //count links
         int links = 0;
