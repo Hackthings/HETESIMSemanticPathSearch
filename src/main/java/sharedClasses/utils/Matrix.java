@@ -20,6 +20,7 @@ public class Matrix {
     //TODO Post: Retorna un vector amb les files valides
     public ArrayList<Integer> rows() {
         //return this.matrix.size();
+        return null;
     }
 
     //Pre: Cert
@@ -30,6 +31,7 @@ public class Matrix {
             ArrayList<Pair<Integer,Double>> tmp = this.matrix.get(key);
             return tmp.size();
         }*/
+        return null;
     }
 
     //Pre: Cert
