@@ -78,30 +78,36 @@ public class DomainHetesimController {
 
         ArrayList<Integer> rows = pmPl.rows();
         ArrayList<Integer> columns = pmPri.rows();
-        for(int i = 0; i < rows.size(); ++i){
-            for(int j = 0; j < result[0].length; ++j){
-
-                result[i][j] /= (modulus(pla)*modulus(prb));
+        Double rmod = 0.0;
+        Double cmod = 0.0;
+        for(Integer row : rows){
+            rmod = pmPl.modulus(row);
+            for(Integer column : columns){
+                cmod = pmPri.modulus(column);
+                result.addValue(row, column, result.getValue(row, column)/(rmod*cmod));
             }
         }
         return result;
     }
 
     private void generateE(char source, char target, Matrix matrixL, Matrix matrixR){
-        double[][] middleMatrix = findMatrix(source, target);
+        Matrix middleMatrix = findMatrix(source, target);
         //count links
-        int links = 0;
-        for (double[] aMiddleMatrix : middleMatrix) {
-            for (double e : aMiddleMatrix) {
-                if(e != 0) links++;
-            }
-        }
-        matrixL = new double[middleMatrix.length][links];
-        matrixR = new double[middleMatrix[0].length][links];
+        /*int links = 0;
+        for(Integer row : middleMatrix.rows()){
+            links += middleMatrix.colums(row).size();
+        }*/
+        matrixL = new Matrix();
+        matrixR = new Matrix();
         //add links
         int c = 0;
+        for(int row : middleMatrix.rows()){
+            for(int column : middleMatrix.columns(row)){
+
+            }
+        }
         for(int i = 0; i < middleMatrix.length; ++i){
-            for(int j = 0; j < middleMatrix[0].length; ++i){
+            for(int j = 0; j < middleMatrix[0].length; ++j){
                 if(middleMatrix[i][j] != 0){
                     matrixL[i][c] = middleMatrix[i][j];
                     matrixR[j][c] = 1; //not yet normalized

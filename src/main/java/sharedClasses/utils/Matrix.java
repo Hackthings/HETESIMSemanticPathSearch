@@ -25,7 +25,7 @@ public class Matrix {
 
     //Pre: Cert
     //TODO Post: Retorna un vector amb les columnes valides de la fila key
-    public ArrayList<Integer> colums(int key) {
+    public ArrayList<Integer> columns(int key) {
         /*if (this.matrix.isEmpty()) return 0;
         else {
             ArrayList<Pair<Integer,Double>> tmp = this.matrix.get(key);
@@ -101,10 +101,10 @@ public class Matrix {
     public Matrix multiply(Matrix m){
         //TODO comprovar el Pre i llançar excepcio
         Matrix mult = new Matrix();
-        for (int x = 0; x < rows(); ++x) {
-            for (int y = 0; y < m.colums(x); y++) {
+        for (int x = 0; x < rows().size(); ++x) {
+            for (int y = 0; y < m.colums(x).size(); y++) {
                 double valor = 0;
-                for (int z = 0; z < colums(x); z++) {
+                for (int z = 0; z < colums(x).size(); z++) {
                     double val1 = getValue(x, z);
                     double val2 = m.getValue(z, y);
                     if (val1 == -1) val1 = 0;
