@@ -1,9 +1,8 @@
-package main.java.ownClasses.domain.domainControllers;
+package main.java.domainControllers;
 
 import main.java.sharedClasses.utils.Matrix;
-import main.java.sharedClasses.utils.Pair;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DomainHetesimController {
     Matrix probAuthorPaper;
@@ -48,14 +47,6 @@ public class DomainHetesimController {
         return auxiliarObjectR;
     }
 
-    public static double modulus(ArrayList<Pair<Integer, Double>> v){
-        double sum = 0;
-        for (Pair<Integer, Double> aV : v) {
-            sum += aV.getSecond()*aV.getSecond();
-        }
-        return Math.sqrt(sum);
-    }
-
     public Matrix heteSim(String path) {
         String pl, pr;
         //create auxiliary matrices (if needed) and split pl/pr
@@ -82,10 +73,11 @@ public class DomainHetesimController {
         Matrix pmPri = findMatrix(pri.charAt(0), pri.charAt(1), 'r');
         for(int i = 2; i < pri.length(); ++i) pmPri = pmPri.multiply(findMatrix(pri.charAt(i-1), pri.charAt(i), 'r'));
         Matrix result = pmPl.multiply(pmPri.transpose());
-        ArrayList<Pair<Integer, Double>> pla, prb;
         //TODO
+
+
         for(int i = 0; i < result.length; ++i){
-            pla = pmPl[i];
+            modpla = pmPl[i];
             for(int j = 0; j < result[0].length; ++j){
                 prb = pmPri[j];
                 result[i][j] /= (modulus(pla)*modulus(prb));

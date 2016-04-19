@@ -19,23 +19,23 @@ public class Matrix {
     }
 
     //Pre: Cert
-    //Post: Retorna el nombre de files de la matriu
+    //TODO Post: Retorna un vector amb les files valides
     public int rows() {
         return this.matrix.size();
     }
 
     //Pre: Cert
-    //Post: Retorna el nombre de columnes de la matriu
+    //TODO Post: Retorna un vector amb les columnes valides de la fila key
     public int colums(int key) {
         if (this.matrix.isEmpty()) return 0;
         else {
             ArrayList<Pair<Integer,Double>> tmp = this.matrix.get(key);
             return tmp.size();
         }
-    }//int key-->> revisar
+    }
 
     //Pre: Cert
-    //Post: Afegeix la fila i a la matriu (un ArrayList<Pair<Integer, Double>> buit)
+    //Post: Afegeix una fila buida (un ArrayList<Pair<Integer, Double>> buit)
     public void addRow(int i){
         this.matrix.put(i, new ArrayList<Pair<Integer, Double>>());
     }
@@ -49,6 +49,7 @@ public class Matrix {
     //Pre: Cert
     //Post: Afegeix el valor value a la posició i,j. Afegeix una fila si es necessari.
     public void addValue(int i, int j, double value){
+        //TODO si value es 0 comprovar si cal eliminar la fila
         if (this.matrix.containsKey(i)) {
             p = new Pair<Integer,Double>(j, value);
             this.matrix.get(i).add(j, p);
@@ -93,6 +94,7 @@ public class Matrix {
     //Pre: el paràmetre implícit té el mateix nombre de columnes que files té m
     //Post: retorna la matriu producte del paràmetre implícit amb m
     public Matrix multiply(Matrix m){
+        //TODO comprovar el Pre i llançar excepcio
         Matrix mult = new Matrix();
         for (int x = 0; x < rows(); ++x) {
             for (int y = 0; y < m.colums(x); y++) {
@@ -110,9 +112,10 @@ public class Matrix {
         return mult;
     }
 
-    //Pre: Existeix una fila i.
+    //Pre: Cert
     //Post: retorna el modul de la fila i.
     public double modulus(int i) {
+        //si la fila no existeix retorna 0
         ArrayList<Pair<Integer, Double>> list = this.matrix.get(i);
         double m = 0;
         for (Pair par : list) {
