@@ -54,7 +54,6 @@ public class DomainPersistanceController {
         System.out.println("Quin tipus d'objecte vols modificar? (A -> Author, P -> Paper, T -> Term, C -> Conference");
         String objectType = scan.nextLine();
         String name;
-        String[] aux;
         String newName;
         String origenName;
         int id;
@@ -134,7 +133,7 @@ public class DomainPersistanceController {
                     case ("T"): //Term
                         System.out.println("Introduïu el nom de l'autor");
                         String nameTerm = scan.nextLine();
-                        Term t = new Term(nameTerm,authorMaxId+1);
+                        Term t = new Term(nameTerm,termMaxId+1);
                         if (termsByName.get(t.getName()) != null) {
                             System.err.println("Aquest autor ja existeix");
                             break;
@@ -256,27 +255,13 @@ public class DomainPersistanceController {
                                 Paper p = (Paper) it.next();
                                 p.removeAuthor(a);
                                 if(p.getAuthorsById().size() < 1) {
+
+                                    //RECOMENÇAR UN PROCES DE ELIMINAR PAPER
+                                    deletePaperRelationsOnConferences(conferencesById, conferencesByName, p);
+                                    deletePaperRelationsOnTerms(termsById, termsByName, p);
                                     papersById.remove(p.getId());
                                     papersByName.remove(p.getName());
                                     deletePaperFromFile(p);
-                                    //RECOMENÇAR UN PROCES DE ELIMINAR PAPER
-                                    Collection<Term> auxiliart = p.getTermsById().values();
-                                    Conference auxiliarc = p.getConference();
-                                    auxiliarc.removeExposedPaperById(p.getId());
-                                    if(auxiliarc.getExposedPapersById().size() < 1){
-                                        conferencesById.remove(auxiliarc.getId());
-                                        conferencesByName.remove(auxiliarc.getName());
-                                        deleteConferenceFromFile(auxiliarc);
-                                    }
-                                    for(Iterator itt = auxiliart.iterator(); itt.hasNext();){
-                                        Term t = (Term) itt.next();
-                                        t.removePaperWhichTalkAboutItById(p.getId());
-                                        if(t.getPapersWhichTalkAboutThisById().size() < 1) {
-                                            termsById.remove(t.getId());
-                                            termsByName.remove(t.getName());
-                                            deleteTermFromFile(t);
-                                        }
-                                    }
                                 }
                             }
                             //eliminem l'autor
@@ -295,33 +280,11 @@ public class DomainPersistanceController {
                             name = scan.nextLine();
                             Paper p = papersByName.get(name);
                             //eliminar relacions
-                            Collection<Author> auxiliara = p.getAuthorsById().values();
-                            Collection<Term> auxiliart = p.getTermsById().values();
-                            Conference auxiliarc = p.getConference();
-                            auxiliarc.removeExposedPaperById(p.getId());
-                            if(auxiliarc.getExposedPapersById().size() < 1){
-                                conferencesById.remove(auxiliarc.getId());
-                                conferencesByName.remove(auxiliarc.getName());
-                                deleteConferenceFromFile(auxiliarc);
-                            }
-                            for(Iterator ita = auxiliara.iterator(); ita.hasNext();){
-                                Author a = (Author) ita.next();
-                                a.removePaperById(p.getId());
-                                if(a.getPapersById().size() < 1){
-                                    authorsById.remove(a.getId());
-                                    authorsByName.remove(a.getName());
-                                    deleteAuthorFromFile(a);
-                                }
-                            }
-                            for(Iterator itt = auxiliart.iterator(); itt.hasNext();){
-                                Term t = (Term) itt.next();
-                                t.removePaperWhichTalkAboutItById(p.getId());
-                                if(t.getPapersWhichTalkAboutThisById().size() < 1){
-                                    termsById.remove(t.getId());
-                                    termsByName.remove(t.getName());
-                                    deleteTermFromFile(t);
-                                }
-                            }
+
+                            deletePaperRelationsOnConferences(conferencesById, conferencesByName, p);
+
+                            deletePaperRelationsOnAuthors(authorsById, authorsByName, p);
+                            deletePaperRelationsOnTerms(termsById, termsByName, p);
                             //eliminar paper
                             deletePaperFromFile(p);
                             deletePaperRelationsOnFile(p);
@@ -342,7 +305,16 @@ public class DomainPersistanceController {
                             for(Iterator it = auxiliar.iterator();it.hasNext();) {
                                 Paper p = (Paper) it.next();
                                 p.removeTerm(t);
-                                if(p.getAuthorsById().size() < 1) ;//RECOMENÇAR UN PROCES DE ELIMINAR PAPER
+                                if(p.getTermsById().size() < 1){ //Eliminar paper i relacions
+                                    deletePaperRelationsOnAuthors(authorsById, authorsByName, p);
+
+                                    deletePaperRelationsOnConferences(conferencesById, conferencesByName, p);
+
+                                    deletePaperFromFile(p);
+                                    deletePaperRelationsOnFile(p);
+                                    papersByName.remove(p.getName());
+                                    papersById.remove(p.getId());
+                                }
                             }
                             //eliminem el term
                             deleteTermFromFile(t);
@@ -359,15 +331,21 @@ public class DomainPersistanceController {
                             name = scan.nextLine();
                             Conference c =conferencesByName.get(name);
                             //eliminem relacions
-                            Collection<Paper> auxiliar = c.getExposedPapersById().values();
-                            for(Iterator it = auxiliar.iterator();it.hasNext();) {
-                                //COMENÇAR UN PROCES DE ELIMINAR PAPERS
+                            Collection<Paper> auxiliarp = c.getExposedPapersById().values();
+                            for(Iterator it = auxiliarp.iterator();it.hasNext();) {
+                                Paper p = (Paper) it.next();
+                                deletePaperRelationsOnAuthors(authorsById, authorsByName, p);
+                                deletePaperRelationsOnTerms(termsById, termsByName, p);
+                                deletePaperFromFile(p);
+                                papersById.remove(p.getId());
+                                papersByName.remove(p.getName());
                             }
                             //eliminem l'autor
                             deleteConferenceFromFile(c);
                             id = c.getId();
                             conferencesByName.remove(name);
                             conferencesById.remove(id);
+
                         }catch (NullPointerException ex){
                             System.out.println("Aquesta conferencia no existeix.");
                         }
@@ -379,11 +357,13 @@ public class DomainPersistanceController {
 
     }
 
+
+
     private void readAuthorsFromFile(HashMap<Integer, Author> authorsById, HashMap<String,Author> authorsByName,int authorMaxId){
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat("\\src\\main.java\\data\\author.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
-            String line = null;
+            String line;
             authorMaxId = 0;
             while ((line = reader.readLine()) != null) {
                 String[] aux = line.split(";");
@@ -401,7 +381,7 @@ public class DomainPersistanceController {
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat("\\src\\main.java\\data\\paper.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 String[] aux = line.split(";");
                 int id = Integer.parseInt(aux[0]);
@@ -418,7 +398,7 @@ public class DomainPersistanceController {
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat("\\src\\main.java\\data\\conf.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 String[] aux = line.split(";");
                 int id = Integer.parseInt(aux[0]);
@@ -438,7 +418,7 @@ public class DomainPersistanceController {
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat("\\src\\main.java\\data\\term.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 String[] aux = line.split(";");
                 int id = Integer.parseInt(aux[0]);
@@ -452,14 +432,7 @@ public class DomainPersistanceController {
             System.err.format("IOException: %s%n", x);        }
     }
 
-    private void writeToFile(String wrline, File inputFile) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
-            writer.write(wrline, 0, wrline.length());
-            writer.newLine();
-        } catch (IOException x) {
-            System.err.format("IOException: %s%n", x);
-        }
-    }
+
 
     private void writeAuthorToFile(Author author){
         String wrauthor = Integer.toString(author.getId()) + ";" + author.getName();
@@ -497,194 +470,43 @@ public class DomainPersistanceController {
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat("\\src\\main.java\\data\\author.txt"));
         File tempFile = new File("myTempFile.txt");
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){ //
-
-
-
-            String lineToRemove = authorId;
-            String currentLine;
-            while ((currentLine = reader.readLine()) != null) {
-                // trim newline when comparing with lineToRemove
-                String trimmedLine = currentLine.trim();
-                if (!trimmedLine.startsWith(lineToRemove))
-                writer.write(currentLine + System.getProperty("line.separator"));
-            }
-            writer.close();
-            reader.close();
-
-            //Delete the original file
-            if (!inputFile.delete()) {
-                System.out.println("Could not delete file");
-                return;
-            }
-
-            //Rename the new file to the filename the original file had.
-            if (!tempFile.renameTo(inputFile))
-                System.out.println("Could not rename file");
-            deleteAuthorRelationsOnFile(author);
-        }
-
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-
-
+        if (!deleteFromFile(authorId, inputFile, tempFile)) return;
+        deleteAuthorRelationsOnFile(author);
     }
 
+
+
     private void deletePaperFromFile(Paper paper){
-
-        try { //
-            String paperId = Integer.toString(paper.getId());
-            String p = new File("").getAbsolutePath();
-            File inputFile = new File(p.concat("\\src\\main.java\\data\\paper.txt"));
-            File tempFile = new File("myTempFile.txt");
-            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-
-            String lineToRemove = paperId;
-            String currentLine;
-            while ((currentLine = reader.readLine()) != null) {
-                // trim newline when comparing with lineToRemove
-                String trimmedLine = currentLine.trim();
-                if (trimmedLine.startsWith(lineToRemove)) continue;
-                writer.write(currentLine + System.getProperty("line.separator"));
-            }
-            writer.close();
-            reader.close();
-
-            //Delete the original file
-            if (!inputFile.delete()) {
-                System.out.println("Could not delete file");
-                return;
-            }
-
-            //Rename the new file to the filename the original file had.
-            if (!tempFile.renameTo(inputFile))
-                System.out.println("Could not rename file");
-
-            deletePaperRelationsOnFile(paper);
-        }
-
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        String paperId = Integer.toString(paper.getId());
+        String p = new File("").getAbsolutePath();
+        File inputFile = new File(p.concat("\\src\\main.java\\data\\paper.txt"));
+        File tempFile = new File("myTempFile.txt");
+        if (!deleteFromFile(paperId, inputFile, tempFile)) return;
+        deletePaperRelationsOnFile(paper);
     }
 
 
     private void deleteConferenceFromFile(Conference conference){
-        try { //
-            String conferenceId = Integer.toString(conference.getId());
-            String p = new File("").getAbsolutePath();
-            File inputFile = new File(p.concat("\\src\\main.java\\data\\conf.txt"));
-            File tempFile = new File("myTempFile.txt");
-            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-
-            String lineToRemove = conferenceId;
-            String currentLine;
-            while ((currentLine = reader.readLine()) != null) {
-                // trim newline when comparing with lineToRemove
-                String trimmedLine = currentLine.trim();
-                if (trimmedLine.startsWith(lineToRemove)) continue;
-                writer.write(currentLine + System.getProperty("line.separator"));
-            }
-            writer.close();
-            reader.close();
-
-            //Delete the original file
-            if (!inputFile.delete()) {
-                System.out.println("Could not delete file");
-                return;
-            }
-
-            //Rename the new file to the filename the original file had.
-            if (!tempFile.renameTo(inputFile))
-                System.out.println("Could not rename file");
-
-            deleteConferenceRelationsOnFile(conference);
-        }
-
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        String conferenceId = Integer.toString(conference.getId());
+        String p = new File("").getAbsolutePath();
+        File inputFile = new File(p.concat("\\src\\main.java\\data\\conf.txt"));
+        File tempFile = new File("myTempFile.txt");
+        if (!deleteFromFile(conferenceId, inputFile, tempFile)) return;
+        deleteConferenceRelationsOnFile(conference);
 
     }
 
     private void deleteTermFromFile(Term term){
-        try { //
-            String termId = Integer.toString(term.getId());
-            String p = new File("").getAbsolutePath();
-            File inputFile = new File(p.concat("\\src\\main.java\\data\\term.txt"));
-            File tempFile = new File("myTempFile.txt");
-            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-
-            String lineToRemove = termId;
-            String currentLine;
-            while ((currentLine = reader.readLine()) != null) {
-                // trim newline when comparing with lineToRemove
-                String trimmedLine = currentLine.trim();
-                if (trimmedLine.startsWith(lineToRemove)) continue;
-                writer.write(currentLine + System.getProperty("line.separator"));
-            }
-            writer.close();
-            reader.close();
-
-            //Delete the original file
-            if (!inputFile.delete()) {
-                System.out.println("Could not delete file");
-                return;
-            }
-
-            //Rename the new file to the filename the original file had.
-            if (!tempFile.renameTo(inputFile))
-                System.out.println("Could not rename file");
-
-            deleteTermRelationsOnFile(term);
-        }
-
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        String termId = Integer.toString(term.getId());
+        String p = new File("").getAbsolutePath();
+        File inputFile = new File(p.concat("\\src\\main.java\\data\\term.txt"));
+        File tempFile = new File("myTempFile.txt");
+        if (!deleteFromFile(termId, inputFile, tempFile)) return;
+        deleteTermRelationsOnFile(term);
 
     }
 
-    private void editFromFile(String nodeId, String replace, File inputFile, File tempFile) {
-        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
 
-            String lineToEdit = nodeId;
-            String currentLine;
-            while ((currentLine = reader.readLine()) != null) {
-                // trim newline when comparing with lineToRemove
-                String trimmedLine = currentLine.trim();
-                if (trimmedLine.startsWith(lineToEdit)){
-                    writer.write(replace + System.getProperty("line.separator"));
-                    continue;
-                }
-                writer.write(currentLine + System.getProperty("line.separator"));
-            }
-            writer.close();
-            reader.close();
-
-            //Delete the original file
-            if (!inputFile.delete()) {
-                System.out.println("Could not delete file");
-                return;
-            }
-
-            //Rename the new file to the filename the original file had.
-            if (!tempFile.renameTo(inputFile))
-                System.out.println("Could not rename file");
-
-        }
-
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
 
 
     private void editAuthorFromFile(Author author, String name){
@@ -907,43 +729,6 @@ public class DomainPersistanceController {
 
 
 
-    private void writeNewRelationPaperConf(Paper paper, Conference conf) {
-        String p = new File("").getAbsolutePath();
-        File inputFile = new File(p.concat("\\src\\main.java\\data\\paper_conf.txt"));
-        writeRelationToFile(paper.getId(), conf.getId(), inputFile);
-    }
-
-    private void deleteRelationsFromFile(String nodeId, File inputFile, File tempFile) {
-        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
-
-
-            String lineToRemove = nodeId;
-            String currentLine;
-            while ((currentLine = reader.readLine()) != null) {
-                // trim newline when comparing with lineToRemove
-                String trimmedLine = currentLine.trim();
-                if (!trimmedLine.endsWith(lineToRemove))
-                    writer.write(currentLine + System.getProperty("line.separator"));
-            }
-            writer.close();
-            reader.close();
-
-            //Delete the original file
-            if (!inputFile.delete()) {
-                System.out.println("Could not delete file");
-                return;
-            }
-
-            //Rename the new file to the filename the original file had.
-            if (!tempFile.renameTo(inputFile))
-                System.out.println("Could not rename file");
-        }
-
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
 
 
     private void deleteAuthorRelationsOnFile(Author author){
@@ -951,7 +736,7 @@ public class DomainPersistanceController {
             String p = new File("").getAbsolutePath();
             File inputFile = new File(p.concat("\\src\\main.java\\data\\paper_author.txt"));
             File tempFile = new File("myTempFile.txt");
-        deleteRelationsFromFile(authorId, inputFile, tempFile);
+        deleteRelationsFromFile(authorId, inputFile, tempFile, false);
 
     }
 
@@ -972,15 +757,15 @@ public class DomainPersistanceController {
 
            //PAPER_AUTHOR
 
-           deleteRelationsFromFile(paperId, inputFile1, tempFile1);
+           deleteRelationsFromFile(paperId, inputFile1, tempFile1, true);
 
            //PAPER_CONF
 
-           deleteRelationsFromFile(paperId, inputFile2, tempFile2);
+           deleteRelationsFromFile(paperId, inputFile2, tempFile2 , true);
 
            //PAPER_TERM
 
-           deleteRelationsFromFile(paperId, inputFile3, tempFile3);
+           deleteRelationsFromFile(paperId, inputFile3, tempFile3 , true);
 
        }
     private void deleteConferenceRelationsOnFile(Conference conference) {
@@ -989,7 +774,7 @@ public class DomainPersistanceController {
             String p = new File("").getAbsolutePath();
             File inputFile = new File(p.concat("\\src\\main.java\\data\\paper_conf.txt"));
             File tempFile = new File("myTempFile.txt");
-        deleteRelationsFromFile(confId, inputFile, tempFile);
+        deleteRelationsFromFile(confId, inputFile, tempFile, false);
 
     }
     private void deleteTermRelationsOnFile(Term term) {
@@ -998,9 +783,164 @@ public class DomainPersistanceController {
             String p = new File("").getAbsolutePath();
             File inputFile = new File(p.concat("\\src\\main.java\\data\\paper_term.txt"));
             File tempFile = new File("myTempFile.txt");
-            deleteRelationsFromFile(termId, inputFile, tempFile);
+            deleteRelationsFromFile(termId, inputFile, tempFile, false);
 
 
+    }
+
+    private void deletePaperRelationsOnConferences(HashMap<Integer, Conference> conferencesById, HashMap<String, Conference> conferencesByName, Paper p) {
+        Conference auxiliarc = p.getConference();
+        auxiliarc.removeExposedPaperById(p.getId());
+        if(auxiliarc.getExposedPapersById().size() < 1){
+            conferencesById.remove(auxiliarc.getId());
+            conferencesByName.remove(auxiliarc.getName());
+            deleteConferenceFromFile(auxiliarc);
+        }
+    }
+
+    private void deletePaperRelationsOnAuthors(HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName, Paper p) {
+        Collection<Author> auxiliara = p.getAuthorsById().values();
+        for(Iterator ita = auxiliara.iterator(); ita.hasNext();){
+            Author a = (Author) ita.next();
+            a.removePaperById(p.getId());
+            if(a.getPapersById().size() < 1){
+                authorsById.remove(a.getId());
+                authorsByName.remove(a.getName());
+                deleteAuthorFromFile(a);
+            }
+        }
+    }
+
+    private void deletePaperRelationsOnTerms(HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName, Paper p) {
+        Collection<Term> auxiliart = p.getTermsById().values();
+        for(Iterator itt = auxiliart.iterator(); itt.hasNext();){
+            Term t = (Term) itt.next();
+            t.removePaperWhichTalkAboutItById(p.getId());
+            if(t.getPapersWhichTalkAboutThisById().size() < 1) {
+                termsById.remove(t.getId());
+                termsByName.remove(t.getName());
+                deleteTermFromFile(t);
+            }
+        }
+    }
+
+    private void writeNewRelationPaperConf(Paper paper, Conference conf) {
+        String p = new File("").getAbsolutePath();
+        File inputFile = new File(p.concat("\\src\\main.java\\data\\paper_conf.txt"));
+        writeRelationToFile(paper.getId(), conf.getId(), inputFile);
+    }
+
+    private void deleteRelationsFromFile(String nodeId, File inputFile, File tempFile, boolean is_paper) {
+        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
+
+
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null) {
+                // trim newline when comparing with lineToRemove
+                String trimmedLine = currentLine.trim();
+                if(!is_paper) {
+                    if (!trimmedLine.endsWith(nodeId))
+                        writer.write(currentLine + System.getProperty("line.separator"));
+                }
+                else {
+                    if (!trimmedLine.startsWith(nodeId))
+                        writer.write(currentLine + System.getProperty("line.separator"));
+                }
+            }
+            writer.close();
+            reader.close();
+
+            //Delete the original file
+            if (!inputFile.delete()) {
+                System.out.println("Could not delete file");
+                return;
+            }
+
+            //Rename the new file to the filename the original file had.
+            if (!tempFile.renameTo(inputFile))
+                System.out.println("Could not rename file");
+        }
+
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void writeToFile(String wrline, File inputFile) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
+            writer.write(wrline, 0, wrline.length());
+            writer.newLine();
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+    }
+
+    private void editFromFile(String nodeId, String replace, File inputFile, File tempFile) {
+        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
+
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null) {
+                // trim newline when comparing with lineToRemove
+                String trimmedLine = currentLine.trim();
+                if (trimmedLine.startsWith(nodeId)){
+                    writer.write(replace + System.getProperty("line.separator"));
+                    continue;
+                }
+                writer.write(currentLine + System.getProperty("line.separator"));
+            }
+            writer.close();
+            reader.close();
+
+            //Delete the original file
+            if (!inputFile.delete()) {
+                System.out.println("Could not delete file");
+                return;
+            }
+
+            //Rename the new file to the filename the original file had.
+            if (!tempFile.renameTo(inputFile))
+                System.out.println("Could not rename file");
+
+        }
+
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private boolean deleteFromFile(String nodeId, File inputFile, File tempFile) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){ //
+
+
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null) {
+                // trim newline when comparing with lineToRemove
+                String trimmedLine = currentLine.trim();
+                if (!trimmedLine.startsWith(nodeId))
+                    writer.write(currentLine + System.getProperty("line.separator"));
+            }
+            writer.close();
+            reader.close();
+
+            //Delete the original file
+            if (!inputFile.delete()) {
+                System.out.println("Could not delete file");
+                return false;
+            }
+
+            //Rename the new file to the filename the original file had.
+            if (!tempFile.renameTo(inputFile))
+                System.out.println("Could not rename file");
+
+        }
+
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return true;
     }
 
 }
