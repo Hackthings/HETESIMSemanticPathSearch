@@ -1,8 +1,6 @@
-package main.java.domainControllers;
+package main.java.ownClasses.domain.domainControllers;
 
 import main.java.sharedClasses.utils.Matrix;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class DomainHetesimController {
     private Matrix probAuthorPaper;
@@ -27,18 +25,18 @@ public class DomainHetesimController {
         auxiliarObjectR = new Matrix();
     }
 
-    private Matrix findMatrix(char source, char target){
-        if(source == 'A') return probAuthorPaper;
-        if(source == 'T') return probTermPaper;
-        if(source == 'C') return probConferencePaper;
-        if(target == 'A') return probPaperAuthor;
-        if(target == 'T') return probPaperTerm;
+    private Matrix findMatrix(char source, char target) {
+        if (source == 'A') return probAuthorPaper;
+        if (source == 'T') return probTermPaper;
+        if (source == 'C') return probConferencePaper;
+        if (target == 'A') return probPaperAuthor;
+        if (target == 'T') return probPaperTerm;
         return probPaperConference;
     }
 
-    private Matrix findMatrix(char source, char target, char side){
-    	if(side == 'l' && target == 'E') return auxiliarObjectL;
-    	if(side == 'r' && target == 'E') return auxiliarObjectR;
+    private Matrix findMatrix(char source, char target, char side) {
+        if (side == 'l' && target == 'E') return auxiliarObjectL;
+        if (side == 'r' && target == 'E') return auxiliarObjectR;
         return findMatrix(source, target);
     }
 
@@ -47,53 +45,53 @@ public class DomainHetesimController {
         //create auxiliary matrices (if needed) and split pl/pr
         if (path.length() % 2 == 0) {
             int mid = path.length() / 2;
-            char in = path.charAt(mid-1);
+            char in = path.charAt(mid - 1);
             char out = path.charAt(mid);
             generateE(in, out);
             pl = path.substring(0, mid);
             pl = pl.concat("E");
             pr = "E";
             pr = pr.concat(path.substring(mid));
-        }
-        else{
-            int mid = path.length()/2;
-            pl = path.substring(0, mid+1);
+        } else {
+            int mid = path.length() / 2;
+            pl = path.substring(0, mid + 1);
             pr = path.substring(mid);
         }
         String pri = new StringBuilder(pr).reverse().toString(); //inverted path
         //PMpl
         Matrix pmPl = findMatrix(pl.charAt(0), pl.charAt(1), 'l');
-        for(int i = 2; i < pl.length(); ++i) pmPl = pmPl.multiply(findMatrix(pl.charAt(i-1), pl.charAt(i), 'l'));
+        for (int i = 2; i < pl.length(); ++i) pmPl = pmPl.multiply(findMatrix(pl.charAt(i - 1), pl.charAt(i), 'l'));
         //PMpri
         Matrix pmPri = findMatrix(pri.charAt(0), pri.charAt(1), 'r');
-        
-        for(int i = 2; i < pri.length(); ++i) pmPri = pmPri.multiply(findMatrix(pri.charAt(i-1), pri.charAt(i), 'r'));
+
+        for (int i = 2; i < pri.length(); ++i)
+            pmPri = pmPri.multiply(findMatrix(pri.charAt(i - 1), pri.charAt(i), 'r'));
         Matrix result = pmPl.multiply(pmPri.transpose());
 
         Double rmod = 0.0;
         Double cmod = 0.0;
-        for(Integer row : result.rows()){
+        for (Integer row : result.rows()) {
             rmod = pmPl.rowModulus(row);
-            for(Integer column : result.columns(row).keySet()){
+            for (Integer column : result.columns(row).keySet()) {
                 cmod = pmPri.rowModulus(column);
-                result.addValue(row, column, result.getValue(row, column)/(rmod*cmod));
+                result.addValue(row, column, result.getValue(row, column) / (rmod * cmod));
             }
         }
         return result;
     }
 
-    private void generateE(char source, char target){
+    private void generateE(char source, char target) {
         Matrix middleMatrix = findMatrix(source, target);
         auxiliarObjectL = new Matrix();
         auxiliarObjectR = new Matrix();
         //add links
         int c = 0;
         int i = 0;
-        for(int row : middleMatrix.rows()){
-            for(int column : middleMatrix.columns(row).keySet()){
-            	auxiliarObjectL.addValue(row, i, middleMatrix.getValue(row, column));
-            	auxiliarObjectR.addValue(i, column, 1.0);
-            	i += 1;
+        for (int row : middleMatrix.rows()) {
+            for (int column : middleMatrix.columns(row).keySet()) {
+                auxiliarObjectL.addValue(row, i, middleMatrix.getValue(row, column));
+                auxiliarObjectR.addValue(i, column, 1.0);
+                i += 1;
             }
         }
         auxiliarObjectR = auxiliarObjectR.transpose().normalize();
