@@ -2,22 +2,22 @@ package main.java.sharedClasses.utils;
 
 
 import java.util.Set;
-import java.util.LinkedList;
 import java.util.HashMap;
 
+
 public class Matrix {
-    private HashMap<Integer, LinkedList<Pair<Integer, Double>>> matrix; //aquest es el format de la matriu que va dir el borja, podem discutir altres si us es mes facil o ho creieu millor. En la nostra practica Double sera segurament Double
-    private HashMap<Integer, LinkedList<Pair<Integer, Double>>> mTrans;
+    private HashMap<Integer, HashMap<Integer, Double>> matrix;
+    private HashMap<Integer, HashMap<Integer, Double>> mTrans;
 
     //Constructora de la classe
     //Pre: Cert
     //Post: Crea una matriu buida i inicialitza el pair
     public Matrix() {
-        this.matrix = new HashMap<Integer, LinkedList<Pair<Integer, Double>>>();
-        this.mTrans = new HashMap<Integer, LinkedList<Pair<Integer, Double>>>();
+        this.matrix = new HashMap<Integer, HashMap<Integer, Double>>();
+        this.mTrans = new HashMap<Integer, HashMap<Integer, Double>>();
     }
 
-    public Matrix(HashMap<Integer, LinkedList<Pair<Integer, Double>>> m, HashMap<Integer, LinkedList<Pair<Integer, Double>>> mTrans) {
+    private Matrix(HashMap<Integer, HashMap<Integer, Double>> m, HashMap<Integer, HashMap<Integer, Double>> mTrans) {
         this.matrix = m;
         this.mTrans = mTrans;
     }
@@ -37,22 +37,34 @@ public class Matrix {
 
     //Pre: Existeix la fila key
     //Post: Retorna un vector amb les columnes valides de la fila key
-    public LinkedList<Pair<Integer, Double>> columns(int key) {
+    public HashMap<Integer, Double> columns(int key) {
         return this.matrix.get(key);
     }
 
 
     //Pre: Cert
-    //Post: Afegeix una fila buida (un LinkedList<Pair<Integer, Double>> buit)
-    public void addRow(int i){
-        this.matrix.put(i, new LinkedList<Pair<Integer, Double>>());
+    //Post: Afegeix una fila buida (un HashMap<Integer, Double>> buit)
+    private void addRow(int i){
+        this.matrix.put(i, new HashMap<Integer, Double>());
+    }
+
+    private void addRowTranspose(int j) {
+        this.mTrans.put(j, new HashMap<Integer, Double>());
     }
 
 
     //Pre: Cert
     //Post: Elimina la fila i de la matriu (elimina l'ArrayList amb id i)
     public void deleteRow(int i){
-        LinkedList<Pair<Integer, Double>> tmp = this.matrix.remove(i);
+        HashMap<Integer, Double> tmp = this.matrix.remove(i);
+        HashMap<Integer, Double> tmp2 = this.mTrans.remove(i);
+    }
+
+    //Pre: Existeix la posicio i,j
+    //Post: Elimina el valor de la posicio i,j
+    private void deleteValue(int i, int j) {
+        this.matrix.get(i).remove(j);
+        this.mTrans.get(j).remove(i);
     }
 
 
@@ -60,19 +72,24 @@ public class Matrix {
     //Post: Afegeix el valor value a la posició i,j. Afegeix una fila si es necessari.
     //      Si el valor es 0, comprova si cal eliminar la fila.
     public void addValue(int i, int j, double value){
-        if (this.matrix.containsKey(i)) {
-            if (value == 0) {
-                this.matrix.get(i).remove(j);
-                this.mTrans.get(j).remove(i);
+        if (value == 0) {
+            if (getValue(i, j) != -1) {
+                deleteValue(i, j);
             }
-            else {
-                this.matrix.get(i).add(j, new Pair<Integer, Double>(j, value));
-                this.mTrans.get(j).add(i, new Pair<Integer, Double>(i, value));
+        } else {
+            if (getValue(i, j) != -1) {
+                this.matrix.get(i).replace(j, value);
+                this.mTrans.get(j).replace(i, value);
+            } else {
+                if (!this.matrix.containsKey(i)) {
+                    addRow(i);
+                }
+                if(!this.mTrans.containsKey(j)){
+                    addRowTranspose(j);
+                }
+                this.matrix.get(i).put(j, value);
+                this.mTrans.get(j).put(i, value);
             }
-        } else if (value != 0) {
-            addRow(i);
-            this.matrix.get(i).add(j, new Pair<Integer, Double>(j, value));
-            this.mTrans.get(j).add(i, new Pair<Integer, Double>(i, value));
         }
     }
 
@@ -81,10 +98,8 @@ public class Matrix {
     //Post: Retorna el valor de i, j, si existeix, sino retorna -1.
     public double getValue(int i, int j){
         if (this.matrix.containsKey(i)) {
-            LinkedList<Pair<Integer, Double>> list = this.matrix.get(i);
-            if (list.contains(j)) {
-                Pair<Integer, Double> p = list.get(i);
-                return p.getSecond();
+            if (this.matrix.get(i).containsKey(j)) {
+                return this.matrix.get(i).get(j);
 
             } else return -1;
         } else return -1;
@@ -94,54 +109,39 @@ public class Matrix {
     //Pre: Cert
     //Post: Retorna la matriu transposada.
     public Matrix transpose(){
-        Matrix m = new Matrix(this.mTrans, this.matrix);
-        return m;
+        return new Matrix(this.mTrans, this.matrix);
     }
 
 
     //Pre: el paràmetre implícit té el mateix nombre de columnes que files té m
     //Post: retorna la matriu producte del paràmetre implícit amb m
     public Matrix multiply(Matrix m){
-
-        try {
-            if (rows().size() == m.rows().size()) {
-                throw new Exception("No es poden multiplicar les matrius!");
-            }
+        /*try {
+            //if (cols().size() != m.rows().size()) {
+                //throw new Exception("No es poden multiplicar les matrius!");
+            //}
         } catch (Exception error) {
-
-        }
-        //TODO comprovar el Pre i llançar excepcio
+            //Falta error
+        }*/
         Matrix mult = new Matrix();
-        Set<Integer> files = rows();
-        Set<Integer> columnes = m.cols();
+        Set<Integer> r = rows();
+        Set<Integer> c = m.cols();
 
-        for (int x : files) {
-            for (int y : columnes) {
-                double valor = 0;
-                for (int z = 0; z < columns(x).size(); z++) {
+        for (int x : r) {
+            for (int y : c) {
+                double value = 0;
+                Set<Integer> cr = columns(x).keySet();
+                for (int z : cr) {
                     double val1 = getValue(x, z);
                     double val2 = m.getValue(z, y);
                     if (val1 != -1 && val2 != -1) {
-                        valor += val1 * val2;
+                        value += val1 * val2;
                     }
                 }
-                mult.addValue(x, y, valor);
+                mult.addValue(x, y, value);
             }
         }
 
-        /*for (int x = 0; x < rows().size(); ++x) {
-            for (int y = 0; y < m.colums(x).size(); y++) {
-                double valor = 0;
-                for (int z = 0; z < colums(x).size(); z++) {
-                    double val1 = getValue(x, z);
-                    double val2 = m.getValue(z, y);
-                    if (val1 == -1) val1 = 0;
-                    if (val2 == -1) val2 = 0;
-                    valor += val1 * val2;
-                }
-                mult.addValue(x, y, valor);
-            }
-        }*/
         return mult;
     }
 
@@ -149,10 +149,10 @@ public class Matrix {
     //Post: retorna el modul de la fila i. Si no existeix, retorna 0.
     public double rowModulus(int i) {
         if (this.matrix.containsKey(i)) {
-            LinkedList<Pair<Integer, Double>> list = this.matrix.get(i);
             double m = 0;
-            for (Pair par : list) {
-                m += par.getSecond() * par.getSecond();
+            for (int j : columns(i).keySet()) {
+            	double d = getValue(i, j);
+                m += d*d;
             }
             return Math.sqrt(m);
         } else return 0;
@@ -163,10 +163,10 @@ public class Matrix {
     //Post: retorna el modul de la columna j. Si no existeix, retorna 0.
     public double columModulus(int j) {
         if (this.mTrans.containsKey(j)) {
-            LinkedList<Pair<Integer, Double>> list = this.mTrans.get(j);
+            Set<Integer> list = this.mTrans.get(j).keySet();
             double m = 0;
-            for (Pair par : list) {
-                m += par.getSecond() * par.getSecond();
+            for (int i : list) {
+                m += this.mTrans.get(j).get(i) * this.mTrans.get(j).get(i);
             }
             return Math.sqrt(m);
         } else return 0;
@@ -178,13 +178,41 @@ public class Matrix {
     public Matrix normalize(){
         Matrix n = new Matrix();
         for (int i : this.matrix.keySet()) {
-            double valor = rows().size();
-            for (Pair<Integer, Double> p : this.matrix.get(i)) {
-                n.addValue(i, p.getFirst(), p.getSecond()/valor);
+            double valor = columns(i).keySet().size();
+            for (int j : this.matrix.get(i).keySet()) {
+                n.addValue(i, j, getValue(i,j)/valor);
             }
         }
         return n;
     }
+    
+    public HashMap<Integer, Double> rows(int key) {
+        return this.mTrans.get(key);
+    }
+    
+    public Matrix normalizeRows(){
+    	Matrix n = new Matrix();
+        for (int j : this.mTrans.keySet()) {
+            double valor = rows(j).keySet().size();
+            for (int i : this.mTrans.get(j).keySet()) {
+                n.addValue(i, j, getValue(i,j)/valor);
+            }
+        }
+        return n;
+    }
+    
+    public void print(){
+    	System.out.println("-------");
+    	for(Integer x : rows()){
+    		for(Integer y : columns(x).keySet()){
+    			System.out.print(x);
+    			System.out.print(",");
+    			System.out.print(y);
+    			System.out.print(":");
+    			System.out.println(getValue(x,y));
+    		}
+    	}
+    	System.out.println("-------");
+    }
 
 }
-
