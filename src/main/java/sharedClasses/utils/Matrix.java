@@ -7,7 +7,6 @@ import java.util.Iterator;
 
 
 public class Matrix {
-    private Pair<Integer, Double> p; //Objecte de la classe Pair
     private HashMap<Integer, ArrayList<Pair<Integer, Double>>> matrix; //aquest es el format de la matriu que va dir el borja, podem discutir altres si us es mes facil o ho creieu millor. En la nostra practica Double sera segurament Double
 
     //Constructora de la classe
@@ -15,27 +14,28 @@ public class Matrix {
     //Post: Crea una matriu buida i inicialitza el pair
     public Matrix() {
         this.matrix = new HashMap<Integer, ArrayList<Pair<Integer, Double>>>();
-        p = new Pair<Integer, Double>(0,0.0);
     }
 
     //Pre: Cert
-    //Post: Retorna el nombre de files de la matriu
-    public int rows() {
-        return this.matrix.size();
+    //TODO Post: Retorna un vector amb les files valides
+    public ArrayList<Integer> rows() {
+        //return this.matrix.size();
+        return null;
     }
 
     //Pre: Cert
-    //Post: Retorna el nombre de columnes de la matriu
-    public int colums(int key) {
-        if (this.matrix.isEmpty()) return 0;
+    //TODO Post: Retorna un vector amb les columnes valides de la fila key
+    public ArrayList<Integer> columns(int key) {
+        /*if (this.matrix.isEmpty()) return 0;
         else {
             ArrayList<Pair<Integer,Double>> tmp = this.matrix.get(key);
             return tmp.size();
-        }
-    }//int key-->> revisar
+        }*/
+        return null;
+    }
 
     //Pre: Cert
-    //Post: Afegeix la fila i a la matriu (un ArrayList<Pair<Integer, Double>> buit)
+    //Post: Afegeix una fila buida (un ArrayList<Pair<Integer, Double>> buit)
     public void addRow(int i){
         this.matrix.put(i, new ArrayList<Pair<Integer, Double>>());
     }
@@ -49,8 +49,9 @@ public class Matrix {
     //Pre: Cert
     //Post: Afegeix el valor value a la posició i,j. Afegeix una fila si es necessari.
     public void addValue(int i, int j, double value){
+        //TODO si value es 0 comprovar si cal eliminar la fila
         if (this.matrix.containsKey(i)) {
-            p = new Pair<Integer,Double>(j, value);
+            Pair<Integer, Double> p = new Pair<Integer,Double>(j, value);
             this.matrix.get(i).add(j, p);
         } else {
             addRow(i);
@@ -65,13 +66,18 @@ public class Matrix {
         if (this.matrix.containsKey(i)) {
             ArrayList<Pair<Integer, Double>> list = this.matrix.get(i);
             if (list.contains(j)) {
-                p = list.get(i);
+                Pair<Integer, Double> p = list.get(i);
                 return p.getSecond();
 
             } else return -1;
         } else return -1;
     }
 
+    //TODO divideix totes les files per el nombre de valors
+    //Pre: la matriu conte nomes 1s i 0s (no cal tirar excepcio)
+    public Matrix normalize(){
+
+    }
 
     //Pre: Cert
     //Post: Retorna la matriu transposada.
@@ -93,11 +99,12 @@ public class Matrix {
     //Pre: el paràmetre implícit té el mateix nombre de columnes que files té m
     //Post: retorna la matriu producte del paràmetre implícit amb m
     public Matrix multiply(Matrix m){
+        //TODO comprovar el Pre i llançar excepcio
         Matrix mult = new Matrix();
-        for (int x = 0; x < rows(); ++x) {
-            for (int y = 0; y < m.colums(x); y++) {
+        for (int x = 0; x < rows().size(); ++x) {
+            for (int y = 0; y < m.colums(x).size(); y++) {
                 double valor = 0;
-                for (int z = 0; z < colums(x); z++) {
+                for (int z = 0; z < colums(x).size(); z++) {
                     double val1 = getValue(x, z);
                     double val2 = m.getValue(z, y);
                     if (val1 == -1) val1 = 0;
@@ -110,9 +117,10 @@ public class Matrix {
         return mult;
     }
 
-    //Pre: Existeix una fila i.
+    //Pre: Cert
     //Post: retorna el modul de la fila i.
     public double modulus(int i) {
+        //si la fila no existeix retorna 0
         ArrayList<Pair<Integer, Double>> list = this.matrix.get(i);
         double m = 0;
         for (Pair par : list) {

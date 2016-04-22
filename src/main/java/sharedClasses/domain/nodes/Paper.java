@@ -41,6 +41,7 @@ public class Paper extends Node {
         termsById.remove(term.getId());
     }
 
+
     public Conference getConference() {
         return conference;
     }
