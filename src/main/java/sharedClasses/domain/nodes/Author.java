@@ -8,6 +8,8 @@ public class Author extends Node {
 
     public Author(String name, int id) {
         super(name, id);
+        papersById = new HashMap<Integer, Paper>();
+        papersByName = new HashMap<String, Paper>();
     }
 
     public HashMap<Integer, Paper> getPapersById() {
@@ -36,12 +38,9 @@ public class Author extends Node {
         papersByName.put(paper.getName(),paper);
     }
 
-    public void removePaperById(int id) {
-        papersById.remove(id);
-    }
-
-    public void removePaperByName(String name) {
-        papersByName.remove(name);
+    public void removePaper(Paper paper) {
+        papersById.remove(paper);
+        papersByName.remove(paper);
     }
 
 }

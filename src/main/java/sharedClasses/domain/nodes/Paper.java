@@ -11,6 +11,10 @@ public class Paper extends Node {
 
     public Paper(String name, int id) {
         super(name, id);
+        authorsById = new HashMap<Integer , Author>();
+        authorsByName = new HashMap<String, Author>();
+        termsById = new HashMap<Integer, Term>();
+        termsByName = new HashMap<String, Term>();
     }
 
     public void setConference(Conference conference) {
@@ -40,7 +44,7 @@ public class Paper extends Node {
     public Conference getConference() {
         return conference;
     }
-    
+
     public HashMap<Integer, Author> getAuthorsById() {
         return authorsById;
     }
@@ -66,7 +70,7 @@ public class Paper extends Node {
     public HashMap<String,Term> getTermsByName() { return termsByName;}
 
     public Term getTermByID (int id){
-       Term t = termsById.get(id);
+        Term t = termsById.get(id);
         if(t != null) return t;
         return null;
     }

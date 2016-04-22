@@ -9,6 +9,8 @@ public class Term extends Node {
 
     public Term(String name, int id) {
         super(name, id);
+        papersWhichTalkAboutThisById = new HashMap<Integer,Paper>();
+        papersWhichTalkAboutThisByName = new HashMap<String, Paper>();
     }
 
     public HashMap<Integer, Paper> getPapersWhichTalkAboutThisById() {
@@ -36,12 +38,8 @@ public class Term extends Node {
         return null;
     }
 
-    public void removePaperWhichTalkAboutItById(int id) {
-        papersWhichTalkAboutThisById.remove(id);
+    public void removePaperWhichTalkAboutIt(Paper paper) {
+        papersWhichTalkAboutThisById.remove(paper);
+        papersWhichTalkAboutThisByName.remove(paper);
     }
-
-    public void removePaperWhichTalkAboutItByName(String name) {
-        papersWhichTalkAboutThisByName.remove(name);
-    }
-
 }

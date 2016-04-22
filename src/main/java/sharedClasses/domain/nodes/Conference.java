@@ -10,8 +10,10 @@ public class Conference extends Node {
 
     public Conference(String name, int id) {
         super(name, id);
+        exposedPapersById = new HashMap<Integer, Paper>();
+        exposedPapersByName = new HashMap<String, Paper>();
     }
-       
+
     public HashMap<Integer, Paper> getExposedPapersById() {
         return exposedPapersById;
     }
@@ -41,13 +43,11 @@ public class Conference extends Node {
         exposedPapersByName.put(paper.getName(),paper);
     }
 
-    public void removeExposedPaperById(int id) {
-        exposedPapersById.remove(id);
+    public void removeExposedPaperBy(Paper paper) {
+        exposedPapersById.remove(paper);
+        exposedPapersByName.remove(paper);
     }
 
-    public void removeExposedPaperByName(String name) {
-        exposedPapersByName.remove(name);
-    }
 
 
     public int getYear() {
