@@ -790,7 +790,7 @@ public class DomainPersistanceController {
 
     private void deletePaperRelationsOnConferences(HashMap<Integer, Conference> conferencesById, HashMap<String, Conference> conferencesByName, Paper p) {
         Conference auxiliarc = p.getConference();
-        auxiliarc.removeExposedPaperById(p.getId());
+        auxiliarc.removeExposedPaperBy(p);
         if(auxiliarc.getExposedPapersById().size() < 1){
             conferencesById.remove(auxiliarc.getId());
             conferencesByName.remove(auxiliarc.getName());
@@ -802,7 +802,7 @@ public class DomainPersistanceController {
         Collection<Author> auxiliara = p.getAuthorsById().values();
         for(Iterator ita = auxiliara.iterator(); ita.hasNext();){
             Author a = (Author) ita.next();
-            a.removePaperById(p.getId());
+            a.removePaper(p);
             if(a.getPapersById().size() < 1){
                 authorsById.remove(a.getId());
                 authorsByName.remove(a.getName());
@@ -815,7 +815,7 @@ public class DomainPersistanceController {
         Collection<Term> auxiliart = p.getTermsById().values();
         for(Iterator itt = auxiliart.iterator(); itt.hasNext();){
             Term t = (Term) itt.next();
-            t.removePaperWhichTalkAboutItById(p.getId());
+            t.removePaperWhichTalkAboutIt(p);
             if(t.getPapersWhichTalkAboutThisById().size() < 1) {
                 termsById.remove(t.getId());
                 termsByName.remove(t.getName());
