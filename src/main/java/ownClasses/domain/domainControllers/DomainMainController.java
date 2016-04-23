@@ -1,5 +1,8 @@
 package main.java.ownClasses.domain.domainControllers;
 
+import main.java.ownClasses.domain.queries.IntervaledQuery;
+import main.java.ownClasses.domain.queries.LimitedQuery;
+import main.java.ownClasses.domain.queries.OrderedQuery;
 import main.java.ownClasses.domain.queries.Query;
 import main.java.sharedClasses.DomainControllers.DomainPersistanceController;
 import main.java.sharedClasses.domain.nodes.Author;
@@ -50,47 +53,6 @@ public class DomainMainController {
             queryType = scan.nextLine();
         }
 
-        System.out.println("Selecciona el tipus que vols buscar:\n 1 Author\n 2 Paper\n 3 Conference\n 4 Term");
-        String queryNode = scan.nextLine();
-
-        int valid = 0;
-        Integer queryId = 0;
-        while(valid == 0){
-            System.out.println("Introdueix el nom:");
-            String queryName = scan.nextLine();
-            switch(queryNode){
-                case("1"):
-                    if(authorsByName.containsKey(queryName)){
-                        System.out.println("OK");
-                        valid = 1;
-                        queryId= authorsByName.get(queryName).getId();
-                    }
-                    break;
-                case("2"):
-                    if(papersByName.containsKey(queryName)){
-                        System.out.println("OK");
-                        valid = 1;
-                        queryId= papersByName.get(queryName).getId();
-                    }
-                    break;
-                case("3"):
-                    if(conferencesByName.containsKey(queryName)){
-                        System.out.println("OK");
-                        valid = 1;
-                        queryId= conferencesByName.get(queryName).getId();
-                    }
-                    break;
-                case("4"):
-                    if(termsByName.containsKey(queryName)){
-                        System.out.println("OK");
-                        valid = 1;
-                        queryId= termsByName.get(queryName).getId();
-                    }
-                    break;
-            }
-            if(valid==0){ System.err.println("nom no valid");}
-        }
-
         int pathvalid=0;
         System.out.println("Introdueix el path (exemple: APA):");
         String queryPath = scan.nextLine();
@@ -110,54 +72,191 @@ public class DomainMainController {
         Query query = new Query(queryPath);
         Matrix result = hetesimController.heteSim((queryPath));
 
-        HashMap<Integer,Double> resultquery = result.columns(queryId);
+        int exit = 0;
+        char type = queryPath.charAt(0);
+
+        while(exit == 0) {
+
+            int valid = 0;
+            Integer queryId = 0;
+            while (valid == 0) {
+                System.out.println("Introdueix el nom:");
+                String queryName = scan.nextLine();
+                switch (type) {
+                    case ('A'):
+                        if (authorsByName.containsKey(queryName)) {
+                            System.out.println("OK");
+                            valid = 1;
+                            queryId = authorsByName.get(queryName).getId();
+                        }
+                        break;
+                    case ('P'):
+                        if (papersByName.containsKey(queryName)) {
+                            System.out.println("OK");
+                            valid = 1;
+                            queryId = papersByName.get(queryName).getId();
+                        }
+                        break;
+                    case ('C'):
+                        if (conferencesByName.containsKey(queryName)) {
+                            System.out.println("OK");
+                            valid = 1;
+                            queryId = conferencesByName.get(queryName).getId();
+                        }
+                        break;
+                    case ('T'):
+                        if (termsByName.containsKey(queryName)) {
+                            System.out.println("OK");
+                            valid = 1;
+                            queryId = termsByName.get(queryName).getId();
+                        }
+                        break;
+                }
+                if (valid == 0) {
+                    System.err.println("nom no valid");
+                }
+            }
+
+            HashMap<Integer, Double> resultquery = result.columns(queryId);
 
 
-        if(queryType.equals("1")) {
-            resultWithoutFilters(resultquery,query);
+            if (queryType.equals("1")) {
+                resultWithoutFilters(resultquery, query);
+            } else {
+                int exitfiltres = 0;
+                while (exitfiltres == 0) {
+                    System.out.println("Escogeix el tipus de filtre: 1 Intervals de rellevancia\n 2 Nombre maxim d'entrades\n 3 Ordre\n 4 Restriccio per element");
+                    String queryfilter = scan.nextLine();
+                    switch (queryfilter) {
+                        case ("1"):
+
+                            System.out.println("Introdueix el valor mes petit (entre 0 i 1)");
+                            double firstrelevance = Double.parseDouble(scan.nextLine());
+                            System.out.println("Introdueix el valor mes gran (entre 0 i 1)");
+                            double secondrelevance = Double.parseDouble(scan.nextLine());
+                            if (firstrelevance > secondrelevance) {
+                                System.err.println("firstrelevance > secondrelevance)");
+                            } else {
+                                IntervaledQuery iq = new IntervaledQuery(query.getPath(), firstrelevance, secondrelevance);
+                                resultWithIntervals(resultquery, iq);
+                            }
+
+                            break;
+                        case ("2"):
+                            System.out.println("Introdueix el nombre maxim d'entrades");
+                            int nomMax = Integer.parseInt(scan.nextLine());
+                            LimitedQuery lq = new LimitedQuery(query.getPath(), nomMax);
+                            resultWithMax(resultquery, lq);
+                            break;
+                        case ("3"):
+                            System.out.println("Selecciona l'ordre 1 Ascendent 2 Descendent");
+                            int i = Integer.parseInt(scan.nextLine());
+                            OrderedQuery oq = new OrderedQuery(query.getPath(), false);
+                            if (i > 2 || i <= 0) {
+                                System.out.println("Ordre no disponible");
+                                break;
+                            } else if (i == 1) {
+                                oq.setAscendent(true);
+                            }
+
+                            break;
+                        case ("4"):
+
+                            break;
+                    }
+                    System.out.println("Vols escollir un altre tipus de filtre? YES or NO");
+                    String answer = scan.nextLine();
+                    if (answer.equals("NO")) exitfiltres = 1;
+                }
+
+            }
+            System.out.println("Vols seleccionar un altre nom amb el mateix path? YES or NO");
+            String answer = scan.nextLine();
+            if (answer.equals("NO")) exit = 1;
         }
-        else{
-            System.out.println("Escogeix el tipus de filtre: 1 Intervals de rellevancia\n 2 Nombre maxim d'entrades\n 3 Ordre\n 4 Restriccio per element");
-            String queryfilter = scan.nextLine();
+
+    }
+
+    public void resultWithMax(HashMap<Integer,Double>resultquery,LimitedQuery query) {
+        char tipus = query.getPath().charAt(query.getPath().length()-1);
+        System.out.println(" NOM  ->  rellevancia");
+
+        Iterator it= resultquery.entrySet().iterator();
+        while(it.hasNext() && query.getLimit()>0) {
+            Map.Entry resultat = (Map.Entry) it.next();
+            switch (tipus) {
+                case ('A'):
+                    System.out.print(authorsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                    break;
+                case ('P'):
+                    System.out.print(papersById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                    break;
+                case ('C'):
+                    System.out.print(conferencesById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                    break;
+                case ('T'):
+                    System.out.print(termsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                    break;
+            }
+            query.setLimit(query.getLimit()-1);
         }
 
 
 
     }
-
-    public void resultWithoutFilters(HashMap<Integer,Double>resultquery,Query query){
+    public void resultWithIntervals(HashMap<Integer,Double>resultquery,IntervaledQuery query){
         char tipus = query.getPath().charAt(query.getPath().length()-1);
-
         System.out.println(" NOM  ->  rellevancia");
 
         Iterator it= resultquery.entrySet().iterator();
+        while(it.hasNext()) {
+            Map.Entry resultat = (Map.Entry) it.next();
+            double res = Double.parseDouble(resultat.getValue().toString());
+            if (res >= query.getFirstRelevance() && res <= query.getSecondRelevance()) {
+                switch (tipus) {
+                    case ('A'):
+                        System.out.print(authorsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                        break;
+                    case ('P'):
+                        System.out.print(papersById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                        break;
+                    case ('C'):
+                        System.out.print(conferencesById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                        break;
+                    case ('T'):
+                        System.out.print(termsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                        break;
+                }
 
-        switch(tipus){
-            case('A'):
-                while(it.hasNext()){
-                    Map.Entry resultat = (Map.Entry)it.next();
-                    System.out.print(authorsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                }
-                break;
-            case('P'):
-                while(it.hasNext()){
-                    Map.Entry resultat = (Map.Entry)it.next();
-                    System.out.print(papersById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                }
-                break;
-            case('C'):
-                while(it.hasNext()) {
-                    Map.Entry resultat = (Map.Entry) it.next();
-                    System.out.print(conferencesById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                }
-                break;
-            case('T'):
-                while(it.hasNext()) {
-                    Map.Entry resultat = (Map.Entry) it.next();
-                    System.out.print(termsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                }
-                break;
+            }
         }
+
+    }
+
+    public void resultWithoutFilters(HashMap<Integer,Double>resultquery,Query query){
+        char tipus = query.getPath().charAt(query.getPath().length()-1);
+        System.out.println(" NOM  ->  rellevancia");
+
+        Iterator it= resultquery.entrySet().iterator();
+        while(it.hasNext()) {
+            Map.Entry resultat = (Map.Entry) it.next();
+            switch (tipus) {
+                case ('A'):
+                    System.out.print(authorsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                    break;
+                case ('P'):
+                    System.out.print(papersById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                    break;
+                case ('C'):
+                    System.out.print(conferencesById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                    break;
+                case ('T'):
+                    System.out.print(termsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                    break;
+            }
+
+        }
+
     }
 
     public void editGraph() {
