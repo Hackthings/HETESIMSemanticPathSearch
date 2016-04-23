@@ -143,12 +143,15 @@ public class DomainMainController {
 
                             break;
                         case ("2"):
+
                             System.out.println("Introdueix el nombre maxim d'entrades");
                             int nomMax = Integer.parseInt(scan.nextLine());
                             LimitedQuery lq = new LimitedQuery(query.getPath(), nomMax);
                             resultWithMax(resultquery, lq);
+
                             break;
                         case ("3"):
+
                             System.out.println("Selecciona l'ordre 1 Ascendent 2 Descendent");
                             int i = Integer.parseInt(scan.nextLine());
                             OrderedQuery oq = new OrderedQuery(query.getPath(), false);
@@ -158,6 +161,8 @@ public class DomainMainController {
                             } else if (i == 1) {
                                 oq.setAscendent(true);
                             }
+
+                            resultWithOrder(resultquery,oq);
 
                             break;
                         case ("4"):
@@ -177,6 +182,43 @@ public class DomainMainController {
 
     }
 
+    public void printresult(char tipus,Integer id, Double relevance){
+        switch (tipus) {
+            case ('A'):
+                System.out.print(authorsById.get(id).getName() + "  ->  " + relevance);
+                break;
+            case ('P'):
+                System.out.print(papersById.get(id).getName() + "  ->  " + relevance);
+                break;
+            case ('C'):
+                System.out.print(conferencesById.get(id).getName() + "  ->  " + relevance);
+                break;
+            case ('T'):
+                System.out.print(termsById.get(id).getName() + "  ->  " + relevance);
+                break;
+        }
+    }
+
+    public void resultWithOrder(HashMap<Integer,Double>resultquery,OrderedQuery query){
+        char tipus = query.getPath().charAt(query.getPath().length()-1);
+        System.out.println(" NOM  ->  rellevancia");
+
+        Iterator it= resultquery.entrySet().iterator();
+        TreeMap<Integer,Double> resultOrdered = new TreeMap<>();
+        while(it.hasNext()) {
+            Map.Entry resultat = (Map.Entry) it.next();
+            resultOrdered.put(Integer.parseInt(resultat.getKey().toString()),Double.parseDouble(resultat.getValue().toString()));
+        }
+        Iterator itOrdered = resultOrdered.entrySet().iterator();
+        while(it.hasNext()) {
+            Map.Entry resultat = (Map.Entry) it.next();
+            printresult(tipus,Integer.parseInt(resultat.getKey().toString()),Double.parseDouble(resultat.getValue().toString()));
+
+
+        }
+
+    }
+
     public void resultWithMax(HashMap<Integer,Double>resultquery,LimitedQuery query) {
         char tipus = query.getPath().charAt(query.getPath().length()-1);
         System.out.println(" NOM  ->  rellevancia");
@@ -184,20 +226,9 @@ public class DomainMainController {
         Iterator it= resultquery.entrySet().iterator();
         while(it.hasNext() && query.getLimit()>0) {
             Map.Entry resultat = (Map.Entry) it.next();
-            switch (tipus) {
-                case ('A'):
-                    System.out.print(authorsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                    break;
-                case ('P'):
-                    System.out.print(papersById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                    break;
-                case ('C'):
-                    System.out.print(conferencesById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                    break;
-                case ('T'):
-                    System.out.print(termsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                    break;
-            }
+
+            printresult(tipus,Integer.parseInt(resultat.getKey().toString()),Double.parseDouble(resultat.getValue().toString()));
+
             query.setLimit(query.getLimit()-1);
         }
 
@@ -213,20 +244,8 @@ public class DomainMainController {
             Map.Entry resultat = (Map.Entry) it.next();
             double res = Double.parseDouble(resultat.getValue().toString());
             if (res >= query.getFirstRelevance() && res <= query.getSecondRelevance()) {
-                switch (tipus) {
-                    case ('A'):
-                        System.out.print(authorsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                        break;
-                    case ('P'):
-                        System.out.print(papersById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                        break;
-                    case ('C'):
-                        System.out.print(conferencesById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                        break;
-                    case ('T'):
-                        System.out.print(termsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                        break;
-                }
+
+                printresult(tipus,Integer.parseInt(resultat.getKey().toString()),Double.parseDouble(resultat.getValue().toString()));
 
             }
         }
@@ -240,20 +259,7 @@ public class DomainMainController {
         Iterator it= resultquery.entrySet().iterator();
         while(it.hasNext()) {
             Map.Entry resultat = (Map.Entry) it.next();
-            switch (tipus) {
-                case ('A'):
-                    System.out.print(authorsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                    break;
-                case ('P'):
-                    System.out.print(papersById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                    break;
-                case ('C'):
-                    System.out.print(conferencesById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                    break;
-                case ('T'):
-                    System.out.print(termsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
-                    break;
-            }
+            printresult(tipus,Integer.parseInt(resultat.getKey().toString()),Double.parseDouble(resultat.getValue().toString()));
 
         }
 
