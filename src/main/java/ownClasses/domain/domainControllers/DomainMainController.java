@@ -1,5 +1,6 @@
 package main.java.ownClasses.domain.domainControllers;
 
+import main.java.ownClasses.domain.queries.Query;
 import main.java.sharedClasses.DomainControllers.DomainPersistanceController;
 import main.java.sharedClasses.domain.nodes.Author;
 import main.java.sharedClasses.domain.nodes.Conference;
@@ -44,6 +45,10 @@ public class DomainMainController {
 
         System.out.println("Quin tipus de cerca vols: 1 Simple\n 2 Amb filtres");
         String queryType = scan.nextLine();
+        while(!queryType.equals("1") || !queryType.equals("2")){
+            System.err.println("tipus no valid, escriu 1 si Simple o 2 si Amb Filtres");
+            queryType = scan.nextLine();
+        }
 
         System.out.println("Selecciona el tipus que vols buscar:\n 1 Author\n 2 Paper\n 3 Conference\n 4 Term");
         String queryNode = scan.nextLine();
@@ -97,22 +102,31 @@ public class DomainMainController {
             }
         }
 
+        Query query = new Query(queryPath);
         Matrix result = hetesimController.heteSim((queryPath));
-
 
 
         if(queryType.equals("2")) {
             System.out.println("Escogeix el tipus de filtre: 1 Intervals de rellevancia\n 2 Nombre maxim d'entrades\n 3 Ordre\n 4 Restriccio per element");
+
+
+        }
+        else{
+
         }
 
 
 
     }
 
+
+
     public void editGraph() {
         DomainPersistanceController domainPersistanceController = new DomainPersistanceController();
         domainPersistanceController.newEdit(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName,termsByName, authorMaxId, paperMaxId, termMaxId, conferenceMaxId);
     }
+
+
 
     public Matrix getAuthorPaperMatrix(){
         Matrix authorpaper = new Matrix();
