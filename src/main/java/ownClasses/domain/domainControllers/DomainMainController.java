@@ -38,8 +38,75 @@ public class DomainMainController {
     }
 
     public void newQuery() {
-        // TODO: Sergi needs to fix the Hetesim Controller
-        //hetesimController.newQuery();
+
+        hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println("Quin tipus de cerca vols: 1 Simple\n 2 Amb filtres");
+        String queryType = scan.nextLine();
+
+        System.out.println("Selecciona el tipus que vols buscar:\n 1 Author\n 2 Paper\n 3 Conference\n 4 Term");
+        String queryNode = scan.nextLine();
+
+        int valid = 0;
+        while(valid == 0){
+            System.out.println("Introdueix el nom:");
+            String queryName = scan.nextLine();
+            switch(queryNode){
+                case("1"):
+                    if(authorsByName.containsKey(queryName)){
+                        System.out.println("OK");
+                        valid = 1;
+                    }
+                    break;
+                case("2"):
+                    if(papersByName.containsKey(queryName)){
+                        System.out.println("OK");
+                        valid = 1;
+                    }
+                    break;
+                case("3"):
+                    if(conferencesByName.containsKey(queryName)){
+                        System.out.println("OK");
+                        valid = 1;
+                    }
+                    break;
+                case("4"):
+                    if(termsByName.containsKey(queryName)){
+                        System.out.println("OK");
+                        valid = 1;
+                    }
+                    break;
+            }
+            if(valid==0){ System.err.println("nom no valid");}
+        }
+
+        int pathvalid=0;
+        System.out.println("Introdueix el path (exemple: APA):");
+        String queryPath = scan.nextLine();
+        while(pathvalid==0) {
+            int surt = 0;
+            for(int i=0; i<queryPath.length() && surt==0; ++i){
+                char node= queryPath.charAt(i);
+                if(node != 'A' && node != 'P' && node!='C' && node!='T') surt=1;
+            }
+            if(surt==0){ pathvalid=1;}
+            else{
+                System.err.println("path no valid, torna'l a escriure (exemple APA):");
+                queryPath = scan.nextLine();
+            }
+        }
+
+        Matrix result = hetesimController.heteSim((queryPath));
+
+
+
+        if(queryType.equals("2")) {
+            System.out.println("Escogeix el tipus de filtre: 1 Intervals de rellevancia\n 2 Nombre maxim d'entrades\n 3 Ordre\n 4 Restriccio per element");
+        }
+
+
+
     }
 
     public void editGraph() {
