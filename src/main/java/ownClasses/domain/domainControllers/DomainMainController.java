@@ -54,6 +54,7 @@ public class DomainMainController {
         String queryNode = scan.nextLine();
 
         int valid = 0;
+        Integer queryId = 0;
         while(valid == 0){
             System.out.println("Introdueix el nom:");
             String queryName = scan.nextLine();
@@ -62,24 +63,28 @@ public class DomainMainController {
                     if(authorsByName.containsKey(queryName)){
                         System.out.println("OK");
                         valid = 1;
+                        queryId= authorsByName.get(queryName).getId();
                     }
                     break;
                 case("2"):
                     if(papersByName.containsKey(queryName)){
                         System.out.println("OK");
                         valid = 1;
+                        queryId= papersByName.get(queryName).getId();
                     }
                     break;
                 case("3"):
                     if(conferencesByName.containsKey(queryName)){
                         System.out.println("OK");
                         valid = 1;
+                        queryId= conferencesByName.get(queryName).getId();
                     }
                     break;
                 case("4"):
                     if(termsByName.containsKey(queryName)){
                         System.out.println("OK");
                         valid = 1;
+                        queryId= termsByName.get(queryName).getId();
                     }
                     break;
             }
@@ -105,21 +110,55 @@ public class DomainMainController {
         Query query = new Query(queryPath);
         Matrix result = hetesimController.heteSim((queryPath));
 
-
-        if(queryType.equals("2")) {
-            System.out.println("Escogeix el tipus de filtre: 1 Intervals de rellevancia\n 2 Nombre maxim d'entrades\n 3 Ordre\n 4 Restriccio per element");
+        HashMap<Integer,Double> resultquery = result.columns(queryId);
 
 
+        if(queryType.equals("1")) {
+            resultWithoutFilters(resultquery,query);
         }
         else{
-
+            System.out.println("Escogeix el tipus de filtre: 1 Intervals de rellevancia\n 2 Nombre maxim d'entrades\n 3 Ordre\n 4 Restriccio per element");
+            String queryfilter = scan.nextLine();
         }
 
 
 
     }
 
+    public void resultWithoutFilters(HashMap<Integer,Double>resultquery,Query query){
+        char tipus = query.getPath().charAt(query.getPath().length()-1);
 
+        System.out.println(" NOM  ->  rellevancia");
+
+        Iterator it= resultquery.entrySet().iterator();
+
+        switch(tipus){
+            case('A'):
+                while(it.hasNext()){
+                    Map.Entry resultat = (Map.Entry)it.next();
+                    System.out.print(authorsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                }
+                break;
+            case('P'):
+                while(it.hasNext()){
+                    Map.Entry resultat = (Map.Entry)it.next();
+                    System.out.print(papersById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                }
+                break;
+            case('C'):
+                while(it.hasNext()) {
+                    Map.Entry resultat = (Map.Entry) it.next();
+                    System.out.print(conferencesById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                }
+                break;
+            case('T'):
+                while(it.hasNext()) {
+                    Map.Entry resultat = (Map.Entry) it.next();
+                    System.out.print(termsById.get(resultat.getKey()).getName() + "  ->  " + resultat.getValue());
+                }
+                break;
+        }
+    }
 
     public void editGraph() {
         DomainPersistanceController domainPersistanceController = new DomainPersistanceController();

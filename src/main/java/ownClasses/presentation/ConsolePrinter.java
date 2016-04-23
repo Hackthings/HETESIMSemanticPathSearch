@@ -1,5 +1,7 @@
 package main.java.ownClasses.presentation;
 
+import java.util.HashMap;
+
 public class ConsolePrinter {
 
     public ConsolePrinter() {}
