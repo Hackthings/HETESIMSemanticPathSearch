@@ -80,7 +80,7 @@ public class DomainMainController {
         }
 
         Query query = new Query(queryPath);
-        Matrix result = hetesimController.heteSim((queryPath));
+        Matrix result = hetesimController.heteSim(queryPath);
 
         boolean exit = false;
         char type = queryPath.charAt(0);
@@ -179,7 +179,7 @@ public class DomainMainController {
                             System.out.println("no disponible");
                             break;
                     }
-                    System.out.println("Vols escollir un altre tipus de filtre? YES or NO");
+                    System.out.println("\nVols escollir un altre tipus de filtre? YES or NO");
                     String answer = "";
                     while("".equals(answer)) answer = scanner.nextLine();
                     if (answer.equals("NO")) exitfiltres = 1;
