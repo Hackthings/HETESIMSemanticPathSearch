@@ -1,4 +1,4 @@
-package main.java.sharedClasses.DomainControllers;
+package main.java.sharedClasses.domain.domainControllers;
 
 import main.java.sharedClasses.domain.nodes.Author;
 import main.java.sharedClasses.domain.nodes.Conference;

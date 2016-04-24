@@ -4,7 +4,7 @@ import main.java.ownClasses.domain.queries.IntervaledQuery;
 import main.java.ownClasses.domain.queries.LimitedQuery;
 import main.java.ownClasses.domain.queries.OrderedQuery;
 import main.java.ownClasses.domain.queries.Query;
-import main.java.sharedClasses.DomainControllers.DomainPersistanceController;
+import main.java.sharedClasses.domain.domainControllers.DomainPersistanceController;
 import main.java.sharedClasses.domain.nodes.Author;
 import main.java.sharedClasses.domain.nodes.Conference;
 import main.java.sharedClasses.domain.nodes.Paper;
@@ -34,7 +34,15 @@ public class DomainMainController {
 
     public DomainMainController() {
         persistanceController = new DomainPersistanceController();
-
+        authorsById = new HashMap<>();
+        papersById = new HashMap<>();
+        conferencesById = new HashMap<>();
+        termsById = new HashMap<>();
+        authorsByName = new HashMap<>();
+        papersByName = new HashMap<>();
+        papersByName = new HashMap<>();
+        conferencesByName = new HashMap<>();
+        termsByName = new HashMap<>();
         authorMaxId = 0;
         paperMaxId = 0;
         conferenceMaxId = 0;
@@ -183,7 +191,7 @@ public class DomainMainController {
 
     }
 
-    public void printresult(char tipus,Integer id, Double relevance){
+    private void printresult(char tipus, Integer id, Double relevance){
         switch (tipus) {
             case ('A'):
                 System.out.print(authorsById.get(id).getName() + "  ->  " + relevance);
@@ -200,25 +208,25 @@ public class DomainMainController {
         }
     }
 
-    public void resultWithOrder(HashMap<Integer,Double>resultquery,OrderedQuery query){
+    private void resultWithOrder(HashMap<Integer, Double> resultquery, OrderedQuery query){
         char tipus = query.getPath().charAt(query.getPath().length()-1);
         System.out.println(" NOM  ->  rellevancia");
 
-        Iterator it= resultquery.entrySet().iterator();
+        Iterator<Map.Entry<Integer, Double>> it= resultquery.entrySet().iterator();
         ArrayList<Pair<Integer,Double>> resultOrdered = new ArrayList<>();
         while(it.hasNext()) {
-            Map.Entry resultat = (Map.Entry) it.next();
+            Map.Entry<Integer, Double> resultat = it.next();
             int id = Integer.parseInt(resultat.getKey().toString());
             double relevance = Double.parseDouble(resultat.getValue().toString());
             if(resultOrdered.isEmpty()){
-                resultOrdered.add(new Pair(id,relevance));
+                resultOrdered.add(new Pair<Integer, Double>(id,relevance));
             }
             else{
                 boolean end=false;
                 if(query.isAscendent()) {
                     for (int i = 0; i < resultOrdered.size() && !end; ++i) {
                         if(resultOrdered.get(i).getSecond()>= relevance){
-                            resultOrdered.add(i,new Pair(id,relevance));
+                            resultOrdered.add(i,new Pair<Integer, Double>(id,relevance));
                             end = true;
                         }
                     }
@@ -226,27 +234,27 @@ public class DomainMainController {
                 else{
                     for(int i = 0; i < resultOrdered.size() && !end; ++i) {
                         if(resultOrdered.get(i).getSecond()<= relevance){
-                            resultOrdered.add(i,new Pair(id,relevance));
+                            resultOrdered.add(i,new Pair<Integer, Double>(id,relevance));
                             end = true;
                         }
                     }
                 }
-                if(!end) resultOrdered.add(new Pair(id,relevance));
+                if(!end) resultOrdered.add(new Pair<Integer, Double>(id,relevance));
             }
         }
 
-        for(int i = 0; i<resultOrdered.size(); ++i){
-            printresult(tipus,resultOrdered.get(i).getFirst(),resultOrdered.get(i).getSecond());
+        for (Pair<Integer, Double> aResultOrdered : resultOrdered) {
+            printresult(tipus, aResultOrdered.getFirst(), aResultOrdered.getSecond());
         }
     }
 
-    public void resultWithMax(HashMap<Integer,Double>resultquery,LimitedQuery query) {
+    private void resultWithMax(HashMap<Integer, Double> resultquery, LimitedQuery query) {
         char tipus = query.getPath().charAt(query.getPath().length()-1);
         System.out.println(" NOM  ->  rellevancia");
 
-        Iterator it= resultquery.entrySet().iterator();
+        Iterator<Map.Entry<Integer, Double>> it= resultquery.entrySet().iterator();
         while(it.hasNext() && query.getLimit()>0) {
-            Map.Entry resultat = (Map.Entry) it.next();
+            Map.Entry<Integer, Double> resultat = it.next();
 
             printresult(tipus,Integer.parseInt(resultat.getKey().toString()),Double.parseDouble(resultat.getValue().toString()));
 
@@ -256,31 +264,29 @@ public class DomainMainController {
 
 
     }
-    public void resultWithIntervals(HashMap<Integer,Double>resultquery,IntervaledQuery query){
+    private void resultWithIntervals(HashMap<Integer, Double> resultquery, IntervaledQuery query){
         char tipus = query.getPath().charAt(query.getPath().length()-1);
         System.out.println(" NOM  ->  rellevancia");
 
-        Iterator it= resultquery.entrySet().iterator();
-        while(it.hasNext()) {
-            Map.Entry resultat = (Map.Entry) it.next();
+        for (Object o : resultquery.entrySet()) {
+            Map.Entry resultat = (Map.Entry) o;
             double res = Double.parseDouble(resultat.getValue().toString());
             if (res >= query.getFirstRelevance() && res <= query.getSecondRelevance()) {
 
-                printresult(tipus,Integer.parseInt(resultat.getKey().toString()),Double.parseDouble(resultat.getValue().toString()));
+                printresult(tipus, Integer.parseInt(resultat.getKey().toString()), Double.parseDouble(resultat.getValue().toString()));
 
             }
         }
 
     }
 
-    public void resultWithoutFilters(HashMap<Integer,Double>resultquery,Query query){
+    private void resultWithoutFilters(HashMap<Integer, Double> resultquery, Query query){
         char tipus = query.getPath().charAt(query.getPath().length()-1);
         System.out.println(" NOM  ->  rellevancia");
 
-        Iterator it= resultquery.entrySet().iterator();
-        while(it.hasNext()) {
-            Map.Entry resultat = (Map.Entry) it.next();
-            printresult(tipus,Integer.parseInt(resultat.getKey().toString()),Double.parseDouble(resultat.getValue().toString()));
+        for (Object o : resultquery.entrySet()) {
+            Map.Entry resultat = (Map.Entry) o;
+            printresult(tipus, Integer.parseInt(resultat.getKey().toString()), Double.parseDouble(resultat.getValue().toString()));
 
         }
 
@@ -293,7 +299,7 @@ public class DomainMainController {
 
 
 
-    public Matrix getAuthorPaperMatrix(){
+    private Matrix getAuthorPaperMatrix(){
         Matrix authorpaper = new Matrix();
 
         for(Author author : authorsById.values()){
@@ -305,7 +311,7 @@ public class DomainMainController {
         return authorpaper;
     }
 
-    public Matrix getPaperAuthorMatrix(){
+    private Matrix getPaperAuthorMatrix(){
         Matrix paperauthor = new Matrix();
 
         for(Paper paper : papersById.values()){
@@ -317,7 +323,7 @@ public class DomainMainController {
         return paperauthor;
     }
 
-    public Matrix getTermPaperMatrix(){
+    private Matrix getTermPaperMatrix(){
         Matrix termpaper = new Matrix();
 
         for(Term term : termsById.values()){
@@ -330,7 +336,7 @@ public class DomainMainController {
         return termpaper;
     }
 
-    public Matrix getPaperTermMatrix() {
+    private Matrix getPaperTermMatrix() {
         Matrix paperterm = new Matrix();
 
         for (Paper paper : papersById.values()) {
@@ -342,7 +348,7 @@ public class DomainMainController {
         return paperterm;
     }
 
-    public Matrix getConferencePaperMatrix(){
+    private Matrix getConferencePaperMatrix(){
         Matrix conferencepaper = new Matrix();
 
         for(Conference conf : conferencesById.values()){
@@ -355,7 +361,7 @@ public class DomainMainController {
         return conferencepaper;
     }
 
-    public Matrix getPaperConferenceMatrix(){
+    private Matrix getPaperConferenceMatrix(){
         Matrix paperconference = new Matrix();
 
         for(Paper paper : papersById.values()){
