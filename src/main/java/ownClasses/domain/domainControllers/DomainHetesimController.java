@@ -2,7 +2,7 @@ package main.java.ownClasses.domain.domainControllers;
 
 import main.java.sharedClasses.utils.Matrix;
 
-public class DomainHetesimController {
+class DomainHetesimController {
     private Matrix probAuthorPaper;
     private Matrix probPaperAuthor;
     private Matrix probTermPaper;
@@ -13,7 +13,7 @@ public class DomainHetesimController {
     private Matrix auxiliarObjectL;
     private Matrix auxiliarObjectR;
 
-    public DomainHetesimController(Matrix authorPaper, Matrix paperAuthor, Matrix termPaper, Matrix paperTerm, Matrix conferencePaper, Matrix paperConference) {
+    DomainHetesimController(Matrix authorPaper, Matrix paperAuthor, Matrix termPaper, Matrix paperTerm, Matrix conferencePaper, Matrix paperConference) {
         probAuthorPaper = authorPaper.normalize();
         probPaperAuthor = paperAuthor.normalize();
         probTermPaper = termPaper.normalize();
@@ -40,7 +40,7 @@ public class DomainHetesimController {
         return findMatrix(source, target);
     }
 
-    public Matrix heteSim(String path) {
+    Matrix heteSim(String path) {
         String pl, pr;
         //create auxiliary matrices (if needed) and split pl/pr
         if (path.length() % 2 == 0) {

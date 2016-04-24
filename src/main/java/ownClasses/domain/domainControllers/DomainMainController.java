@@ -75,7 +75,7 @@ public class DomainMainController {
             if(!surt){ pathValid = true;}
             else{
                 System.err.println("Path no valid, torna'l a escriure (exemple APA):");
-                queryPath = scanner.nextLine();
+                while ("".equals(queryPath)) queryPath = scanner.nextLine();
             }
         }
 
@@ -127,7 +127,8 @@ public class DomainMainController {
                 }
             }
 
-            HashMap<Integer, Double> resultquery = result.columns(queryId);
+            HashMap<Integer, Double> resultquery = new HashMap<>();
+            if (result.columns(queryId) != null) resultquery = result.columns(queryId);
 
 
             if (queryType != -1) {
@@ -154,7 +155,7 @@ public class DomainMainController {
                         case (-2):
 
                             System.out.println("Introdueix el nombre maxim d'entrades");
-                            int nomMax = Integer.parseInt(scanner.nextLine());
+                            int nomMax = scanner.nextInt();
                             LimitedQuery lq = new LimitedQuery(query.getPath(), nomMax);
                             resultWithMax(resultquery, lq);
 
@@ -162,7 +163,7 @@ public class DomainMainController {
                         case (-3):
 
                             System.out.println("Selecciona l'ordre 1 Ascendent 2 Descendent");
-                            int i = Integer.parseInt(scanner.nextLine());
+                            int i = scanner.nextInt();
                             OrderedQuery oq = new OrderedQuery(query.getPath(), false);
                             if (i > 2 || i <= 0) {
                                 System.out.println("Ordre no disponible");
@@ -179,7 +180,8 @@ public class DomainMainController {
                             break;
                     }
                     System.out.println("Vols escollir un altre tipus de filtre? YES or NO");
-                    String answer = scanner.nextLine();
+                    String answer = "";
+                    while("".equals(answer)) answer = scanner.nextLine();
                     if (answer.equals("NO")) exitfiltres = 1;
                 }
 
