@@ -10,6 +10,7 @@ import main.java.sharedClasses.domain.nodes.Conference;
 import main.java.sharedClasses.domain.nodes.Paper;
 import main.java.sharedClasses.domain.nodes.Term;
 import main.java.sharedClasses.utils.Matrix;
+import main.java.sharedClasses.utils.Pair;
 
 import java.util.*;
 
@@ -166,7 +167,7 @@ public class DomainMainController {
 
                             break;
                         case ("4"):
-
+                            System.out.println("no disponible");
                             break;
                     }
                     System.out.println("Vols escollir un altre tipus de filtre? YES or NO");
@@ -204,19 +205,39 @@ public class DomainMainController {
         System.out.println(" NOM  ->  rellevancia");
 
         Iterator it= resultquery.entrySet().iterator();
-        TreeMap<Integer,Double> resultOrdered = new TreeMap<>();
+        ArrayList<Pair<Integer,Double>> resultOrdered = new ArrayList<>();
         while(it.hasNext()) {
             Map.Entry resultat = (Map.Entry) it.next();
-            resultOrdered.put(Integer.parseInt(resultat.getKey().toString()),Double.parseDouble(resultat.getValue().toString()));
+            int id = Integer.parseInt(resultat.getKey().toString());
+            double relevance = Double.parseDouble(resultat.getValue().toString());
+            if(resultOrdered.isEmpty()){
+                resultOrdered.add(new Pair(id,relevance));
+            }
+            else{
+                boolean end=false;
+                if(query.isAscendent()) {
+                    for (int i = 0; i < resultOrdered.size() && !end; ++i) {
+                        if(resultOrdered.get(i).getSecond()>= relevance){
+                            resultOrdered.add(i,new Pair(id,relevance));
+                            end = true;
+                        }
+                    }
+                }
+                else{
+                    for(int i = 0; i < resultOrdered.size() && !end; ++i) {
+                        if(resultOrdered.get(i).getSecond()<= relevance){
+                            resultOrdered.add(i,new Pair(id,relevance));
+                            end = true;
+                        }
+                    }
+                }
+                if(!end) resultOrdered.add(new Pair(id,relevance));
+            }
         }
-        Iterator itOrdered = resultOrdered.entrySet().iterator();
-        while(it.hasNext()) {
-            Map.Entry resultat = (Map.Entry) it.next();
-            printresult(tipus,Integer.parseInt(resultat.getKey().toString()),Double.parseDouble(resultat.getValue().toString()));
 
-
+        for(int i = 0; i<resultOrdered.size(); ++i){
+            printresult(tipus,resultOrdered.get(i).getFirst(),resultOrdered.get(i).getSecond());
         }
-
     }
 
     public void resultWithMax(HashMap<Integer,Double>resultquery,LimitedQuery query) {
