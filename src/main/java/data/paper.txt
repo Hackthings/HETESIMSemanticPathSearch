@@ -1,0 +1,20 @@
+7601;Some Philosophical Problems with Formal Learning Theory.
+7604;Terminological Cycles in KL-ONE-based Knowledge Representation Languages.
+7605;Integrating Description Logics and Action Formalisms: First Results.
+7610;Old Resolution Meets Modern SLS.
+7612;Partial Compilation of Strategic Knowledge.
+7613;Using an Annotated Language Corpus as a Virtual Stochastic Grammar.
+7621;Plan Abstraction Based on Operator Generalization.
+7630;Quantifying Incentive Compatibility of Ranking Systems.
+7631;Case-Based Introspection.
+7632;QuOnto: Querying Ontologies.
+7633;Editorial Comprehension in OpEd through Argument Units.
+7637;Looking for the AI in Software Engineering: An Applications Perspective.
+7638;Hiding Satisfying Assignments: Two Are Better than One.
+7652;QUICR-Learning for Multi-Agent Coordination.
+7653;Constraint Limited Generalization: Acquiring Procedures From Examples.
+7655;Semantic Tagging at the Sense Level.
+7658;Keeping in Touch: Maintaining Biconnected Structure by Homogeneous Robots.
+7660;Biconnected Structure for Multi-Robot Systems.
+7663;Clustering by Exceptions.
+7664;Automatic Generation of Semantic Attachments in FOL.
