@@ -10,7 +10,7 @@ all:
 	javac -d classes/ -classpath classes/ src/main/java/Main.java
 
 run:
-	java classes.main.java.Main
+	java -cp classes/ main.java.Main
 
 clean:
 	rm -rf classes/*
