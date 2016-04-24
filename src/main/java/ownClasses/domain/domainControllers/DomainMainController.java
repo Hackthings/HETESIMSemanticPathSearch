@@ -179,7 +179,7 @@ public class DomainMainController {
                             System.out.println("no disponible");
                             break;
                     }
-                    System.out.println("\nVols escollir un altre tipus de filtre? YES or NO");
+                    System.out.println("Vols escollir un altre tipus de filtre? YES or NO");
                     String answer = "";
                     while("".equals(answer)) answer = scanner.nextLine();
                     if (answer.equals("NO")) exitfiltres = 1;
@@ -196,16 +196,16 @@ public class DomainMainController {
     private void printresult(char tipus, Integer id, Double relevance){
         switch (tipus) {
             case ('A'):
-                System.out.print(authorsById.get(id).getName() + "  ->  " + relevance);
+                System.out.println(authorsById.get(id).getName() + "  ->  " + relevance);
                 break;
             case ('P'):
-                System.out.print(papersById.get(id).getName() + "  ->  " + relevance);
+                System.out.println(papersById.get(id).getName() + "  ->  " + relevance);
                 break;
             case ('C'):
-                System.out.print(conferencesById.get(id).getName() + "  ->  " + relevance);
+                System.out.println(conferencesById.get(id).getName() + "  ->  " + relevance);
                 break;
             case ('T'):
-                System.out.print(termsById.get(id).getName() + "  ->  " + relevance);
+                System.out.println(termsById.get(id).getName() + "  ->  " + relevance);
                 break;
         }
     }
