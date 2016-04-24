@@ -16,7 +16,7 @@ public class DomainPersistanceController {
     private static String filepath;
 
     public DomainPersistanceController() {
-        filepath = "\\src\\cluster\\";
+        filepath = "/src/main/java/data/";
     }
 
     public void readAll(HashMap<Integer, Author> authorsById,
@@ -1038,8 +1038,8 @@ public class DomainPersistanceController {
         String p = new File("").getAbsolutePath();
         File inputFile1 = new File(p.concat(filepath + "paper_author.txt"));
         System.out.println(inputFile1.getAbsolutePath());
-        File inputFile2 = new File(p.concat("\\src\\main.java\\data/" + "paper_conf.txt"));
-        File inputFile3 = new File(p.concat("\\src\\main.java\\data/" + "paper_term.txt"));
+        File inputFile2 = new File(p.concat(filepath + "paper_conf.txt"));
+        File inputFile3 = new File(p.concat(filepath + "paper_term.txt"));
         File tempFile1 = new File("myTempFile1.txt");
         File tempFile2 = new File("myTempFile2.txt");
         File tempFile3 = new File("myTempFile3.txt");
