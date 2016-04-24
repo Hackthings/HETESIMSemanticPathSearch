@@ -28,3 +28,23 @@ Later, the user can edit the presentation of the results by number or filter res
 The data from our program will read text files at the start of program execution. These data files can be modified at runtime by the user by adding new entities and direct relationships between entities, deleting them or changing them, for example, a user can add a new author and a new relationship or publication without each other. In the case of deleting data if a relationship is orphaned, the whole erased.
 
 You also have the option to undo these changes to a certain limit and sometimes for no longer interested to keep these changes.
+
+
+#####How to compile#####
+
+Just execute:
+
+`make`
+
+
+#####How to execute#####
+
+Just execute:
+
+`make run`
+
+#####How to clean project#####
+
+Just execute:
+
+`make clean`
