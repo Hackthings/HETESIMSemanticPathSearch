@@ -25,6 +25,7 @@ public class DomainMainController {
     private HashMap<String, Term> termsByName;
     private DomainPersistanceController persistanceController;
     private DomainHetesimController hetesimController;
+    private Scanner scanner;
 
     private int authorMaxId;
     private int paperMaxId;
@@ -46,103 +47,102 @@ public class DomainMainController {
         authorMaxId = 0;
         paperMaxId = 0;
         conferenceMaxId = 0;
+        hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
+        scanner = new Scanner(System.in);
         termMaxId = 0;
         persistanceController.readAll(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName, authorMaxId, paperMaxId, termMaxId, conferenceMaxId);
     }
 
     public void newQuery() {
 
-        hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
-        Scanner scan = new Scanner(System.in);
-
-        System.out.println("Quin tipus de cerca vols: 1 Simple\n 2 Amb filtres");
-        String queryType = scan.nextLine();
-        while(!queryType.equals("1") || !queryType.equals("2")){
-            System.err.println("tipus no valid, escriu 1 si Simple o 2 si Amb Filtres");
-            queryType = scan.nextLine();
+        System.out.println("Quin tipus de cerca vols: -1 Simple o -2 Amb filtres");
+        int queryType = scanner.nextInt();
+        while(queryType != -1 && queryType != -2){
+            System.err.println("Tipus no valid, escriu -1 Simple o -2 Amb filtres");
+            queryType = scanner.nextInt();
         }
 
-        int pathvalid=0;
-        System.out.println("Introdueix el path (exemple: APA):");
-        String queryPath = scan.nextLine();
-        while(pathvalid==0) {
-            int surt = 0;
-            for(int i=0; i<queryPath.length() && surt==0; ++i){
+        boolean pathValid = false;
+        System.out.println("Introdueix el teu path (exemple: APA):");
+        String queryPath = "";
+        while ("".equals(queryPath)) queryPath = scanner.nextLine();
+        while(!pathValid) {
+            boolean surt = false;
+            for(int i=0; i<queryPath.length() && !surt; ++i){
                 char node= queryPath.charAt(i);
-                if(node != 'A' && node != 'P' && node!='C' && node!='T') surt=1;
+                if(node != 'A' && node != 'P' && node!='C' && node!='T') surt = true;
             }
-            if(surt==0){ pathvalid=1;}
+            if(!surt){ pathValid = true;}
             else{
-                System.err.println("path no valid, torna'l a escriure (exemple APA):");
-                queryPath = scan.nextLine();
+                System.err.println("Path no valid, torna'l a escriure (exemple APA):");
+                queryPath = scanner.nextLine();
             }
         }
 
         Query query = new Query(queryPath);
         Matrix result = hetesimController.heteSim((queryPath));
 
-        int exit = 0;
+        boolean exit = false;
         char type = queryPath.charAt(0);
 
-        while(exit == 0) {
+        while(!exit) {
 
-            int valid = 0;
+            boolean valid = false;
             Integer queryId = 0;
-            while (valid == 0) {
+            while (!valid) {
                 System.out.println("Introdueix el nom:");
-                String queryName = scan.nextLine();
+                String queryName = scanner.nextLine();
                 switch (type) {
                     case ('A'):
                         if (authorsByName.containsKey(queryName)) {
                             System.out.println("OK");
-                            valid = 1;
+                            valid = true;
                             queryId = authorsByName.get(queryName).getId();
                         }
                         break;
                     case ('P'):
                         if (papersByName.containsKey(queryName)) {
                             System.out.println("OK");
-                            valid = 1;
+                            valid = true;
                             queryId = papersByName.get(queryName).getId();
                         }
                         break;
                     case ('C'):
                         if (conferencesByName.containsKey(queryName)) {
                             System.out.println("OK");
-                            valid = 1;
+                            valid = true;
                             queryId = conferencesByName.get(queryName).getId();
                         }
                         break;
                     case ('T'):
                         if (termsByName.containsKey(queryName)) {
                             System.out.println("OK");
-                            valid = 1;
+                            valid = true;
                             queryId = termsByName.get(queryName).getId();
                         }
                         break;
                 }
-                if (valid == 0) {
-                    System.err.println("nom no valid");
+                if (!valid) {
+                    System.err.println("Nom no vàlid. Siusplau introdueix un nom correcte.");
                 }
             }
 
             HashMap<Integer, Double> resultquery = result.columns(queryId);
 
 
-            if (queryType.equals("1")) {
+            if (queryType != -1) {
                 resultWithoutFilters(resultquery, query);
             } else {
                 int exitfiltres = 0;
                 while (exitfiltres == 0) {
-                    System.out.println("Escogeix el tipus de filtre: 1 Intervals de rellevancia\n 2 Nombre maxim d'entrades\n 3 Ordre\n 4 Restriccio per element");
-                    String queryfilter = scan.nextLine();
+                    System.out.println("Escull el tipus de filtre: -1 Intervals de rellevancia, -2 Nombre maxim d'entrades, -3 Ordre o -4 Restriccio per element:");
+                    int queryfilter = scanner.nextInt();
                     switch (queryfilter) {
-                        case ("1"):
-
+                        case (-1):
                             System.out.println("Introdueix el valor mes petit (entre 0 i 1)");
-                            double firstrelevance = Double.parseDouble(scan.nextLine());
+                            double firstrelevance = scanner.nextDouble();
                             System.out.println("Introdueix el valor mes gran (entre 0 i 1)");
-                            double secondrelevance = Double.parseDouble(scan.nextLine());
+                            double secondrelevance = scanner.nextDouble();
                             if (firstrelevance > secondrelevance) {
                                 System.err.println("firstrelevance > secondrelevance)");
                             } else {
@@ -151,18 +151,18 @@ public class DomainMainController {
                             }
 
                             break;
-                        case ("2"):
+                        case (-2):
 
                             System.out.println("Introdueix el nombre maxim d'entrades");
-                            int nomMax = Integer.parseInt(scan.nextLine());
+                            int nomMax = Integer.parseInt(scanner.nextLine());
                             LimitedQuery lq = new LimitedQuery(query.getPath(), nomMax);
                             resultWithMax(resultquery, lq);
 
                             break;
-                        case ("3"):
+                        case (-3):
 
                             System.out.println("Selecciona l'ordre 1 Ascendent 2 Descendent");
-                            int i = Integer.parseInt(scan.nextLine());
+                            int i = Integer.parseInt(scanner.nextLine());
                             OrderedQuery oq = new OrderedQuery(query.getPath(), false);
                             if (i > 2 || i <= 0) {
                                 System.out.println("Ordre no disponible");
@@ -174,19 +174,19 @@ public class DomainMainController {
                             resultWithOrder(resultquery,oq);
 
                             break;
-                        case ("4"):
+                        case (-4):
                             System.out.println("no disponible");
                             break;
                     }
                     System.out.println("Vols escollir un altre tipus de filtre? YES or NO");
-                    String answer = scan.nextLine();
+                    String answer = scanner.nextLine();
                     if (answer.equals("NO")) exitfiltres = 1;
                 }
 
             }
             System.out.println("Vols seleccionar un altre nom amb el mateix path? YES or NO");
-            String answer = scan.nextLine();
-            if (answer.equals("NO")) exit = 1;
+            String answer = scanner.nextLine();
+            if (answer.equals("NO")) exit = true;
         }
 
     }
