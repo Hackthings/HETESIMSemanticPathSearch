@@ -1,5 +1,6 @@
 package main.java;
 
+import com.sun.java.browser.plugin2.DOM;
 import main.java.ownClasses.domain.domainControllers.DomainMainController;
 import main.java.ownClasses.presentation.ConsolePrinter;
 
@@ -22,7 +23,10 @@ public class Main {
             consolePrinter.printMenu();
             option = sc.nextInt();
             if (option == NEW_QUERY) mainController.newQuery();
-            else if (option == EDIT) mainController.editGraph();
+            else if (option == EDIT) {
+                mainController.editGraph();
+                mainController = new DomainMainController();
+            }
         } while (option != EXIT);
     }
 }
