@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void Main() {
+    public static void main(String[] args) {
         final int EXIT = -3;
         final int NEW_QUERY = -1;
         final int EDIT = -2;
