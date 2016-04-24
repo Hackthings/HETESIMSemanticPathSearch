@@ -1,15 +1,15 @@
-#HETESIM Semantic Path Search#
+#HETESIM Semantic Path Search
 
-##PROP Project 42.3 Group##
+##PROP Project 42.3 Group
 
-#####Contributors:#####
+#####Contributors:
 
 - Andreu Rodríguez i Donaire (@anrodon)
 - Ian Sanginés-Uriarte Muñoz (@iansangines)
 - Nicola Bafundi (@Nico152)
 - Sergi Canal (@shierve)
 
-#####Project Description#####
+#####Project Description
 
 The 42.3 PROP group has done an interactive search based on semantic relevance of the paths defined by the relations of a graph based on the following outline nodes.
 
@@ -30,20 +30,20 @@ The data from our program will read text files at the start of program execution
 You also have the option to undo these changes to a certain limit and sometimes for no longer interested to keep these changes.
 
 
-#####How to compile#####
+#####How to compile
 
 Just execute:
 
 `make`
 
 
-#####How to execute#####
+#####How to execute
 
 Just execute:
 
 `make run`
 
-#####How to clean project#####
+#####How to clean project
 
 Just execute:
 
