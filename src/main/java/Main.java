@@ -1,6 +1,5 @@
 package main.java;
 
-import com.sun.java.browser.plugin2.DOM;
 import main.java.ownClasses.domain.domainControllers.DomainMainController;
 import main.java.ownClasses.presentation.ConsolePrinter;
 
