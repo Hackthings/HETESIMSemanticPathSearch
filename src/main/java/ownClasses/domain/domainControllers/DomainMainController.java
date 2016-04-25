@@ -131,7 +131,7 @@ public class DomainMainController {
             if (result.columns(queryId) != null) resultquery = result.columns(queryId);
 
 
-            if (queryType != -1) {
+            if (queryType == -1) {
                 resultWithoutFilters(resultquery, query);
             } else {
                 int exitfiltres = 0;
