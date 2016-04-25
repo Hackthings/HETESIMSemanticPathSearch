@@ -24,7 +24,6 @@ public class Main {
             if (option == NEW_QUERY) mainController.newQuery();
             else if (option == EDIT) {
                 mainController.editGraph();
-                mainController = new DomainMainController();
             }
         } while (option != EXIT);
     }
