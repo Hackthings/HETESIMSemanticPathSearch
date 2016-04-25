@@ -27,7 +27,7 @@ public class DomainMainController {
     private DomainHetesimController hetesimController;
     private Scanner scanner;
 
-    private Integer authorMaxId;
+    private Integer authorMaxId; //changed
     private Integer paperMaxId;
     private Integer conferenceMaxId;
     private Integer termMaxId;
