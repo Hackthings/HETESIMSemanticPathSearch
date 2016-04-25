@@ -194,6 +194,8 @@ public class DomainMainController {
     }
 
     private void printresult(char tipus, Integer id, Double relevance){
+        if (relevance > 1.0) relevance = 1.0;
+        else if (relevance < 0.0) relevance = 0.0;
         switch (tipus) {
             case ('A'):
                 System.out.println(authorsById.get(id).getName() + "  ->  " + relevance);
