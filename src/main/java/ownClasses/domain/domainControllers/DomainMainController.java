@@ -27,10 +27,10 @@ public class DomainMainController {
     private DomainHetesimController hetesimController;
     private Scanner scanner;
 
-    private int authorMaxId;
-    private int paperMaxId;
-    private int conferenceMaxId;
-    private int termMaxId;
+    private Integer authorMaxId; //changed
+    private Integer paperMaxId;
+    private Integer conferenceMaxId;
+    private Integer termMaxId;
 
 
     public DomainMainController() {
@@ -47,10 +47,11 @@ public class DomainMainController {
         authorMaxId = 0;
         paperMaxId = 0;
         conferenceMaxId = 0;
-        persistanceController.readAll(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName, authorMaxId, paperMaxId, termMaxId, conferenceMaxId);
+        termMaxId = 0;
+        persistanceController.readAll(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
         hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
         scanner = new Scanner(System.in);
-        termMaxId = 0;
+
     }
 
     public void newQuery() {
@@ -298,7 +299,8 @@ public class DomainMainController {
 
     public void editGraph() {
         DomainPersistanceController domainPersistanceController = new DomainPersistanceController();
-        domainPersistanceController.newEdit(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName,termsByName, authorMaxId, paperMaxId, termMaxId, conferenceMaxId);
+        domainPersistanceController.newEdit(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName,termsByName);
+
     }
 
 

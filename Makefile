@@ -1,6 +1,5 @@
-
 all:
-    mkdir -p classes
+	mkdir -p classes
 	javac -d classes/ src/main/java/sharedClasses/utils/Pair.java
 	javac -d classes/ src/main/java/sharedClasses/utils/Matrix.java
 	javac -d classes/ src/main/java/sharedClasses/domain/nodes/*.java
