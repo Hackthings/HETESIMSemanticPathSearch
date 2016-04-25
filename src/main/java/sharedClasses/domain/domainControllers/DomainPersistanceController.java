@@ -175,13 +175,13 @@ public class DomainPersistanceController {
                                 break;
                             }
                             Conference co = new Conference(confname, Conference.getMaxId() + 1);
-                            /*System.out.println("Introduïu l'any");
+                            System.out.println("Introduïu l'any");
                             int confyear = scan.nextInt();
                             scan.nextLine();
                             System.out.println("Introduïu el continent");
                             String confcont = scan.nextLine();
                             co.setYear(confyear);
-                            co.setContinent(confcont);*/
+                            co.setContinent(confcont);
                             conferencesByName.put(co.getName(), co);
                             conferencesById.put(co.getId(), co);
                             writeConferenceToFile(co);
