@@ -8,6 +8,7 @@ all:
 	javac -d classes/ -classpath classes/ src/main/java/sharedClasses/domain/domainControllers/DomainPersistanceController.java
 	javac -d classes/ -classpath classes/ src/main/java/ownClasses/domain/domainControllers/*.java
 	javac -d classes/ -classpath classes/ src/main/java/Main.java
+	javac -d classes/ -classpath classes/ src/main/java/ownClasses/domain/domainControllers/Drivers/*.java
 
 run:
 	java -cp classes/ main.java.Main
