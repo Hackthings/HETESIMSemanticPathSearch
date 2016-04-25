@@ -23,14 +23,14 @@ public class Paper_driver {
         //Assigna una conferencia al Paper i la mostra per pantalla el seu nom
         Conference c = new Conference("CSS",3);
         p.setConference(c);
-        System.out.println(p.getConference());
+        System.out.println(p.getConference().getName());
 
         //Cas 1: 1 unic autor
         //Afegeix un autor al Paper i el mostra per pantalla el seu nom i id
         Author a1 = new Author("Muhamed Lee",123);
         p.addAuthor(a1);
-        System.out.println(p.getAuthorByName("Muhamed Lee"));
-        System.out.println(p.getAuthorByID(123));
+        System.out.println(p.getAuthorByName("Muhamed Lee").getName());
+        System.out.println(p.getAuthorByID(123).getId());
 
         //Cas 2: mes d'un autor
         //Afegeix un altre autor i mostra ambos autors tant per nom com per id
@@ -38,11 +38,11 @@ public class Paper_driver {
         p.addAuthor(a2);
         Set <Integer> keyMap = p.getAuthorsById().keySet();
         for (Integer i : keyMap){
-            System.out.println(p.getAuthorsById().get(i));
+            System.out.println(p.getAuthorsById().get(i).getId());
         }
         Set<String> keyMap2 = p.getAuthorsByName().keySet();
         for (String s : keyMap2){
-            System.out.println(p.getAuthorByName(s));
+            System.out.println(p.getAuthorByName(s).getName());
         }
 
 
@@ -54,18 +54,18 @@ public class Paper_driver {
         p.addTerm(t2);
         Term t3 = new Term("problem",3);
         p.addTerm(t3);
-        System.out.println(p.getTermByName("NP"));
-        System.out.println(p.getTermByID(2));
+        System.out.println(p.getTermByName("NP").getName());
+        System.out.println(p.getTermByID(2).getId());
 
         //Tot seguit mostra tots els termes associats al Paper,tant per nom com per id
         System.out.println("Termes de l'article");
         Set<Integer> keyMap3 = p.getTermsById().keySet();
         for (Integer i : keyMap3){
-            System.out.println(p.getTermsById().get(i));
+            System.out.println(p.getTermsById().get(i).getId());
         }
         Set<String> keyMap4 = p.getTermsByName().keySet();
         for (String s : keyMap4){
-            System.out.println(p.getTermByName(s));
+            System.out.println(p.getTermByName(s).getName());
         }
 
         //Borra un dels autors

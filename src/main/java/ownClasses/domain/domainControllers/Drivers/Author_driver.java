@@ -25,8 +25,8 @@ public class Author_driver {
         Paper p1 = new Paper("The NP Problem", 1);
         a.addPaper(p1);
 
-        System.out.println(a.getPaperByName("The NP Problem"));
-        System.out.println(a.getPaperById(1));
+        System.out.println(a.getPaperByName("The NP Problem").getName());
+        System.out.println(a.getPaperById(1).getName());
 
         //Tot seguit mostra tots els articles associats al autor,tant per nom com per id
         Paper p2 = new Paper("P equals NP", 2);
@@ -34,11 +34,11 @@ public class Author_driver {
         System.out.println("Articles de l'autor");
         Set<Integer> keyMap = a.getPapersById().keySet();
         for (Integer i : keyMap) {
-            System.out.println(a.getPapersById().get(i));
+            System.out.println(a.getPapersById().get(i).getName());
         }
         Set<String> keyMap2 = a.getPapersByName().keySet();
         for (String s : keyMap2) {
-            System.out.println(a.getPaperByName(s));
+            System.out.println(a.getPaperByName(s).getName());
         }
 
         //Borra un dels articles
