@@ -6,11 +6,22 @@ public class Term extends Node {
     public HashMap<Integer, Paper> papersWhichTalkAboutThisById;
     public HashMap<String, Paper> papersWhichTalkAboutThisByName;
 
+    private static int maxId;
+
 
     public Term(String name, int id) {
         super(name, id);
         papersWhichTalkAboutThisById = new HashMap<Integer,Paper>();
         papersWhichTalkAboutThisByName = new HashMap<String, Paper>();
+
+        if (maxId < id) maxId = id;
+
+    }
+
+    //Pre: Cert.
+    //Post: Retorna el valor de maxId del parametre implicit.
+    public static int getMaxId() {
+        return maxId;
     }
 
     public HashMap<Integer, Paper> getPapersWhichTalkAboutThisById() {

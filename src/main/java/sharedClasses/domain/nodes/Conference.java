@@ -8,10 +8,21 @@ public class Conference extends Node {
     private HashMap<Integer, Paper> exposedPapersById;
     private HashMap<String, Paper> exposedPapersByName;
 
+    private static int maxId;
+
     public Conference(String name, int id) {
         super(name, id);
         exposedPapersById = new HashMap<Integer, Paper>();
         exposedPapersByName = new HashMap<String, Paper>();
+
+        if (maxId < id) maxId = id;
+
+    }
+
+    //Pre: Cert.
+    //Post: Retorna el valor de maxId del parametre implicit.
+    public static int getMaxId() {
+        return maxId;
     }
 
     public HashMap<Integer, Paper> getExposedPapersById() {

@@ -6,10 +6,21 @@ public class Author extends Node {
     private HashMap<Integer, Paper> papersById;
     private HashMap<String, Paper> papersByName;
 
+    private static int maxId;
+
     public Author(String name, int id) {
         super(name, id);
         papersById = new HashMap<Integer, Paper>();
         papersByName = new HashMap<String, Paper>();
+
+        if (maxId < id) maxId = id;
+
+    }
+
+    //Pre: Cert.
+    //Post: Retorna el valor de maxId del parametre implicit.
+    public static int getMaxId() {
+        return maxId;
     }
 
     public HashMap<Integer, Paper> getPapersById() {

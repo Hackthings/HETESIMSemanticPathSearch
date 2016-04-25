@@ -9,12 +9,23 @@ public class Paper extends Node {
     private HashMap<Integer, Term> termsById;
     private HashMap<String,Term> termsByName;
 
+    private static int maxId;
+
     public Paper(String name, int id) {
         super(name, id);
         authorsById = new HashMap<Integer , Author>();
         authorsByName = new HashMap<String, Author>();
         termsById = new HashMap<Integer, Term>();
         termsByName = new HashMap<String, Term>();
+
+        if (maxId < id) maxId = id;
+
+    }
+
+    //Pre: Cert.
+    //Post: Retorna el valor de maxId del parametre implicit.
+    public static int getMaxId() {
+        return maxId;
     }
 
     public void setConference(Conference conference) {
