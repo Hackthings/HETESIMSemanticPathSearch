@@ -27,10 +27,10 @@ public class DomainMainController {
     private DomainHetesimController hetesimController;
     private Scanner scanner;
 
-    private int authorMaxId;
-    private int paperMaxId;
-    private int conferenceMaxId;
-    private int termMaxId;
+    private Integer authorMaxId;
+    private Integer paperMaxId;
+    private Integer conferenceMaxId;
+    private Integer termMaxId;
 
 
     public DomainMainController() {
@@ -47,10 +47,11 @@ public class DomainMainController {
         authorMaxId = 0;
         paperMaxId = 0;
         conferenceMaxId = 0;
+        termMaxId = 0;
         persistanceController.readAll(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName, authorMaxId, paperMaxId, termMaxId, conferenceMaxId);
         hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
         scanner = new Scanner(System.in);
-        termMaxId = 0;
+
     }
 
     public void newQuery() {
