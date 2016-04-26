@@ -76,7 +76,8 @@ public class DomainMainController {
             if(!surt){ pathValid = true;}
             else{
                 System.err.println("Path no valid, torna'l a escriure (exemple APA):");
-                while ("".equals(queryPath)) queryPath = scanner.nextLine();
+                //while ("".equals(queryPath)) queryPath = scanner.nextLine();
+                queryPath = scanner.nextLine();
             }
         }
 
