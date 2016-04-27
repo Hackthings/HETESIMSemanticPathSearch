@@ -17,6 +17,63 @@ public class DomainPersistanceController {
 
     public DomainPersistanceController() {filepath = "/src/main/java/data/";}
 
+    public void testDomain(HashMap<Integer, Author> authorsById,
+                      HashMap<Integer, Paper> papersById,
+                      HashMap<Integer, Conference> conferencesById,
+                      HashMap<Integer, Term> termsById){
+
+        System.out.println("TEST DOMAIN!");
+
+
+        System.out.println("AUTORS : *_*_*_*_*_*_*_*_*_*_*_*_*_**_*_*_*_ ");
+
+        for(Author a : authorsById.values()){
+           System.out.println("Autor: " + a.getId() + " " + a.getName());
+           System.out.println("Papers Relacionats ");
+           for(Paper p : a.getPapersById().values()){
+               System.out.println(p.getId() + " " + p.getName());
+           }
+       }
+
+        System.out.println("PAPERS : *_*_*_*_*_*_*_*_**_*_*_*_*_*_*_**_*_*_*_*_*_*_*_");
+        for(Paper p : papersById.values()){
+            System.out.println("Paper: " + p.getId() + " " + p.getName());
+            System.out.println("Autors relacionats: ");
+            for(Author a : p.getAuthorsById().values()){
+                System.out.println(a.getId() + " " + a.getName());
+            }
+            System.out.println("Termes relacionats: ");
+
+            for(Term t : p.getTermsById().values()){
+                System.out.println(t.getId() + " " + t.getName());
+            }
+            System.out.println("Conferencia relacionada: ");
+            System.out.println(p.getConference().getId() + " " + p.getConference().getName());
+        }
+
+        System.out.println("TERMES : *_*_*_*_*_*_*_*_**_*_*_*_*_*_*_**_*_*_*_*_*_*_*_");
+
+        for(Term t : termsById.values()){
+            System.out.println("Tema: " + t.getId() + " " + t.getName());
+            System.out.println("Papers Relacionats: ");
+            for(Paper p : t.getPapersWhichTalkAboutThisById().values()){
+                System.out.println(p.getId() + " " + p.getName());
+            }
+        }
+
+        System.out.println("CONFERENCIES : *_*_*_*_*_*_*_*_**_*_*_*_*_*_*_**_*_*_*_*_*_*_*_");
+
+        for(Conference c : conferencesById.values()){
+            System.out.println("Conferencia: " + c.getId() + " " + c.getName() + " " +c.getYear()+" "+c.getContinent());
+            System.out.println("Les seves relacions: ");
+            for(Paper p : c.getExposedPapersById().values()){
+                System.out.println(p.getId() + " " + p.getName());
+            }
+        }
+        System.out.println("FIIIII : *_*_*_*_*_*_*_*_**_*_*_*_*_*_*_**_*_*_*_*_*_*_*_");
+
+    }
+
     public void readAll(HashMap<Integer, Author> authorsById,
                         HashMap<Integer, Paper> papersById,
                         HashMap<Integer, Conference> conferencesById,
@@ -33,6 +90,10 @@ public class DomainPersistanceController {
         readPaperAuthorRelations(papersById,authorsById);
         readTermRelations(papersById,termsById);
         readConferenceRelations(papersById,conferencesById);
+
+        
+        //IMPRIMIR HASHMAPS
+        testDomain(authorsById,papersById,conferencesById,termsById);
     }
 
     public void newEdit(HashMap<Integer, Author> authorsById,
