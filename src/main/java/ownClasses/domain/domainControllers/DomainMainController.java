@@ -24,7 +24,7 @@ public class DomainMainController {
     private HashMap<String, Conference> conferencesByName;
     private HashMap<String, Term> termsByName;
     private DomainPersistanceController persistanceController;
-    private DomainHetesimController hetesimController;
+    //private DomainHetesimController hetesimController;
     private Scanner scanner;
 
     private Integer authorMaxId; //changed
@@ -49,12 +49,14 @@ public class DomainMainController {
         conferenceMaxId = 0;
         termMaxId = 0;
         persistanceController.readAll(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
-        hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
+        //hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
         scanner = new Scanner(System.in);
 
     }
 
     public void newQuery() {
+
+        DomainHetesimController hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
 
         System.out.println("Quin tipus de cerca vols: -1 Simple o -2 Amb filtres");
         int queryType = scanner.nextInt();
