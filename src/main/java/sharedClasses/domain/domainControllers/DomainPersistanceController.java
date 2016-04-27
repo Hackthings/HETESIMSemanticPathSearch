@@ -91,7 +91,7 @@ public class DomainPersistanceController {
         readTermRelations(papersById,termsById);
         readConferenceRelations(papersById,conferencesById);
 
-        
+
         //IMPRIMIR HASHMAPS
         testDomain(authorsById,papersById,conferencesById,termsById);
     }
@@ -475,6 +475,8 @@ public class DomainPersistanceController {
             }
 
         }
+
+        testDomain(authorsById,papersById,conferencesById,termsById);
     }
 
 
