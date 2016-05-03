@@ -13,7 +13,7 @@ public class Main {
         final int NEW_QUERY = -1;
         final int EDIT = -2;
 
-        ConsolePrinter consolePrinter = new ConsolePrinter();
+        ConsolePrinter consolePrinter = new ConsolePrinter(); 
 
         Scanner sc = new Scanner(System.in);
         DomainMainController mainController = new DomainMainController();
