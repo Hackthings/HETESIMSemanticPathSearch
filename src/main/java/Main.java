@@ -2,6 +2,7 @@ package main.java;
 
 import main.java.ownClasses.domain.domainControllers.DomainMainController;
 import main.java.ownClasses.presentation.ConsolePrinter;
+import main.java.ownClasses.presentation.PresentationController;
 
 import java.util.Scanner;
 
@@ -16,7 +17,7 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
         DomainMainController mainController = new DomainMainController();
-
+        PresentationController window = new PresentationController(mainController);
         int option;
         do {
             consolePrinter.printMenu();
