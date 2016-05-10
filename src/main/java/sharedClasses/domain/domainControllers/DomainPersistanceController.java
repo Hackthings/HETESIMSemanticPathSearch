@@ -2,10 +2,7 @@ package main.java.sharedClasses.domain.domainControllers;
 
 
 
-import main.java.sharedClasses.domain.nodes.Author;
-import main.java.sharedClasses.domain.nodes.Conference;
-import main.java.sharedClasses.domain.nodes.Paper;
-import main.java.sharedClasses.domain.nodes.Term;
+import main.java.sharedClasses.domain.nodes.*;
 
 import java.io.*;
 import java.util.*;
@@ -130,25 +127,83 @@ public class DomainPersistanceController {
                                 System.err.println("Aquest autor ja existeix");
                                 break;
                             }
-                            authorsByName.put(a.getName(), a);
-                            authorsById.put(a.getId(), a);
-                           writeAuthorToFile(a);
                             System.out.println("En quants articles ha participat?");
                             int numArt = scan.nextInt();
                             scan.nextLine();
                             for (int i = 0; i < numArt; ++i) {
                                 System.out.println("Introduïu el nom de l'article");
                                 String nameArt = scan.nextLine();
+                                Paper p;
+                                p = papersByName.get(nameArt);
+                                if (p == null) {
+                                    System.out.println("L'article no existeix, vols crear-lo? [s/n] ");
+                                    if (scan.nextLine().equals("s")) {
+                                        p = new Paper(nameArt, Paper.getMaxId() + 1);
+                                        System.out.println("Quina és la seva conferència?");
+                                        String nameConf = scan.nextLine();
+                                        Conference c;
+                                        c = conferencesByName.get(nameConf);
+                                        if (c == null) {
+                                            System.out.println("La conferencia no existeix, vols crear-la? [s/n]");
+                                            if(scan.nextLine().equals("s")) {
+                                                c = new Conference(nameConf, Conference.getMaxId() + 1);
+                                                System.out.println("Introduïu l'any");
+                                                int confyear = scan.nextInt();
+                                                scan.nextLine();
+                                                System.out.println("Introduïu el continent");
+                                                String confcont = scan.nextLine();
+                                                c.setYear(confyear);
+                                                c.setContinent(confcont);
+                                                conferencesByName.put(c.getName(), c);
+                                                conferencesById.put(c.getId(), c);
+                                                writeConferenceToFile(c);
+                                                writeNewRelationPaperConf(p, c);
+                                                p.setConference(c);
+                                                c.addExposedPaper(p);
+                                                conferencesById.put(c.getId(),c);
+                                                conferencesByName.put(c.getName(),c);
+                                            }
+                                            else{
+                                                System.out.println("L'autor no s'ha creat");
+                                                //elimincar els papers creats relacionats i relacions
+                                                break;
+                                            }
+                                        }
+                                        else{
+                                            writeNewRelationPaperConf(p, c);
+                                            p.setConference(c);
+                                            c.addExposedPaper(p);
+                                        }
+                                        //afegirTermes();
 
-                                try {
-                                    Paper p = papersByName.get(nameArt);
-                                    a.addPaper(p);
-                                    writeNewRelationPaperAuthor(p, a);
-                                } catch (NullPointerException e) {
-                                    System.err.println("L'article no existeix");
+
+
+                                        a.addPaper(p);
+                                        p.addAuthor(a);
+                                        writeNewRelationPaperAuthor(p,a);
+                                        papersByName.put(p.getName(), p);
+                                        papersById.put(p.getId(), p);
+                                        writePaperToFile(p);
+                                    } else{
+                                        System.out.println("L'autor no s'ha creat");
+                                        //eliminar els papers relacionats i les conferencies creades
+                                        break;
+                                    }
                                 }
+                                else{
+                                    a.addPaper(p);
+                                    p.addAuthor(a);
+                                    writeNewRelationPaperAuthor(p,a);
+
+                                }
+
+
                             }
+                            authorsByName.put(a.getName(), a);
+                            authorsById.put(a.getId(), a);
+                            writeAuthorToFile(a);
                             break;
+
                         case ("P"): //Paper
                             System.out.println("Introduïu el nom de l'article");
                             String namePaper = scan.nextLine();
@@ -157,60 +212,84 @@ public class DomainPersistanceController {
                                 System.err.println("Aquest article ja existeix");
                                 break;
                             }
-                            papersByName.put(p.getName(), p);
-                            papersById.put(p.getId(), p);
-                            writePaperToFile(p);
+
                             System.out.println("Quina és la seva conferència?");
                             String nameConf = scan.nextLine();
                             Conference c;
-                            try {
                                 c = conferencesByName.get(nameConf);
-                            } catch (NullPointerException e) {
-                                c = new Conference(nameConf, Conference.getMaxId()+1);
-                               /* System.out.println("Introduïu l'any");
-                                int confyear = scan.nextInt();
-                                scan.nextLine();
-                                System.out.println("Introduïu el continent");
-                                String confcont = scan.nextLine();
-                                c.setYear(confyear);
-                                c.setContinent(confcont);*/
-                                conferencesByName.put(c.getName(), c);
-                                conferencesById.put(c.getId(), c);
-                                writeConferenceToFile(c);
+                            if(c == null) {
+                                System.out.println("La conferencia no existeix, vols crear-la? [s/n]:");
+                                if(scan.nextLine().equals("s")) {
+                                    c = new Conference(nameConf, Conference.getMaxId() + 1);
+                                    System.out.println("Introduïu l'any");
+                                    int confyear = scan.nextInt();
+                                    scan.nextLine();
+                                    System.out.println("Introduïu el continent");
+                                    String confcont = scan.nextLine();
+                                    c.setYear(confyear);
+                                    c.setContinent(confcont);
+                                    p.setConference(c);
+                                    conferencesByName.put(c.getName(), c);
+                                    conferencesById.put(c.getId(), c);
+                                    writeConferenceToFile(c);
+                                    writeNewRelationPaperConf(p,c);
+                                }
+                                else{
+                                    System.out.println("El paper no s'ha creat");
+                                    break;
+                                }
                             }
-                            p.setConference(c);
-                            writeNewRelationPaperConf(p,c);
+                            else{
+                                p.setConference(c);
+                                c.addExposedPaper(p);
+                                writeNewRelationPaperConf(p,c);
+                            }
+
                             System.out.println("Quants autors té aquest article?");
                             int numAut = scan.nextInt();
                             scan.nextLine();
                             for (int i = 0; i < numAut; ++i) {
                                 System.out.println("Introduïu el nom de l'autor");
                                 String nameAut = scan.nextLine();
-                                try {
-                                    a = authorsByName.get(nameAut);
-                                } catch (NullPointerException e) {
-                                    a = new Author(nameAut, Author.getMaxId()+1);
-                                    authorsByName.put(a.getName(), a);
-                                    authorsById.put(a.getId(), a);
-                                    writeAuthorToFile(a);
+                                a = authorsByName.get(nameAut);
+                                if( a == null) {
+                                    System.out.println("Aquest autor no existeix, vols crear-lo? [s/n]");
+                                    if(scan.nextLine().equals("s")) {
+                                        a = new Author(nameAut, Author.getMaxId() + 1);
+                                        authorsByName.put(a.getName(), a);
+                                        authorsById.put(a.getId(), a);
+                                        p.addAuthor(a);
+                                        a.addPaper(p);
+                                        writeAuthorToFile(a);
+                                        writeNewRelationPaperAuthor(p,a);
+                                    }
+                                    else{
+                                        System.out.println("El paper no s'ha creat");
+                                        //eliminar conferencia, autors i relacions
+                                        break;
+                                    }
                                 }
-                                p.addAuthor(a);
-                                a.addPaper(p);
-                                writeNewRelationPaperAuthor(p, a);
+                                else {
+                                    p.addAuthor(a);
+                                    a.addPaper(p);
+                                    writeNewRelationPaperAuthor(p,a);
+                                }
                             }
                             //afegirTermes();
+                            papersByName.put(p.getName(), p);
+                            papersById.put(p.getId(), p);
+                            writePaperToFile(p);
                             break;
+
                         case ("T"): //Term
                             System.out.println("Introduïu el nom del terme");
                             String nameTerm = scan.nextLine();
                             Term t = new Term(nameTerm, Term.getMaxId()+1);
                             if (termsByName.get(t.getName()) != null) {
-                                System.err.println("\u001B[31m"+"Aquest autor ja existeix"+"\u001B[0m");
+                                System.err.println("\u001B[31m"+"Aquest terme ja existeix"+"\u001B[0m");
                                 break;
                             }
-                            termsByName.put(t.getName(), t);
-                            termsById.put(t.getId(), t);
-                            writeTermToFile(t);
+
                             System.out.println("En quants articles ha participat?");
                             numArt = scan.nextInt();
                             scan.nextLine();
@@ -218,14 +297,94 @@ public class DomainPersistanceController {
                                 System.out.println("Introduïu el nom de l'article");
                                 String nameArt = scan.nextLine();
 
-                                try {
                                     p = papersByName.get(nameArt);
-                                    t.addPaperWhichTalkAboutIt(p);
-                                    writeNewRelationPaperTerm(p, t);
-                                } catch (NullPointerException e) {
-                                    System.err.println("\u001B[31m"+"L'article no existeix"+"\u001B[0m");
+                                if(p == null) {
+                                    System.out.println("L'article no existeix, voleu crear-lo? [s/n]");
+                                    if(scan.nextLine().equals("s")) {
+                                        p = new Paper(nameArt, Paper.getMaxId()+1);
+                                        System.out.println("Quina és la seva conferència?");
+                                        nameConf = scan.nextLine();
+                                        c = conferencesByName.get(nameConf);
+                                        if(c == null) {
+                                            System.out.println("La conferencia no existeix, vols crear-la? [s/n]:");
+                                            if(scan.nextLine().equals("s")) {
+                                                c = new Conference(nameConf, Conference.getMaxId() + 1);
+                                                System.out.println("Introduïu l'any");
+                                                int confyear = scan.nextInt();
+                                                scan.nextLine();
+                                                System.out.println("Introduïu el continent");
+                                                String confcont = scan.nextLine();
+                                                c.setYear(confyear);
+                                                c.setContinent(confcont);
+                                                p.setConference(c);
+                                                c.addExposedPaper(p);
+                                                conferencesByName.put(c.getName(), c);
+                                                conferencesById.put(c.getId(), c);
+                                                writeConferenceToFile(c);
+
+                                            }
+                                            else{
+                                                System.out.println("El paper no s'ha creat");
+                                                break;
+                                            }
+                                        }
+                                        else{
+                                            p.setConference(c);
+                                            c.addExposedPaper(p);
+                                            writeNewRelationPaperConf(p,c);
+                                        }
+
+                                        System.out.println("Quants autors té aquest article?");
+                                        numAut = scan.nextInt();
+                                        scan.nextLine();
+                                        for (i = 0; i < numAut; ++i) {
+                                            System.out.println("Introduïu el nom de l'autor");
+                                            String nameAut = scan.nextLine();
+                                            a = authorsByName.get(nameAut);
+                                            if( a != null) {
+                                                System.out.println("Aquest autor no existeix, vols crear-lo? [s/n]");
+                                                if(scan.nextLine().equals("s")) {
+                                                    a = new Author(nameAut, Author.getMaxId() + 1);
+                                                    p.addAuthor(a);
+                                                    a.addPaper(p);
+                                                    authorsById.put(a.getId(), a);
+                                                    authorsByName.put(a.getName(), a);
+                                                    writeNewRelationPaperAuthor(p,a);
+                                                }
+                                                else{
+                                                    System.out.println("El paper no s'ha creat");
+                                                    //eliminar autors i conferencies creats i relacions
+                                                    break;
+                                                }
+                                            }
+                                            else {
+                                                p.addAuthor(a);
+                                                a.addPaper(p);
+                                                writeNewRelationPaperAuthor(p,a);
+                                            }
+                                        }
+                                    }
+                                    else{
+                                        System.out.println("El terme no s'ha creat");
+                                        //eliminar autors i conferencies creats i relacions
+
+                                        break;
+                                    }
+
+                                    papersById.put(p.getId(), p);
+                                    papersByName.put(p.getName() ,p);
+                                    writePaperToFile(p);
                                 }
+                                else {
+                                    t.addPaperWhichTalkAboutIt(p);
+                                    p.addTerm(t);
+                                    writeNewRelationPaperTerm(p, t);
+                                }
+
                             }
+                            termsByName.put(t.getName(), t);
+                            termsById.put(t.getId(), t);
+                            writeTermToFile(t);
                             break;
 
                         case ("C"): //Conference
@@ -243,9 +402,6 @@ public class DomainPersistanceController {
                             String confcont = scan.nextLine();
                             co.setYear(confyear);
                             co.setContinent(confcont);
-                            conferencesByName.put(co.getName(), co);
-                            conferencesById.put(co.getId(), co);
-                            writeConferenceToFile(co);
                             System.out.println("Quants articles té aquesta conferència?");
                             int numart = scan.nextInt();
                             scan.nextLine();
@@ -258,29 +414,31 @@ public class DomainPersistanceController {
                                     System.err.println("\u001B[31m"+"Aquest article ja existeix"+"\u001B[0m");
                                     break;
                                 }
-                                papersByName.put(pa.getName(), pa);
-                                papersById.put(pa.getId(), pa);
-                                writePaperToFile(pa);
-                                pa.setConference(co);
-                                co.addExposedPaper(pa);
                                 System.out.println("Quants autors té aquest article?");
                                 int numAut2 = scan.nextInt();
                                 scan.nextLine();
                                 for (int j = 0; j < numAut2; ++j) {
                                     System.out.println("Introduïu el nom de l'autor");
                                     String nameAut = scan.nextLine();
-                                    Author at;
-                                    if (authorsByName.get(nameAut) != null) {
-                                        at = authorsByName.get(nameAut);
+                                    Author at = authorsByName.get(nameAut);
+                                    if ( at == null) {
+                                        System.out.println("L'autor no existeix, vols crear-lo? [s/n]");
+                                        if(scan.nextLine().equals("s")) {
+                                            at = new Author(nameAut, Author.getMaxId() + 1);
+                                            authorsByName.put(at.getName(), at);
+                                            authorsById.put(at.getId(), at);
+                                            writeAuthorToFile(at);
+                                        }
+                                        else{
+                                            System.out.println("La conferencia no s'ha creat");
+                                            //eliminar conferencia, papers i relacions
+                                            break;
+                                        }
                                     } else {
-                                        at = new Author(nameAut, Author.getMaxId() + 1);
-                                        authorsByName.put(at.getName(), at);
-                                        authorsById.put(at.getId(), at);
-                                        writeAuthorToFile(at);
+                                        at.addPaper(pa);
+                                        pa.addAuthor(at);
+                                        writeNewRelationPaperAuthor(pa, at);
                                     }
-                                    at.addPaper(papersById.get(pa.getId()));
-                                    pa.addAuthor(at);
-                                    writeNewRelationPaperAuthor(pa, at);
                                 }
                                 System.out.println("Quants Terms té aquest article?");
                                 int numTerms = scan.nextInt();
@@ -288,24 +446,40 @@ public class DomainPersistanceController {
                                 for (int k = 0; k < numTerms; ++k) {
                                     System.out.println("Introduïu el term");
                                     nameTerm = scan.nextLine();
-                                    if (termsByName.get(nameTerm) != null) {
-                                        t = termsByName.get(nameTerm);
-                                    } else {
-                                        t = new Term(nameTerm, Term.getMaxId() + 1);
-                                        termsByName.put(t.getName(), t);
-                                        termsById.put(t.getId(), t);
-                                        writeTermToFile(t);
-                                    }
                                     t = termsByName.get(nameTerm);
+                                    if ( t == null) {
+                                        System.out.println("El terme no existeix, vols crear-lo? [s/n]");
+                                        if(scan.nextLine().equals("s")) {
+                                            t = new Term(nameTerm, Term.getMaxId() + 1);
+                                            termsByName.put(t.getName(), t);
+                                            termsById.put(t.getId(), t);
+                                            writeTermToFile(t);
+                                            writeNewRelationPaperTerm(pa, t);
+                                        }
+                                        else{
+                                            System.out.println("La conferencia no s'ha creat");
+                                            //Eliminar conferencia, papers, termes i relacions
+                                            break;
+                                        }
+                                    }
                                     t.addPaperWhichTalkAboutIt(papersById.get(pa.getId()));
                                     pa.addTerm(t);
                                     writeNewRelationPaperTerm(pa, t);
+
                                 }
+                                papersByName.put(pa.getName(), pa);
+                                papersById.put(pa.getId(), pa);
+                                writePaperToFile(pa);
+                                pa.setConference(co);
+                                co.addExposedPaper(pa);
                                 writeNewRelationPaperConf(pa, co);
                             }
+                            conferencesByName.put(co.getName(), co);
+                            conferencesById.put(co.getId(), co);
+                            writeConferenceToFile(co);
                             break;
                     }
-                    break;
+                            break;
 
                 case ("Ed"): //Editar
 
