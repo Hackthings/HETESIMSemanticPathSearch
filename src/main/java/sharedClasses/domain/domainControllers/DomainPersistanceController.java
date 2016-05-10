@@ -1,8 +1,9 @@
 package main.java.sharedClasses.domain.domainControllers;
 
-
-
-import main.java.sharedClasses.domain.nodes.*;
+import main.java.sharedClasses.domain.nodes.Author;
+import main.java.sharedClasses.domain.nodes.Conference;
+import main.java.sharedClasses.domain.nodes.Paper;
+import main.java.sharedClasses.domain.nodes.Term;
 
 import java.io.*;
 import java.util.*;
@@ -90,7 +91,7 @@ public class DomainPersistanceController {
 
 
         //IMPRIMIR HASHMAPS
-        testDomain(authorsById,papersById,conferencesById,termsById);
+       //testDomain(authorsById,papersById,conferencesById,termsById);
     }
 
     public void newEdit(HashMap<Integer, Author> authorsById,
@@ -650,7 +651,7 @@ public class DomainPersistanceController {
 
         }
 
-        testDomain(authorsById,papersById,conferencesById,termsById);
+        //testDomain(authorsById,papersById,conferencesById,termsById);
     }
 
 
@@ -663,7 +664,7 @@ public class DomainPersistanceController {
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] aux = line.split(";");
+                String[] aux = line.split("	");
                 int id = Integer.parseInt(aux[0]);
                 Author author = new Author(aux[1],id);
                 authorsById.put(id,author);
@@ -679,7 +680,7 @@ public class DomainPersistanceController {
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] aux = line.split(";");
+                String[] aux = line.split("	");
                 int id = Integer.parseInt(aux[0]);
                 Paper paper = new Paper(aux[1],id);
                 papersById.put(id,paper);
@@ -695,7 +696,7 @@ public class DomainPersistanceController {
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] aux = line.split(";");
+                String[] aux = line.split("	");
                 int id = Integer.parseInt(aux[0]);
                 Conference conf = new Conference(aux[1],id);
                 conf.setYear(Integer.parseInt(aux[2]));
@@ -714,7 +715,7 @@ public class DomainPersistanceController {
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] aux = line.split(";");
+                String[] aux = line.split("	");
                 int id = Integer.parseInt(aux[0]);
                 Term term = new Term(aux[1],id);
                 termsById.put(id,term);
@@ -727,14 +728,14 @@ public class DomainPersistanceController {
 
 
     private void writeAuthorToFile(Author author){
-        String wrauthor = Integer.toString(author.getId()) + ";" + author.getName();
+        String wrauthor = Integer.toString(author.getId()) + "	" + author.getName();
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(filepath + "author.txt"));
         writeToFile(wrauthor, inputFile);
     }
 
     public void writePaperToFile(Paper paper){
-        String wrpaper = Integer.toString(paper.getId()) + ";" + paper.getName();
+        String wrpaper = Integer.toString(paper.getId()) + "	" + paper.getName();
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(filepath + "paper.txt"));
         writeToFile(wrpaper, inputFile);
@@ -742,15 +743,15 @@ public class DomainPersistanceController {
 
 
     public void writeConferenceToFile(Conference conference) {
-        String wrconf = Integer.toString(conference.getId()) + ";" + conference.getName() +
-                ";" + conference.getYear() + ";" + conference.getContinent();
+        String wrconf = Integer.toString(conference.getId()) + "	" + conference.getName() +
+                "	" + conference.getYear() + "	" + conference.getContinent();
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(filepath + "conf.txt"));
         writeToFile(wrconf, inputFile);
     }
 
     private void writeTermToFile(Term term){
-        String wrterm = Integer.toString(term.getId()) + ";" + term.getName();
+        String wrterm = Integer.toString(term.getId()) + "	" + term.getName();
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(filepath + "term.txt"));
         writeToFile(wrterm, inputFile);
@@ -804,7 +805,7 @@ public class DomainPersistanceController {
     private void editAuthorFromFile(Author author, String name){
         String authorId = Integer.toString(author.getId());
         String p = new File("").getAbsolutePath();
-        String replace = authorId + ";" + name;
+        String replace = authorId + "	" + name;
         File inputFile = new File(p.concat(filepath + "author.txt"));
         File tempFile = new File("myTempFile.txt");
         editFromFile(authorId, replace, inputFile, tempFile);
@@ -816,7 +817,7 @@ public class DomainPersistanceController {
     private void editPaperFromFile(Paper paper, String value) {
             String paperId = Integer.toString(paper.getId());
             String p = new File("").getAbsolutePath();
-            String replace = paperId + ";" + value;
+            String replace = paperId + "	" + value;
             File inputFile = new File(p.concat(filepath + "paper.txt"));
             File tempFile = new File("myTempFile.txt");
             editFromFile(paperId, replace, inputFile, tempFile);
@@ -827,7 +828,7 @@ public class DomainPersistanceController {
     private void editConferenceFromFile(Conference conference, String key, String year, String continent){
             String conferenceId = Integer.toString(conference.getId());
             String p = new File("").getAbsolutePath();
-            String replace = conferenceId + ";" + key + ";" + year + ";" + continent;
+            String replace = conferenceId + "	" + key + "	" + year + "	" + continent;
             File inputFile = new File(p.concat(filepath + "conf.txt"));
             File tempFile = new File("myTempFile.txt");
             editFromFile(conferenceId, replace, inputFile, tempFile);
@@ -838,7 +839,7 @@ public class DomainPersistanceController {
     private void editTermFromFile(Term term, String value){
             String termId = Integer.toString(term.getId());
             String p = new File("").getAbsolutePath();
-            String replace = termId + ";" + value;
+            String replace = termId + "	" + value;
             File inputFile = new File(p.concat(filepath + "term.txt"));
             File tempFile = new File("myTempFile.txt");
             editFromFile(termId, replace, inputFile, tempFile);
@@ -853,7 +854,7 @@ public class DomainPersistanceController {
             Paper p;
             Author a;
             while((line = reader.readLine()) != null){
-                String aux[] = line.split(";");
+                String aux[] = line.split("	");
                 p = papersById.get(Integer.parseInt(aux[0]));
                 a = authorsById.get(Integer.parseInt(aux[1]));
 
@@ -873,7 +874,7 @@ public class DomainPersistanceController {
             Paper p;
             Conference c;
             while((line = reader.readLine()) != null){
-                String aux[] = line.split(";");
+                String aux[] = line.split("	");
                 p = papersById.get(Integer.parseInt(aux[0]));
                 c = conferencesById.get(Integer.parseInt(aux[1]));
 
@@ -893,7 +894,7 @@ public class DomainPersistanceController {
             Paper p;
             Term t;
             while((line = reader.readLine()) != null){
-                String aux[] = line.split(";");
+                String aux[] = line.split("	");
                 p = papersById.get(Integer.parseInt(aux[0]));
                 t = termsById.get(Integer.parseInt(aux[1]));
 
@@ -912,7 +913,7 @@ public class DomainPersistanceController {
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
             String authorId = Integer.toString(author.getId());
             for(Paper p : author.getPapersById().values()){
-                String relationToWrite = Integer.toString(p.getId()) + ";" + authorId;
+                String relationToWrite = Integer.toString(p.getId()) + "	" + authorId;
                 writer.write(relationToWrite,0,relationToWrite.length());
                 writer.newLine();
             }
@@ -929,7 +930,7 @@ public class DomainPersistanceController {
         String paperId = Integer.toString(paper.getId());
         try( BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
             for(Author a : paper.getAuthorsById().values()){
-                String relationToWrite = paperId + ";" + Integer.toString(a.getId());
+                String relationToWrite = paperId + "	" + Integer.toString(a.getId());
                 writer.write(relationToWrite,0,relationToWrite.length());
                 writer.newLine();
             }
@@ -942,7 +943,7 @@ public class DomainPersistanceController {
         inputFile = new File(p.concat(filepath + "paper_term.txt"));
         try( BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
             for(Term t : paper.getTermsById().values()){
-                String relationToWrite = paperId + ";" + Integer.toString(t.getId());
+                String relationToWrite = paperId + "	" + Integer.toString(t.getId());
                 writer.write(relationToWrite,0,relationToWrite.length());
                 writer.newLine();
             }
@@ -954,7 +955,7 @@ public class DomainPersistanceController {
         p = new File("").getAbsolutePath();
         inputFile = new File(p.concat(filepath + "paper_conf.txt"));
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
-            String relationToWrite = paperId + ";" + Integer.toString(paper.getConference().getId());
+            String relationToWrite = paperId + "	" + Integer.toString(paper.getConference().getId());
             writer.write(relationToWrite,0,relationToWrite.length());
             writer.newLine();
         }
@@ -969,7 +970,7 @@ public class DomainPersistanceController {
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
             String confId = Integer.toString(conference.getId());
             for(Paper p : conference.getExposedPapersById().values()){
-                String relationToWrite = Integer.toString(p.getId()) + ";" + confId;
+                String relationToWrite = Integer.toString(p.getId()) + "	" + confId;
                 writer.write(relationToWrite,0,relationToWrite.length());
                 writer.newLine();
             }
@@ -984,7 +985,7 @@ public class DomainPersistanceController {
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
             String termId = Integer.toString(term.getId());
             for(Paper p : term.getPapersWhichTalkAboutThisById().values()){
-                String relationToWrite = Integer.toString(p.getId()) + ";" + termId;
+                String relationToWrite = Integer.toString(p.getId()) + "	" + termId;
                 writer.write(relationToWrite,0,relationToWrite.length());
                 writer.newLine();
             }
@@ -997,7 +998,7 @@ public class DomainPersistanceController {
     private void writeRelationToFile(int id1, int id2, File inputFile) {
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,true))){
             String paperId = Integer.toString(id1);
-            String relationToWrite = paperId + ";" + Integer.toString(id2);
+            String relationToWrite = paperId + "	" + Integer.toString(id2);
             writer.write(relationToWrite,0,relationToWrite.length());
             writer.newLine();
         }
