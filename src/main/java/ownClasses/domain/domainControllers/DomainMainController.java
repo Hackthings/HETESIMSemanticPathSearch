@@ -83,16 +83,29 @@ public class DomainMainController {
             }
         }
 
-        Query query = new Query(queryPath);
+        OrderedQuery query = new OrderedQuery(queryPath,false);
         Matrix result = hetesimController.heteSim(queryPath);
 
         boolean exit = false;
         char type = queryPath.charAt(0);
 
         while(!exit) {
+            System.out.println("Selecciona l'ordre 1 Ascendent 2 Descendent");
+            String r = scanner.nextLine();
+            int i = Integer.parseInt(r);
+            if (i > 2 || i <= 0) {
+                System.out.println("Ordre no disponible");
+                break;
+            }
+            else {
+                if (i == 1)
+                    query.setAscendent(true);
+            }
 
+            System.out.println("OK");
             boolean valid = false;
             Integer queryId = 0;
+
             while (!valid) {
                 System.out.println("Introdueix el nom:");
                 String queryName = scanner.nextLine();
@@ -135,12 +148,15 @@ public class DomainMainController {
             if (result.columns(queryId) != null) resultquery = result.columns(queryId);
 
 
+            ArrayList<Pair<Integer,Double>> resultOrdered = resultWithOrder(resultquery, query);
+
+
             if (queryType == -1) {
-                resultWithoutFilters(resultquery, query);
+                resultWithoutFilters(resultOrdered, query);
             } else {
                 int exitfiltres = 0;
                 while (exitfiltres == 0) {
-                    System.out.println("Escull el tipus de filtre: -1 Intervals de rellevancia, -2 Nombre maxim d'entrades, -3 Ordre o -4 Restriccio per element:");
+                    System.out.println("Escull el tipus de filtre: -1 Intervals de rellevancia, -2 Nombre maxim d'entrades, -3 Restriccio per element:");
                     int queryfilter = scanner.nextInt();
                     switch (queryfilter) {
                         case (-1):
@@ -152,7 +168,7 @@ public class DomainMainController {
                                 System.err.println("firstrelevance > secondrelevance)");
                             } else {
                                 IntervaledQuery iq = new IntervaledQuery(query.getPath(), firstrelevance, secondrelevance);
-                                resultWithIntervals(resultquery, iq);
+                                resultWithIntervals(resultOrdered, iq);
                             }
 
                             break;
@@ -161,38 +177,33 @@ public class DomainMainController {
                             System.out.println("Introdueix el nombre maxim d'entrades");
                             int nomMax = scanner.nextInt();
                             LimitedQuery lq = new LimitedQuery(query.getPath(), nomMax);
-                            resultWithMax(resultquery, lq);
+                            resultWithMax(resultOrdered, lq);
 
                             break;
                         case (-3):
-
-                            System.out.println("Selecciona l'ordre 1 Ascendent 2 Descendent");
-                            int i = scanner.nextInt();
-                            OrderedQuery oq = new OrderedQuery(query.getPath(), false);
-                            if (i > 2 || i <= 0) {
-                                System.out.println("Ordre no disponible");
-                                break;
-                            } else if (i == 1) {
-                                oq.setAscendent(true);
-                            }
-
-                            resultWithOrder(resultquery,oq);
-
-                            break;
-                        case (-4):
                             System.out.println("no disponible");
                             break;
                     }
                     System.out.println("Vols escollir un altre tipus de filtre? YES or NO");
                     String answer = "";
-                    while("".equals(answer)) answer = scanner.nextLine();
-                    if (answer.equals("NO")) exitfiltres = 1;
+                    boolean validesa = false;
+                    while(!validesa){
+                        answer = scanner.nextLine();
+                        if (answer.equals("NO") || answer.equals("no")){
+                            exitfiltres = 1;
+                            validesa = true;
+                        }
+                        else{
+                            if(answer.equals("YES") || answer.equals("yes")) validesa = true;
+                            else System.out.println("torna a introduir la resposta");
+                        }
+                    }
                 }
 
             }
             System.out.println("Vols seleccionar un altre nom amb el mateix path? YES or NO");
             String answer = scanner.nextLine();
-            if (answer.equals("NO")) exit = true;
+            if (answer.equals("NO") || answer.equals("no")) exit = true;
         }
 
     }
@@ -216,9 +227,9 @@ public class DomainMainController {
         }
     }
 
-    private void resultWithOrder(HashMap<Integer, Double> resultquery, OrderedQuery query){
-        char tipus = query.getPath().charAt(query.getPath().length()-1);
-        System.out.println(" NOM  ->  rellevancia");
+    private ArrayList<Pair<Integer,Double>> resultWithOrder(HashMap<Integer, Double> resultquery, OrderedQuery query){
+        /*char tipus = query.getPath().charAt(query.getPath().length()-1);
+        System.out.println(" NOM  ->  rellevancia");*/
 
         Iterator<Map.Entry<Integer, Double>> it= resultquery.entrySet().iterator();
         ArrayList<Pair<Integer,Double>> resultOrdered = new ArrayList<>();
@@ -251,32 +262,37 @@ public class DomainMainController {
             }
         }
 
-        for (Pair<Integer, Double> aResultOrdered : resultOrdered) {
+        /*for (Pair<Integer, Double> aResultOrdered : resultOrdered) {
             printresult(tipus, aResultOrdered.getFirst(), aResultOrdered.getSecond());
-        }
+        }*/
+
+        return resultOrdered;
     }
 
-    private void resultWithMax(HashMap<Integer, Double> resultquery, LimitedQuery query) {
+    private void resultWithMax(ArrayList<Pair<Integer,Double>> resultquery, LimitedQuery query) {
         char tipus = query.getPath().charAt(query.getPath().length()-1);
         System.out.println(" NOM  ->  rellevancia");
 
-        Iterator<Map.Entry<Integer, Double>> it= resultquery.entrySet().iterator();
-        while(it.hasNext() && query.getLimit()>0) {
-            Map.Entry<Integer, Double> resultat = it.next();
-
-            printresult(tipus,Integer.parseInt(resultat.getKey().toString()),Double.parseDouble(resultat.getValue().toString()));
-
+        for(Pair<Integer,Double> p : resultquery){
+            if(query.getLimit() >0){
+                printresult(tipus,p.getFirst(),p.getSecond());
+            }
+            else{
+                resultquery.clear();
+            }
             query.setLimit(query.getLimit()-1);
         }
-
-
-
     }
-    private void resultWithIntervals(HashMap<Integer, Double> resultquery, IntervaledQuery query){
+    private void resultWithIntervals(ArrayList<Pair<Integer,Double>> resultquery, IntervaledQuery query){
         char tipus = query.getPath().charAt(query.getPath().length()-1);
         System.out.println(" NOM  ->  rellevancia");
 
-        for (Object o : resultquery.entrySet()) {
+        for(Pair<Integer,Double> p : resultquery){
+            if(p.getSecond() >= query.getFirstRelevance() && p.getSecond() <= query.getSecondRelevance()) {
+                printresult(tipus,p.getFirst(),p.getSecond());
+            }
+        }
+        /*for (Object o : resultquery.entrySet()) {
             Map.Entry resultat = (Map.Entry) o;
             double res = Double.parseDouble(resultat.getValue().toString());
             if (res >= query.getFirstRelevance() && res <= query.getSecondRelevance()) {
@@ -284,19 +300,22 @@ public class DomainMainController {
                 printresult(tipus, Integer.parseInt(resultat.getKey().toString()), Double.parseDouble(resultat.getValue().toString()));
 
             }
-        }
+        }*/
 
     }
 
-    private void resultWithoutFilters(HashMap<Integer, Double> resultquery, Query query){
+    private void resultWithoutFilters(ArrayList<Pair<Integer,Double>> resultquery, Query query){
         char tipus = query.getPath().charAt(query.getPath().length()-1);
         System.out.println(" NOM  ->  rellevancia");
 
-        for (Object o : resultquery.entrySet()) {
+        for(Pair<Integer,Double> p : resultquery){
+            printresult(tipus,p.getFirst(),p.getSecond());
+        }
+        /*for (Object o : resultquery.entrySet()) {
             Map.Entry resultat = (Map.Entry) o;
             printresult(tipus, Integer.parseInt(resultat.getKey().toString()), Double.parseDouble(resultat.getValue().toString()));
 
-        }
+        }*/
 
     }
 

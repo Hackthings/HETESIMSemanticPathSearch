@@ -127,7 +127,18 @@ public class Matrix {
         Set<Integer> r = rows();
         Set<Integer> c = m.cols();
 
+        System.out.println("inici multiplicacio");
+        int tam = r.size();
+        int i = 0;
+        int j = 0;
+        System.out.println(j+"%");
         for (int x : r) {
+            int ji = (i*100)/tam;
+            if(j<ji){
+                System.out.println(ji+"%");
+                j = ji;
+            }
+
             for (int y : c) {
                 double value = 0;
                 Set<Integer> cr = columns(x).keySet();
@@ -140,6 +151,7 @@ public class Matrix {
                 }
                 mult.addValue(x, y, value);
             }
+            ++i;
         }
 
         return mult;
