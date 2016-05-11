@@ -1,6 +1,8 @@
 package main.java.sharedClasses.domain.nodes;
 
-public class Node {
+import java.io.Serializable;
+
+public class Node implements Serializable{
     private int id;
     private String name;
 

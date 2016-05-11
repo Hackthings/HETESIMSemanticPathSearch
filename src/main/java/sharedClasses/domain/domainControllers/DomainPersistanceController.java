@@ -2,10 +2,7 @@ package main.java.sharedClasses.domain.domainControllers;
 
 
 
-import main.java.sharedClasses.domain.nodes.Author;
-import main.java.sharedClasses.domain.nodes.Conference;
-import main.java.sharedClasses.domain.nodes.Paper;
-import main.java.sharedClasses.domain.nodes.Term;
+import main.java.sharedClasses.domain.nodes.*;
 
 import java.io.*;
 import java.util.*;
@@ -1058,6 +1055,33 @@ public class DomainPersistanceController {
             ex.printStackTrace();
         }
         return true;
+    }
+
+
+    private void saveCurrentWork(HashMap<Integer, Author> authorsById,
+                                 HashMap<Integer, Paper> papersById,
+                                 HashMap<Integer, Conference> conferencesById,
+                                 HashMap<Integer, Term> termsById,
+                                 HashMap<String, Author> authorsByName,
+                                 HashMap<String, Paper> papersByName,
+                                 HashMap<String, Conference> conferencesByName,
+                                 HashMap<String, Term> termsByName){
+
+    }
+
+    private void serializeAuthors(HashMap<Integer,Author> toSerialize, HashMap<String, Author> toSerialize2){
+        try{
+
+            FileOutputStream fout = new FileOutputStream("");
+            ObjectOutputStream oos = new ObjectOutputStream(fout);
+            oos.writeObject(toSerialize);
+            oos.writeObject(toSerialize2);
+            oos.close();
+            System.out.println("Done");
+
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
 
 }

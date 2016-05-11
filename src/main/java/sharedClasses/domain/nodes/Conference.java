@@ -1,5 +1,6 @@
 package main.java.sharedClasses.domain.nodes;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 public class Conference extends Node {

@@ -1,8 +1,9 @@
 package main.java.sharedClasses.domain.nodes;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Author extends Node {
+public class Author extends Node{
     private HashMap<Integer, Paper> papersById;
     private HashMap<String, Paper> papersByName;
 
