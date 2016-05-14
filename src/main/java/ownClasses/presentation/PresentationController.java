@@ -19,7 +19,8 @@ public class PresentationController extends JFrame {
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        newQueryButton.addActionListener(e->mainController.newQuery());
+        newQueryButton.addActionListener(e-> new PresentationNewQuery(mainController));
+        //newQueryButton.addActionListener(e->mainController.newQuery());
         editGraphButton.addActionListener(e->mainController.editGraph());
         setVisible(true);
     }
