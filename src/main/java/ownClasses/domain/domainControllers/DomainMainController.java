@@ -32,6 +32,8 @@ public class DomainMainController {
     private Integer conferenceMaxId;
     private Integer termMaxId;
 
+    private Matrix result;
+
 
     public DomainMainController() {
         persistanceController = new DomainPersistanceController();
@@ -51,6 +53,15 @@ public class DomainMainController {
         persistanceController.readAll(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
         //hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
         scanner = new Scanner(System.in);
+
+
+    }
+
+    public void NQ(String path){
+        DomainHetesimController hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
+
+        result = hetesimController.heteSim(path);
+
 
     }
 

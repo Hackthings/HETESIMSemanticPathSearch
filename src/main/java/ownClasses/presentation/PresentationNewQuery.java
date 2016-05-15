@@ -19,6 +19,7 @@ public class PresentationNewQuery extends JFrame{
     private JRadioButton simpleRadioButton;
     private JRadioButton ambFiltresRadioButton;
     private JTextArea TextArea1;
+    private JButton DeleteButton;
 
 
     int queryType = 0;
@@ -43,8 +44,10 @@ public class PresentationNewQuery extends JFrame{
         pButton.addActionListener(e1 -> concatpath("P"));
         tButton.addActionListener(e1 -> concatpath("T"));
 
+        DeleteButton.addActionListener(e1 -> deletelast());
 
-        NEXTButton.addActionListener(e -> callNQ());
+
+        NEXTButton.addActionListener(e -> callNQ(mainController));
 
         setVisible(true);
     }
@@ -56,13 +59,37 @@ public class PresentationNewQuery extends JFrame{
 
     private void concatpath(String Node){
         if("".equals(path)) path = Node;
-        else path = path.concat(Node);
+        else{
+            char last = path.charAt(path.length()-1);
+            if(last=='P'&& "P".equals(Node)){
+                VistaWARNING vw = new VistaWARNING();
+                vw.setVisible("Sintaxi de paths incorrecte");
+            }
+            else {
+                if (last != 'P' && !"P".equals(Node)) path = path.concat("P" + Node);
+                else path = path.concat(Node);
+            }
+        }
         System.out.println(path);
         TextArea1.setText(path);
     }
 
-    private void callNQ(){
+    private void deletelast(){
+        if(!path.isEmpty()){
+            path = path.substring(0,path.length()-1);
+            System.out.println(path);
+            TextArea1.setText(path);
+        }
+    }
 
+    private void callNQ(DomainMainController mainController){
+        if(!path.isEmpty()){
+            mainController.NQ(path);
+        }
+        else{
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("PATH buit");
+        }
     }
 
     private void createUIComponents(){
