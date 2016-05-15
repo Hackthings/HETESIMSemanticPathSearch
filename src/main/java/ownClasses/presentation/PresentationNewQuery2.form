@@ -80,7 +80,9 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <visible value="true"/>
+        </properties>
       </component>
       <component id="7a888" class="javax.swing.JLabel">
         <constraints>
@@ -106,7 +108,9 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <visible value="true"/>
+        </properties>
       </component>
       <component id="688f9" class="javax.swing.JTextField" binding="granField">
         <constraints>
@@ -116,6 +120,7 @@
         </constraints>
         <properties>
           <text value=""/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="360aa" class="javax.swing.JLabel">

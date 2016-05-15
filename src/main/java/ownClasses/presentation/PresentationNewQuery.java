@@ -85,6 +85,8 @@ public class PresentationNewQuery extends JFrame{
     private void callNQ(DomainMainController mainController){
         if(!path.isEmpty()){
             mainController.NQ(path);
+            PresentationNewQuery2 window = new PresentationNewQuery2(mainController,path);
+            System.out.println("DONE");
         }
         else{
             VistaWARNING vw = new VistaWARNING();
