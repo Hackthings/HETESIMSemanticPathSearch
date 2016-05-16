@@ -18,7 +18,7 @@ public class PresentationResult extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         for (int i = 0; i < resultat.size(); i++)
-            textArea1.append("\n" + resultat.get(i));
+            textArea1.append("\n"+(i+1)+". "+ resultat.get(i));
 
         setVisible(true);
     }
