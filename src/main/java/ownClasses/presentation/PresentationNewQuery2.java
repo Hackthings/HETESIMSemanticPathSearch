@@ -3,6 +3,7 @@ package main.java.ownClasses.presentation;
 import main.java.ownClasses.domain.domainControllers.DomainMainController;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 /**
  * Created by Nicola on 15/05/2016.
@@ -18,6 +19,7 @@ public class PresentationNewQuery2 extends JFrame {
     private JTextField petitField;
     private JTextField granField;
     private JTextField nameField;
+    private JButton NEXTButton;
 
     boolean ascendent = true;
     String name = "";
@@ -55,6 +57,8 @@ public class PresentationNewQuery2 extends JFrame {
 
         nameField.addActionListener(e -> setname());
 
+        NEXTButton.addActionListener(e -> callresult(mainController,path));
+
         setVisible(true);
 
     }
@@ -83,6 +87,11 @@ public class PresentationNewQuery2 extends JFrame {
 
     private void setMax(){
         max = Double.parseDouble(granField.getText());
+    }
+
+    private void callresult(DomainMainController mainController,String path){
+        ArrayList<String> resultat = mainController.resultat(path,querytype,ascendent,name,n,max,min);
+        new PresentationResult(resultat);
     }
 
 }
