@@ -17,8 +17,8 @@ public class PresentationNewQuery extends JFrame {
     private JButton pButton;
     private JButton tButton;
     private JButton NEXTButton;
-    private JRadioButton simpleRadioButton;
-    private JRadioButton ambFiltresRadioButton;
+    //private JRadioButton simpleRadioButton;
+    //private JRadioButton ambFiltresRadioButton;
     private JTextArea TextArea1;
     private JButton DeleteButton;
 
@@ -29,17 +29,18 @@ public class PresentationNewQuery extends JFrame {
     public PresentationNewQuery(DomainMainController mainController) {
         super("NEW QUERY");
 
-        ButtonGroup group = new ButtonGroup();
         $$$setupUI$$$();
+      /*  ButtonGroup group = new ButtonGroup();
+
         group.add(simpleRadioButton);
-        group.add(ambFiltresRadioButton);
+        group.add(ambFiltresRadioButton);*/
 
         setContentPane(panel);
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        simpleRadioButton.addActionListener(e1 -> selectTypeAction(-1));
-        ambFiltresRadioButton.addActionListener(e1 -> selectTypeAction(-2));
+      //  simpleRadioButton.addActionListener(e1 -> selectTypeAction(-1));
+       // ambFiltresRadioButton.addActionListener(e1 -> selectTypeAction(-2));
 
         aButton.addActionListener(e1 -> concatpath("A"));
         cButton.addActionListener(e1 -> concatpath("C"));
@@ -54,10 +55,10 @@ public class PresentationNewQuery extends JFrame {
         setVisible(true);
     }
 
-    private void selectTypeAction(int type) {
+    /*private void selectTypeAction(int type) {
         queryType = type;
         System.out.println("selected type " + type);
-    }
+    }*/
 
     private void concatpath(String Node) {
         if ("".equals(path)) path = Node;
@@ -95,8 +96,8 @@ public class PresentationNewQuery extends JFrame {
     }
 
     private void createUIComponents() {
-        simpleRadioButton = new JRadioButton("Simple");
-        ambFiltresRadioButton = new JRadioButton("Amb Filtres");
+        //simpleRadioButton = new JRadioButton("Simple");
+        //ambFiltresRadioButton = new JRadioButton("Amb Filtres");
     }
 
     /**
@@ -155,7 +156,7 @@ public class PresentationNewQuery extends JFrame {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(NEXTButton, gbc);
-        simpleRadioButton.setLabel("Simple");
+        /*simpleRadioButton.setLabel("Simple");
         simpleRadioButton.setText("Simple");
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
@@ -169,7 +170,7 @@ public class PresentationNewQuery extends JFrame {
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        panel.add(ambFiltresRadioButton, gbc);
+        panel.add(ambFiltresRadioButton, gbc);*/
         final JScrollPane scrollPane1 = new JScrollPane();
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
