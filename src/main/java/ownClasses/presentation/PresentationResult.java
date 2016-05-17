@@ -11,12 +11,16 @@ public class PresentationResult extends JFrame {
     private JTextArea textArea1;
     private JPanel panel;
 
-    public PresentationResult(ArrayList<String> resultat) {
+    public PresentationResult(ArrayList<String> resultat, String path,String name) {
         super("RESULTAT");
+
+        $$$setupUI$$$();
 
         setContentPane(panel);
         pack();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
 
         for (int i = 0; i < resultat.size(); i++)
             textArea1.append("\n" + (i + 1) + ". " + resultat.get(i));
@@ -57,7 +61,7 @@ public class PresentationResult extends JFrame {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         panel.add(scrollPane1, gbc);
-        textArea1 = new JTextArea();
+        textArea1 = new JTextArea(21,40);
         scrollPane1.setViewportView(textArea1);
     }
 

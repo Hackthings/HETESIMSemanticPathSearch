@@ -33,7 +33,7 @@ public class DomainMainController {
     private Integer termMaxId;
 
     private Matrix result;
-
+    private boolean edit;
 
     public DomainMainController() {
         persistanceController = new DomainPersistanceController();
@@ -53,15 +53,16 @@ public class DomainMainController {
         persistanceController.readAll(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
         //hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
         scanner = new Scanner(System.in);
-
+        edit=true;
 
     }
 
     public void NQ(String path){
-        DomainHetesimController hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
-
-        result = hetesimController.heteSim(path);
-
+        if(edit) {
+            DomainHetesimController hetesimController = new DomainHetesimController(getAuthorPaperMatrix(), getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
+            result = hetesimController.heteSim(path);
+            edit = false;
+        }
 
     }
 
@@ -423,7 +424,7 @@ public class DomainMainController {
     public void editGraph() {
         DomainPersistanceController domainPersistanceController = new DomainPersistanceController();
         domainPersistanceController.newEdit(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName,termsByName);
-
+        edit =true;
     }
 
 
