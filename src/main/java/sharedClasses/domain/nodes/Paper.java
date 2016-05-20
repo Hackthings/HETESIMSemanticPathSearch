@@ -1,29 +1,29 @@
 package main.java.sharedClasses.domain.nodes;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Paper extends Node {
     private Conference conference;
-    private HashMap<Integer, Author> authorsById;
-    private HashMap<String,Author> authorsByName;
-    private HashMap<Integer, Term> termsById;
-    private HashMap<String,Term> termsByName;
+    private ArrayList<Integer> authorsById;
+    private ArrayList<String> authorsByName;
+    private ArrayList<Integer> termsById;
+    private ArrayList<String> termsByName;
 
     private static int maxId;
 
     public Paper(String name, int id) {
         super(name, id);
-        authorsById = new HashMap<Integer , Author>();
-        authorsByName = new HashMap<String, Author>();
-        termsById = new HashMap<Integer, Term>();
-        termsByName = new HashMap<String, Term>();
+        authorsById = new ArrayList<Integer>();
+        authorsByName = new ArrayList<String>();
+        termsById = new ArrayList<Integer>();
+        termsByName = new ArrayList<String>();
 
         if (maxId < id) maxId = id;
 
     }
 
-    //Pre: Cert.
-    //Post: Retorna el valor de maxId del parametre implicit.
     public static int getMaxId() {
         return maxId;
     }
@@ -33,23 +33,33 @@ public class Paper extends Node {
     }
 
     public void addAuthor(Author author) {
-        authorsById.put(author.getId(), author);
-        authorsByName.put(author.getName(),author);
+        authorsById.add(author.getId());
+        authorsByName.add(author.getName());
     }
 
     public void addTerm(Term term) {
-        termsById.put(term.getId(), term);
-        termsByName.put(term.getName(),term);
+        termsById.add(term.getId());
+        termsByName.add(term.getName());
     }
 
     public void removeAuthor(Author author) {
-        authorsById.remove(author.getId());
-        authorsByName.remove(author.getName());
+        for(int i = 0; i < authorsById.size(); i++){
+            if(authorsById.get(i) == author.getId()){
+                authorsById.remove(i);
+                authorsByName.remove(i);
+                break;
+            }
+        }
     }
 
     public void removeTerm(Term term) {
-        termsByName.remove(term.getName());
-        termsById.remove(term.getId());
+        for(int i = 0; i < termsById.size(); i++){
+            if(termsById.get(i) == term.getId()){
+                termsById.remove(i);
+                termsByName.remove(i);
+                break;
+            }
+        }
     }
 
 
@@ -57,40 +67,50 @@ public class Paper extends Node {
         return conference;
     }
 
-    public HashMap<Integer, Author> getAuthorsById() {
+    public HashMap<Integer, Author> getAuthorsById(HashMap<Integer,Author> authors) {
+        HashMap<Integer,Author> authorsById = new HashMap<Integer,Author>();
+        for(int i = 0; i < this.authorsById.size(); i++){
+            int keyId = this.authorsById.get(i);
+            authorsById.put(keyId, authors.get(keyId));
+        }
         return authorsById;
     }
 
-    public HashMap<String,Author> getAuthorsByName() { return authorsByName;}
-
-    public Author getAuthorByID (int id){
-        Author a = authorsById.get(id);
-        if(a != null) return a;
-        return null;
+    public HashMap<String,Author> getAuthorsByName(HashMap<String,Author> authors) {
+        HashMap<String,Author> authorsByName = new HashMap<String,Author>();
+        for(int i = 0; i < this.authorsByName.size(); i++){
+            String keyName = this.authorsByName.get(i);
+            authorsByName.put(keyName, authors.get(keyName));
+        }
+        return authorsByName;
     }
 
-    public Author getAuthorByName (String name){
-        Author a = authorsByName.get(name);
-        if(a != null) return a;
-        return null;
-    }
-
-    public HashMap<Integer, Term> getTermsById() {
+    public HashMap<Integer, Term> getTermsById(HashMap<Integer,Term> terms) {
+        HashMap<Integer,Term> termsById = new HashMap<Integer,Term>();
+        for(int i = 0; i < this.termsById.size(); i++){
+            int keyId = this.termsById.get(i);
+            termsById.put(keyId, terms.get(keyId));
+        }
         return termsById;
     }
 
-    public HashMap<String,Term> getTermsByName() { return termsByName;}
-
-    public Term getTermByID (int id){
-        Term t = termsById.get(id);
-        if(t != null) return t;
-        return null;
+    public HashMap<String,Term> getTermsByName(HashMap<String,Term> terms) {
+        HashMap<String,Term> termsByName = new HashMap<String,Term>();
+        for(int i = 0; i < this.termsByName.size(); i++){
+            String keyName = this.termsByName.get(i);
+            termsByName.put(keyName, terms.get(keyName));
+        }
+        return termsByName;
     }
 
-    public Term getTermByName (String name){
-        Term t = termsByName.get(name);
-        if(t != null) return t;
-        return null;
+    public void sortAuthors(){
+        Collections.sort(authorsById);
+        Collections.sort(authorsByName);
+    }
+
+    public void sortTerms(){
+        Collections.sort(termsById);
+        Collections.sort(termsByName);
     }
 
 }

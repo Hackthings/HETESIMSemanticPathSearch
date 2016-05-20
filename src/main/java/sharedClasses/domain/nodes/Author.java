@@ -1,18 +1,19 @@
 package main.java.sharedClasses.domain.nodes;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Author extends Node{
-    private HashMap<Integer, Paper> papersById;
-    private HashMap<String, Paper> papersByName;
+    private ArrayList<Integer> papersById;
+    private ArrayList<String> papersByName;
 
     private static int maxId;
 
     public Author(String name, int id) {
         super(name, id);
-        papersById = new HashMap<Integer, Paper>();
-        papersByName = new HashMap<String, Paper>();
+        papersById = new ArrayList<Integer>();
+        papersByName = new ArrayList<String>();
 
         if (maxId < id) maxId = id;
 
@@ -24,35 +25,42 @@ public class Author extends Node{
         return maxId;
     }
 
-    public HashMap<Integer, Paper> getPapersById() {
+    public HashMap<Integer, Paper> getPapersById(HashMap<Integer,Paper> papers) {
+        HashMap<Integer,Paper> papersById = new HashMap<Integer,Paper>();
+        for(int i = 0; i < this.papersById.size(); i++){
+            int keyId = this.papersById.get(i);
+            papersById.put(keyId, papers.get(keyId));
+        }
         return papersById;
     }
 
-    public HashMap<String, Paper> getPapersByName() {
+    public HashMap<String, Paper> getPapersByName(HashMap<Integer,Paper> papers) {
+        HashMap<String,Paper> papersByName = new HashMap<String,Paper>();
+        for(int i = 0; i < this.papersByName.size(); i++){
+            String keyName = this.papersByName.get(i);
+            papersByName.put(keyName, papers.get(keyName));
+        }
         return papersByName;
     }
 
-
-    public Paper getPaperById (int id){
-        Paper p = papersById.get(id);
-        if(p != null) return p;
-        return null;
-    }
-
-    public Paper getPaperByName (String name){
-        Paper p = papersByName.get(name);
-        if(p != null) return p;
-        return null;
-    }
-
     public void addPaper(Paper paper) {
-        papersById.put(paper.getId(), paper);
-        papersByName.put(paper.getName(),paper);
+        papersById.add(paper.getId());
+        papersByName.add(paper.getName());
     }
 
     public void removePaper(Paper paper) {
-        papersById.remove(paper);
-        papersByName.remove(paper);
+        for(int i = 0; i < papersById.size(); i++){
+            if(papersById.get(i) == paper.getId()){
+                papersById.remove(i);
+                papersByName.remove(i);
+                break;
+            }
+        }
+    }
+
+    public void sortPapers(){
+        Collections.sort(papersById);
+        Collections.sort(papersByName);
     }
 
 }
