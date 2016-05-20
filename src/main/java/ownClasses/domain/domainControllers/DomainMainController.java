@@ -32,6 +32,8 @@ public class DomainMainController {
     private Integer conferenceMaxId;
     private Integer termMaxId;
 
+    private Matrix result;
+    private boolean edit;
 
     public DomainMainController() {
         persistanceController = new DomainPersistanceController();
@@ -51,7 +53,72 @@ public class DomainMainController {
         persistanceController.readAll(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
         //hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
         scanner = new Scanner(System.in);
+        edit=true;
 
+    }
+
+    public void NQ(String path){
+        if(edit) {
+            DomainHetesimController hetesimController = new DomainHetesimController(getAuthorPaperMatrix(), getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
+            result = hetesimController.heteSim(path);
+            edit = false;
+        }
+
+    }
+
+    public boolean checkName(String name){
+        boolean check = false;
+        if(authorsByName.containsKey(name) || papersByName.containsKey(name) || conferencesByName.containsKey(name) || termsByName.containsKey(name)){
+            check = true;
+        }
+        return check;
+    }
+
+    public ArrayList<String> resultat(String path, int querytype,boolean ascendent,String name,int n,double max,double min){
+        OrderedQuery query = new OrderedQuery(path,ascendent);
+
+        ArrayList<String> total = new ArrayList<>();
+
+        Integer queryId = 0;
+        char type = path.charAt(0);
+
+        switch (type) {
+            case ('A'):
+                    queryId = authorsByName.get(name).getId();
+                break;
+            case ('P'):
+                    queryId = papersByName.get(name).getId();
+                break;
+            case ('C'):
+                    queryId = conferencesByName.get(name).getId();
+                break;
+            case ('T'):
+                    queryId = termsByName.get(name).getId();
+                break;
+        }
+
+        HashMap<Integer, Double> resultquery = new HashMap<>();
+        if (result.columns(queryId) != null) resultquery = result.columns(queryId);
+
+
+        ArrayList<Pair<Integer,Double>> resultOrdered = resultWithOrder(resultquery, query);
+
+        switch (querytype){
+            case (1):
+                total = resultWithoutFilters(resultOrdered,query);
+                break;
+            case (2):
+                LimitedQuery lq = new LimitedQuery(query.getPath(), n);
+                total = resultWithMax(resultOrdered, lq);
+                break;
+            case(3):
+                IntervaledQuery iq = new IntervaledQuery(query.getPath(), max, min);
+                total = resultWithIntervals(resultOrdered, iq);
+                break;
+        }
+
+
+        return total;
     }
 
     public void newQuery() {
@@ -208,6 +275,28 @@ public class DomainMainController {
 
     }
 
+    private String GetString(char tipus, Integer id, Double relevance){
+        if (relevance > 1.0) relevance = 1.0;
+        else if (relevance < 0.0) relevance = 0.0;
+        String row = new String();
+        switch (tipus) {
+            case ('A'):
+                row = (authorsById.get(id).getName() + "  ->  " + relevance);
+                break;
+            case ('P'):
+                row = (papersById.get(id).getName() + "  ->  " + relevance);
+                break;
+            case ('C'):
+                row = (conferencesById.get(id).getName() + "  ->  " + relevance);
+                break;
+            case ('T'):
+                row = (termsById.get(id).getName() + "  ->  " + relevance);
+                break;
+        }
+        return row;
+
+    }
+
     private void printresult(char tipus, Integer id, Double relevance){
         if (relevance > 1.0) relevance = 1.0;
         else if (relevance < 0.0) relevance = 0.0;
@@ -269,29 +358,37 @@ public class DomainMainController {
         return resultOrdered;
     }
 
-    private void resultWithMax(ArrayList<Pair<Integer,Double>> resultquery, LimitedQuery query) {
+    private ArrayList<String> resultWithMax(ArrayList<Pair<Integer,Double>> resultquery, LimitedQuery query) {
         char tipus = query.getPath().charAt(query.getPath().length()-1);
-        System.out.println(" NOM  ->  rellevancia");
-
+        //System.out.println(" NOM  ->  rellevancia");
+        ArrayList<String> total = new ArrayList<>();
         for(Pair<Integer,Double> p : resultquery){
             if(query.getLimit() >0){
+                total.add(GetString(tipus,p.getFirst(),p.getSecond()));
                 printresult(tipus,p.getFirst(),p.getSecond());
             }
             else{
-                resultquery.clear();
+                break;
             }
             query.setLimit(query.getLimit()-1);
         }
-    }
-    private void resultWithIntervals(ArrayList<Pair<Integer,Double>> resultquery, IntervaledQuery query){
-        char tipus = query.getPath().charAt(query.getPath().length()-1);
-        System.out.println(" NOM  ->  rellevancia");
 
+        return total;
+    }
+
+    private ArrayList<String> resultWithIntervals(ArrayList<Pair<Integer,Double>> resultquery, IntervaledQuery query){
+        char tipus = query.getPath().charAt(query.getPath().length()-1);
+        //System.out.println(" NOM  ->  rellevancia");
+
+        ArrayList<String> total = new ArrayList<>();
         for(Pair<Integer,Double> p : resultquery){
             if(p.getSecond() >= query.getFirstRelevance() && p.getSecond() <= query.getSecondRelevance()) {
+                total.add(GetString(tipus,p.getFirst(),p.getSecond()));
                 printresult(tipus,p.getFirst(),p.getSecond());
             }
         }
+
+        return total;
         /*for (Object o : resultquery.entrySet()) {
             Map.Entry resultat = (Map.Entry) o;
             double res = Double.parseDouble(resultat.getValue().toString());
@@ -304,13 +401,18 @@ public class DomainMainController {
 
     }
 
-    private void resultWithoutFilters(ArrayList<Pair<Integer,Double>> resultquery, Query query){
+    private ArrayList<String> resultWithoutFilters(ArrayList<Pair<Integer,Double>> resultquery, Query query){
         char tipus = query.getPath().charAt(query.getPath().length()-1);
-        System.out.println(" NOM  ->  rellevancia");
+        //System.out.println(" NOM  ->  rellevancia");
 
+        ArrayList<String> total = new ArrayList<>();
         for(Pair<Integer,Double> p : resultquery){
+            String row = GetString(tipus,p.getFirst(),p.getSecond());
+            total.add(row);
             printresult(tipus,p.getFirst(),p.getSecond());
         }
+
+        return total;
         /*for (Object o : resultquery.entrySet()) {
             Map.Entry resultat = (Map.Entry) o;
             printresult(tipus, Integer.parseInt(resultat.getKey().toString()), Double.parseDouble(resultat.getValue().toString()));
@@ -322,7 +424,7 @@ public class DomainMainController {
     public void editGraph() {
         DomainPersistanceController domainPersistanceController = new DomainPersistanceController();
         domainPersistanceController.newEdit(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName,termsByName);
-
+        edit =true;
     }
 
 
