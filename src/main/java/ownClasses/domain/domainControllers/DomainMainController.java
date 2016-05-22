@@ -433,7 +433,7 @@ public class DomainMainController {
         Matrix authorpaper = new Matrix();
 
         for(Author author : authorsById.values()){
-            HashMap<Integer,Paper> papersOfAuthor = author.getPapersById();
+            HashMap<Integer,Paper> papersOfAuthor = author.getPapersById(papersById);
             for(Paper paper : papersOfAuthor.values()){
                 authorpaper.addValue(author.getId(),paper.getId(),1.0);
             }
@@ -445,7 +445,7 @@ public class DomainMainController {
         Matrix paperauthor = new Matrix();
 
         for(Paper paper : papersById.values()){
-            HashMap<Integer,Author> authorsOfPaper = paper.getAuthorsById();
+            HashMap<Integer,Author> authorsOfPaper = paper.getAuthorsById(authorsById);
             for(Author author : authorsOfPaper.values()){
                 paperauthor.addValue(paper.getId(),author.getId(),1.0);
             }
@@ -457,7 +457,7 @@ public class DomainMainController {
         Matrix termpaper = new Matrix();
 
         for(Term term : termsById.values()){
-            HashMap<Integer,Paper> papersOfTerm = term.getPapersWhichTalkAboutThisById();
+            HashMap<Integer,Paper> papersOfTerm = term.getPapersWhichTalkAboutThisById(papersById);
             for(Paper paper : papersOfTerm.values()){
                 termpaper.addValue(term.getId(),paper.getId(),1.0);
             }
@@ -470,7 +470,7 @@ public class DomainMainController {
         Matrix paperterm = new Matrix();
 
         for (Paper paper : papersById.values()) {
-            HashMap<Integer, Term> termsOfPaper = paper.getTermsById();
+            HashMap<Integer, Term> termsOfPaper = paper.getTermsById(termsById);
             for (Term term : termsOfPaper.values()) {
                 paperterm.addValue(paper.getId(), term.getId(), 1.0);
             }
@@ -482,7 +482,7 @@ public class DomainMainController {
         Matrix conferencepaper = new Matrix();
 
         for(Conference conf : conferencesById.values()){
-            HashMap<Integer,Paper> papersOfConf = conf.getExposedPapersById();
+            HashMap<Integer,Paper> papersOfConf = conf.getExposedPapersById(papersById);
             for(Paper paper : papersOfConf.values()){
                 conferencepaper.addValue(conf.getId(),paper.getId(),1.0);
             }
