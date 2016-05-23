@@ -101,7 +101,7 @@ public class DomainPersistanceController {
 
     }
 
-    public void readAll(String path) {
+    public void readAllFromFile(String path) {
         //filepath = path;
         readAuthorsFromFile();
         readPapersFromFile();
@@ -111,7 +111,6 @@ public class DomainPersistanceController {
         readTermRelations();
         readConferenceRelations();
 
-        binaryexport();
         //IMPRIMIR HASHMAPS
         //testDomain(authorsById,papersById,conferencesById,termsById);
     }
@@ -778,18 +777,68 @@ public class DomainPersistanceController {
 
     public void binaryimport (){
         authorsById = importBinaryAuthors();
+        authorsByName = null;
+        for(Author a : authorsById.values()) authorsByName.put(a.getName(),a);
+
+        papersById = importBinaryPapers();
+        papersByName = null;
+        for(Paper p: papersById.values()) papersByName.put(p.getName(),p);
+
+        termsById = importBinaryTerms();
+        termsByName = null;
+        for(Term t : termsById.values()) termsByName.put(t.getName(),t);
+
+        conferencesById = importBinaryConferences();
+        conferencesByName = null;
+        for(Conference c : conferencesById.values()) conferencesByName.put(c.getName(),c);
     }
 
     public void binaryexport (){
         File tmp = new File(filepath,"/tmp");
         if(!tmp.mkdir()) System.out.println("no s'ha creat tmp");
         exportBinaryAuthors(tmp);
+        exportBinaryPapers(tmp);
+        exportBinaryTerms(tmp);
+        exportBinaryConferences(tmp);
     }
 
     private void exportBinaryAuthors(File tmp){
         try {
             ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(tmp.getAbsolutePath() +"/authors.dat"));
             oout.writeObject(authorsById);
+            oout.close();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void exportBinaryPapers(File tmp){
+        try {
+            ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(tmp.getAbsolutePath() +"/papers.dat"));
+            oout.writeObject(papersById);
+            oout.close();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void exportBinaryTerms(File tmp){
+        try {
+            ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(tmp.getAbsolutePath() +"/terms.dat"));
+            oout.writeObject(termsById);
+            oout.close();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void exportBinaryConferences(File tmp){
+        try {
+            ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(tmp.getAbsolutePath() +"/conferences.dat"));
+            oout.writeObject(conferencesById);
             oout.close();
         }
         catch(IOException e){
@@ -811,5 +860,53 @@ public class DomainPersistanceController {
             e.printStackTrace();
         }
         return authorsById;
+    }
+
+    private HashMap<Integer,Paper> importBinaryPapers(){
+        HashMap<Integer,Paper> papersById = new HashMap<>();
+        try {
+            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(filepath + "/tmp/papers.dat"));
+            papersById = (HashMap<Integer,Paper>) oin.readObject();
+            oin.close();
+        }
+        catch(IOException a){
+            a.printStackTrace();
+        }
+        catch(ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        return papersById;
+    }
+
+    private HashMap<Integer,Term> importBinaryTerms(){
+        HashMap<Integer,Term> termsById = new HashMap<>();
+        try {
+            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(filepath + "/tmp/papers.dat"));
+            termsById = (HashMap<Integer,Term>) oin.readObject();
+            oin.close();
+        }
+        catch(IOException a){
+            a.printStackTrace();
+        }
+        catch(ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        return termsById;
+    }
+
+    private HashMap<Integer,Conference> importBinaryConferences(){
+        HashMap<Integer,Conference> conferencesById = new HashMap<>();
+        try {
+            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(filepath + "/tmp/conferences.dat"));
+            conferencesById = (HashMap<Integer,Conference>) oin.readObject();
+            oin.close();
+        }
+        catch(IOException a){
+            a.printStackTrace();
+        }
+        catch(ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        return conferencesById;
     }
 }

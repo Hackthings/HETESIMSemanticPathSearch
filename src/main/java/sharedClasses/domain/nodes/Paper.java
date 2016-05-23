@@ -36,11 +36,13 @@ public class Paper extends Node {
     public void addAuthor(Author author) {
         authorsById.add(author.getId());
         authorsByName.add(author.getName());
+        sortAuthors();
     }
 
     public void addTerm(Term term) {
         termsById.add(term.getId());
         termsByName.add(term.getName());
+        sortTerms();
     }
 
     public void removeAuthor(Author author) {

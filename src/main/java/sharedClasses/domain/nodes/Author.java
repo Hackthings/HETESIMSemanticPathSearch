@@ -50,6 +50,7 @@ public class Author extends Node{
     public void addPaper(Paper paper) {
         papersById.add(paper.getId());
         papersByName.add(paper.getName());
+        sortPapers();
     }
 
     public void removePaper(Paper paper) {

@@ -53,6 +53,7 @@ public class Conference extends Node {
     public void addExposedPaper(Paper paper) {
         exposedPapersById.add(paper.getId());
         exposedPapersByName.add(paper.getName());
+        sortExposedPapers();
     }
 
     public void removeExposedPaperBy(Paper paper) {

@@ -48,6 +48,7 @@ public class Term extends Node {
     public void addPaperWhichTalkAboutIt(Paper paper) {
         papersWhichTalkAboutThisById.add(paper.getId());
         papersWhichTalkAboutThisByName.add(paper.getName());
+        sortPapersWhichTalkAboutThis();
     }
 
     public void removePaperWhichTalkAboutIt(Paper paper) {
