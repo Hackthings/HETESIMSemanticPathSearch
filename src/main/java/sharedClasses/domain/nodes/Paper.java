@@ -1,5 +1,6 @@
 package main.java.sharedClasses.domain.nodes;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -101,6 +102,14 @@ public class Paper extends Node {
             termsByName.put(keyName, terms.get(keyName));
         }
         return termsByName;
+    }
+
+    public ArrayList<Integer> getRelatedAuthors(){
+        return authorsById;
+    }
+
+    public ArrayList<Integer> getRelationesTerms(){
+        return termsById;
     }
 
     public void sortAuthors(){

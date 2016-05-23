@@ -46,6 +46,9 @@ public class Conference extends Node {
         return papersByName;
     }
 
+    public ArrayList<Integer> getExposedPapers(){
+        return exposedPapersById;
+    }
 
     public void addExposedPaper(Paper paper) {
         exposedPapersById.add(paper.getId());

@@ -43,6 +43,10 @@ public class Author extends Node{
         return papersByName;
     }
 
+    public ArrayList<Integer> getAuthorRelations(){
+        return papersById;
+    }
+
     public void addPaper(Paper paper) {
         papersById.add(paper.getId());
         papersByName.add(paper.getName());

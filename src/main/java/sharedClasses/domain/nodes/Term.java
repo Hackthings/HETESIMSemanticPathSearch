@@ -60,6 +60,10 @@ public class Term extends Node {
         }
     }
 
+    public ArrayList<Integer> getPapersWhichTalkAboutThis(){
+        return papersWhichTalkAboutThisById;
+    }
+
     public void sortPapersWhichTalkAboutThis(){
         Collections.sort(papersWhichTalkAboutThisById);
         Collections.sort(papersWhichTalkAboutThisByName);
