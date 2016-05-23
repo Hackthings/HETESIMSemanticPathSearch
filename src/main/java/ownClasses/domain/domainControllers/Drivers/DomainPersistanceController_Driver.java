@@ -29,19 +29,15 @@ public class DomainPersistanceController_Driver {
         Conference c = new Conference("",-1);
 
 
-        DomainPersistanceController dpc = new DomainPersistanceController();
-        dpc.readAll(authorsById,papersById,
+        DomainPersistanceController dpc = new DomainPersistanceController(authorsById,papersById,
                 conferencesById,termsById,
                 authorsByName,papersByName,
                 conferencesByName,
                 termsByName);
+        dpc.readAll(null);
 
 
 
-        dpc.newEdit(authorsById,papersById,
-                conferencesById,termsById,
-                authorsByName,papersByName,
-                conferencesByName,
-                termsByName);
+        dpc.newEdit();
     }
 }

@@ -36,7 +36,7 @@ public class DomainMainController {
     private boolean edit;
 
     public DomainMainController() {
-        persistanceController = new DomainPersistanceController();
+        persistanceController = new DomainPersistanceController(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
         authorsById = new HashMap<>();
         papersById = new HashMap<>();
         conferencesById = new HashMap<>();
@@ -50,7 +50,7 @@ public class DomainMainController {
         paperMaxId = 0;
         conferenceMaxId = 0;
         termMaxId = 0;
-        persistanceController.readAll(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
+        persistanceController.readAll(null);
         //hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
         scanner = new Scanner(System.in);
         edit=true;
@@ -422,9 +422,9 @@ public class DomainMainController {
     }
 
     public void editGraph() {
-        DomainPersistanceController domainPersistanceController = new DomainPersistanceController();
-        domainPersistanceController.newEdit(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName,termsByName);
-        edit =true;
+        DomainPersistanceController domainPersistanceController = new DomainPersistanceController(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
+        domainPersistanceController.newEdit();
+        edit = true;
     }
 
 

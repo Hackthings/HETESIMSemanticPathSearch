@@ -17,16 +17,37 @@ import java.util.Scanner;
 public class DomainPersistanceController {
     private static String filepath;
 
-    public DomainPersistanceController() {
+    HashMap<Integer, Author> authorsById;
+    HashMap<Integer, Paper> papersById;
+    HashMap<Integer, Conference> conferencesById;
+    HashMap<Integer, Term> termsById;
 
-        filepath = "/src/cluster/data/";
-        //filepath = "/src/Propies/Persistencia/data/"
+    HashMap<String, Author> authorsByName;
+    HashMap<String, Paper> papersByName;
+    HashMap<String, Conference> conferencesByName;
+    HashMap<String, Term> termsByName;
+
+    public DomainPersistanceController(HashMap<Integer, Author> authorsById,
+                                       HashMap<Integer, Paper> papersById,
+                                       HashMap<Integer, Conference> conferencesById,
+                                       HashMap<Integer, Term> termsById,
+                                       HashMap<String, Author> authorsByName,
+                                       HashMap<String, Paper> papersByName,
+                                       HashMap<String, Conference> conferencesByName,
+                                       HashMap<String, Term> termsByName) {
+
+        this.authorsById = authorsById;
+        this.papersById = papersById;
+        this.conferencesById = conferencesById;
+        this.termsById = termsById;
+        this.authorsByName = authorsByName;
+        this.papersByName = papersByName;
+        this.conferencesByName = conferencesByName;
+        this.termsByName = termsByName;
+        filepath = "/src/main/java/data/";
     }
 
-    public void testDomain(HashMap<Integer, Author> authorsById,
-                           HashMap<Integer, Paper> papersById,
-                           HashMap<Integer, Conference> conferencesById,
-                           HashMap<Integer, Term> termsById) {
+    public void testDomain() {
 
         System.out.println("TEST DOMAIN!");
 
@@ -80,37 +101,22 @@ public class DomainPersistanceController {
 
     }
 
-    public void readAll(String path,
-                        HashMap<Integer, Author> authorsById,
-                        HashMap<Integer, Paper> papersById,
-                        HashMap<Integer, Conference> conferencesById,
-                        HashMap<Integer, Term> termsById,
-                        HashMap<String, Author> authorsByName,
-                        HashMap<String, Paper> papersByName,
-                        HashMap<String, Conference> conferencesByName,
-                        HashMap<String, Term> termsByName) {
-        filepath = path;
-        readAuthorsFromFile(authorsById, authorsByName);
-        readPapersFromFile(papersById, papersByName);
-        readConferencesFromFile(conferencesById, conferencesByName);
-        readTermsFromFile(termsById, termsByName);
-        readPaperAuthorRelations(papersById, authorsById);
-        readTermRelations(papersById, termsById);
-        readConferenceRelations(papersById, conferencesById);
+    public void readAll(String path) {
+        //filepath = path;
+        readAuthorsFromFile();
+        readPapersFromFile();
+        readConferencesFromFile();
+        readTermsFromFile();
+        readPaperAuthorRelations();
+        readTermRelations();
+        readConferenceRelations();
 
-
+        binaryexport();
         //IMPRIMIR HASHMAPS
         //testDomain(authorsById,papersById,conferencesById,termsById);
     }
 
-    public void newEdit(HashMap<Integer, Author> authorsById,
-                        HashMap<Integer, Paper> papersById,
-                        HashMap<Integer, Conference> conferencesById,
-                        HashMap<Integer, Term> termsById,
-                        HashMap<String, Author> authorsByName,
-                        HashMap<String, Paper> papersByName,
-                        HashMap<String, Conference> conferencesByName,
-                        HashMap<String, Term> termsByName) {
+    public void newEdit() {
 
         Scanner scan = new Scanner(System.in);
         System.out.println("Quants edits vols fer?");
@@ -512,8 +518,8 @@ public class DomainPersistanceController {
                                     if (p.getAuthorsById(authorsById).size() < 1) {
 
                                         //RECOMENÇAR UN PROCES DE ELIMINAR PAPER
-                                        deletePaperRelationsOnConferences(papersById,conferencesById, conferencesByName, p);
-                                        deletePaperRelationsOnTerms(papersById,termsById, termsByName, p);
+                                        deletePaperRelationsOnConferences(p);
+                                        deletePaperRelationsOnTerms( p);
                                         papersById.remove(p.getId());
                                         papersByName.remove(p.getName());
                                     }
@@ -533,10 +539,10 @@ public class DomainPersistanceController {
                                 Paper p = papersByName.get(name);
                                 //eliminar relacions
 
-                                deletePaperRelationsOnConferences(papersById,conferencesById, conferencesByName, p);
+                                deletePaperRelationsOnConferences( p);
 
-                                deletePaperRelationsOnAuthors(papersById,authorsById, authorsByName, p);
-                                deletePaperRelationsOnTerms(papersById,termsById, termsByName, p);
+                                deletePaperRelationsOnAuthors( p);
+                                deletePaperRelationsOnTerms(p);
                                 //eliminar paper
                                 id = p.getId();
                                 papersByName.remove(name);
@@ -556,8 +562,8 @@ public class DomainPersistanceController {
                                     Paper p = (Paper) it.next();
                                     p.removeTerm(t);
                                     if (p.getTermsById(termsById).size() < 1) { //Eliminar paper i relacions
-                                        deletePaperRelationsOnAuthors(papersById,authorsById, authorsByName, p);
-                                        deletePaperRelationsOnConferences(papersById,conferencesById, conferencesByName, p);
+                                        deletePaperRelationsOnAuthors(p);
+                                        deletePaperRelationsOnConferences(p);
                                         papersByName.remove(p.getName());
                                         papersById.remove(p.getId());
                                     }
@@ -579,8 +585,8 @@ public class DomainPersistanceController {
                                 Collection<Paper> auxiliarp = c.getExposedPapersById(papersById).values();
                                 for (Iterator it = auxiliarp.iterator(); it.hasNext(); ) {
                                     Paper p = (Paper) it.next();
-                                    deletePaperRelationsOnAuthors(papersById,authorsById, authorsByName, p);
-                                    deletePaperRelationsOnTerms(papersById,termsById, termsByName, p);
+                                    deletePaperRelationsOnAuthors(p);
+                                    deletePaperRelationsOnTerms( p);
                                     papersById.remove(p.getId());
                                     papersByName.remove(p.getName());
                                 }
@@ -604,7 +610,7 @@ public class DomainPersistanceController {
     }
 
 
-    private void readAuthorsFromFile(HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName) {
+    private void readAuthorsFromFile() {
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(filepath + "author.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -621,7 +627,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private void readPapersFromFile(HashMap<Integer, Paper> papersById, HashMap<String, Paper> papersByName) {
+    private void readPapersFromFile() {
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(filepath + "paper.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -638,7 +644,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private void readConferencesFromFile(HashMap<Integer, Conference> conferencesById, HashMap<String, Conference> conferencesByName) {
+    private void readConferencesFromFile() {
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(filepath + "conf.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -658,7 +664,7 @@ public class DomainPersistanceController {
     }
 
 
-    private void readTermsFromFile(HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName) {
+    private void readTermsFromFile() {
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(filepath + "term.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -676,7 +682,7 @@ public class DomainPersistanceController {
     }
 
 
-    private void readPaperAuthorRelations(HashMap<Integer, Paper> papersById, HashMap<Integer, Author> authorsById) {
+    private void readPaperAuthorRelations() {
         String p1 = new File("").getAbsolutePath();
         File inputFile = new File(p1.concat(filepath + "paper_author.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -696,7 +702,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private void readConferenceRelations(HashMap<Integer, Paper> papersById, HashMap<Integer, Conference> conferencesById) {
+    private void readConferenceRelations() {
         String p1 = new File("").getAbsolutePath();
         File inputFile = new File(p1.concat(filepath + "paper_conf.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -716,7 +722,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private void readTermRelations(HashMap<Integer, Paper> papersById, HashMap<Integer, Term> termsById) {
+    private void readTermRelations() {
         String p1 = new File("").getAbsolutePath();
         File inputFile = new File(p1.concat(filepath + "paper_term.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -737,7 +743,7 @@ public class DomainPersistanceController {
     }
 
 
-    private void deletePaperRelationsOnConferences(HashMap<Integer, Paper> papersById,HashMap<Integer, Conference> conferencesById, HashMap<String, Conference> conferencesByName, Paper p) {
+    private void deletePaperRelationsOnConferences(Paper p) {
         Conference auxiliarc = p.getConference();
         auxiliarc.removeExposedPaperBy(p);
         if (auxiliarc.getExposedPapersById(papersById).size() < 1) {
@@ -746,7 +752,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private void deletePaperRelationsOnAuthors(HashMap<Integer, Paper> papersById,HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName, Paper p) {
+    private void deletePaperRelationsOnAuthors(Paper p) {
         Collection<Author> auxiliara = p.getAuthorsById(authorsById).values();
         for (Iterator ita = auxiliara.iterator(); ita.hasNext(); ) {
             Author a = (Author) ita.next();
@@ -758,7 +764,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private void deletePaperRelationsOnTerms(HashMap<Integer, Paper> papersById,HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName, Paper p) {
+    private void deletePaperRelationsOnTerms(Paper p) {
         Collection<Term> auxiliart = p.getTermsById(termsById).values();
         for (Iterator itt = auxiliart.iterator(); itt.hasNext(); ) {
             Term t = (Term) itt.next();
@@ -769,40 +775,41 @@ public class DomainPersistanceController {
             }
         }
     }
-/*
-    public void binaryimport (HIN h){
-        String fileName = "binary.dat";
-        ObjectInputStream inputStream = null;
-        try{
-            inputStream = new ObjectInputStream(new FileInputStream(fileName));
-        }catch(IOException e){
-            System.out.println("There was a problem opening the file: " + e);
-            System.exit(0);
+
+    public void binaryimport (){
+        authorsById = importBinaryAuthors();
+    }
+
+    public void binaryexport (){
+        File tmp = new File(filepath,"/tmp");
+        if(!tmp.mkdir()) System.out.println("no s'ha creat tmp");
+        exportBinaryAuthors(tmp);
+    }
+
+    private void exportBinaryAuthors(File tmp){
+        try {
+            ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(tmp.getAbsolutePath() +"/authors.dat"));
+            oout.writeObject(authorsById);
+            oout.close();
         }
-        try{
-            HIN aux = (HIN)inputStream.readObject();
-            h.gethin(aux);
-            inputStream.close();
-        }catch(Exception e){
-            System.out.println("There was an issue reading from the file: " + e);
-            System.exit(0);
+        catch(IOException e){
+            e.printStackTrace();
         }
     }
-    public void binaryexport (HIN h){
-        String fileName = "binary.dat";
-        ObjectOutputStream  outputStream = null;
-        try{
-            outputStream = new ObjectOutputStream(new FileOutputStream(fileName));
-        }catch(IOException e){
-            System.out.println("Could not open the file." + e);
-            System.exit(0);
+
+    private HashMap<Integer,Author> importBinaryAuthors(){
+        HashMap<Integer,Author> authorsById = new HashMap<>();
+        try {
+            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(filepath + "/tmp/authors.dat"));
+            authorsById = (HashMap<Integer,Author>) oin.readObject();
+            oin.close();
         }
-        try{
-            outputStream.writeObject(h);
-            outputStream.close();
-        }catch(IOException e){
-            System.out.println("Writing error: " + e);
-            System.exit(0);
+        catch(IOException a){
+            a.printStackTrace();
         }
-    }*/
+        catch(ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        return authorsById;
+    }
 }
