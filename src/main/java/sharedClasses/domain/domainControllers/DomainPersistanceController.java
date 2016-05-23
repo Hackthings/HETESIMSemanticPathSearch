@@ -653,8 +653,8 @@ public class DomainPersistanceController {
                 String[] aux = line.split("	");
                 int id = Integer.parseInt(aux[0]);
                 Conference conf = new Conference(aux[1], id);
-                conf.setYear(Integer.parseInt(aux[2]));
-                conf.setContinent(aux[3]);
+//                conf.setYear(Integer.parseInt(aux[2]));
+  //              conf.setContinent(aux[3]);
                 conferencesById.put(id, conf);
                 conferencesByName.put(aux[1], conf);
             }

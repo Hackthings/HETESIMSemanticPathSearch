@@ -36,7 +36,6 @@ public class DomainMainController {
     private boolean edit;
 
     public DomainMainController() {
-        persistanceController = new DomainPersistanceController(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
         authorsById = new HashMap<>();
         papersById = new HashMap<>();
         conferencesById = new HashMap<>();
@@ -50,6 +49,7 @@ public class DomainMainController {
         paperMaxId = 0;
         conferenceMaxId = 0;
         termMaxId = 0;
+        persistanceController = new DomainPersistanceController(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
         persistanceController.readAll(null);
         //hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
         scanner = new Scanner(System.in);

@@ -8,7 +8,7 @@ import main.java.sharedClasses.domain.nodes.Paper;
 import java.util.Set;
 
 public class Author_driver {
-
+/*
     public static void main(String[] args) {
 
         //Crea un objecte de la classe Author.
@@ -46,5 +46,5 @@ public class Author_driver {
         System.out.println("Esborrem l'article 1 amb nom The NP Problem i comprovem que no hi es");
         if (a.getPaperByName("The NP Problem") == null) System.out.println("Aquest autor no es d'aquest article");
         if (a.getPaperById(1) == null) System.out.println("Aquest autor no es d'aquest article");
-    }
+    }*/
 }

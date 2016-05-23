@@ -11,7 +11,7 @@ public class Conference_driver {
 
     public static void main(String[] args) {
 
-
+/*
         Paper p2 = new Paper("Hi", 1);
         Paper p1 = new Paper("Hola", 2);
         Conference c = new Conference("CSS", 3);
@@ -57,7 +57,7 @@ public class Conference_driver {
         aux = p1;
         c.removeExposedPaperBy(p1);
         aux = c.getPaperById(2);
-        if (aux == null) System.out.println("The paper with id 2 does not exists anymore");
+        if (aux == null) System.out.println("The paper with id 2 does not exists anymore");*/
 
 
     }

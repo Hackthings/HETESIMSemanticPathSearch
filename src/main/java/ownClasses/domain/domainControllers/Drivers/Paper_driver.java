@@ -8,7 +8,7 @@ import main.java.sharedClasses.domain.nodes.Term;
 import java.util.Set;
 
 public class Paper_driver {
-
+/*
     public static void main(String[] args) {
         //Crea un objecte de la classe Paper.
         Paper p = new Paper("The NP problem",321);
@@ -77,5 +77,5 @@ public class Paper_driver {
         p.removeTerm(t2);
         if(p.getTermByName("NP") == null)System.out.println("Aquest article no conte aquest terme");
         if(p.getTermByID(2) == null)System.out.println("Aquest article no conte aquest terme");
-    }
+    }*/
 }
