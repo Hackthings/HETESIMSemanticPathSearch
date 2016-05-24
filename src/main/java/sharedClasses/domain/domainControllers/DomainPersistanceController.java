@@ -112,7 +112,7 @@ public class DomainPersistanceController {
         readConferenceRelations();
 
         //IMPRIMIR HASHMAPS
-        testDomain();
+        //testDomain();
     }
 
     public void newEdit() {
@@ -800,7 +800,6 @@ public class DomainPersistanceController {
         HashMap<String,Conference> confByNameaux = new HashMap<String,Conference>();
         for(Conference c : conferencesById.values()) confByNameaux.put(c.getName(),c);
         conferencesByName = confByNameaux;
-        testDomain();
     }
 
     public void binaryexport (){
