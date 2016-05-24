@@ -14,6 +14,7 @@ public class PresentationAddNode extends JFrame {
     private static final int PAPER = 1;
     private static final int TERM = 2;
     private static final int CONFERENCE = 3;
+    private final int selectedNodeType;
 
     private JPanel panel;
     private JButton aButton;
@@ -32,6 +33,8 @@ public class PresentationAddNode extends JFrame {
 
     public PresentationAddNode(DomainPersistanceController persistanceController, int selectedIndex) {
         super("NEW QUERY");
+
+        selectedNodeType = selectedIndex;
 
         this.persistanceController = persistanceController;
 
