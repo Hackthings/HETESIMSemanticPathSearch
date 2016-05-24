@@ -38,7 +38,7 @@ public class PresentationEditGraph extends JFrame {
 
     private void editNodeAction() {
         System.out.println("EditNodeAction");
-        // TODO: IMPLEMENT EDIT
+        new PresentationAddNode(persistanceController, editList.getSelectedIndex());
     }
 
     private void addNodeAction() {

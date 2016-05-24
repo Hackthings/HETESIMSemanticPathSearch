@@ -28,7 +28,7 @@ public class PresentationNewQuery extends JFrame {
         super("NEW QUERY");
 
         $$$setupUI$$$();
-        
+
         setContentPane(panel);
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
