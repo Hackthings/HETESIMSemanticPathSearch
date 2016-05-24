@@ -3,6 +3,7 @@ package main.java;
 import main.java.ownClasses.domain.domainControllers.DomainMainController;
 import main.java.ownClasses.presentation.ConsolePrinter;
 import main.java.ownClasses.presentation.PresentationController;
+import main.java.sharedClasses.domain.domainControllers.DomainPersistanceController;
 
 import java.util.Scanner;
 

@@ -112,7 +112,7 @@ public class DomainPersistanceController {
         readConferenceRelations();
 
         //IMPRIMIR HASHMAPS
-        //testDomain(authorsById,papersById,conferencesById,termsById);
+        testDomain();
     }
 
     public void newEdit() {
@@ -776,26 +776,37 @@ public class DomainPersistanceController {
     }
 
     public void binaryimport (){
-        authorsById = importBinaryAuthors();
-        authorsByName = null;
-        for(Author a : authorsById.values()) authorsByName.put(a.getName(),a);
+        String aux  = new File("").getAbsolutePath();
+        File tmp = new File(aux.concat(filepath),"/tmp");
 
-        papersById = importBinaryPapers();
-        papersByName = null;
-        for(Paper p: papersById.values()) papersByName.put(p.getName(),p);
+        authorsById = importBinaryAuthors(tmp);
+        HashMap<String,Author> authorsByNameaux = new HashMap<String,Author>();
+        for(Author a : authorsById.values()) {
+            authorsByNameaux.put(a.getName(),a);
+        }
+        authorsByName = authorsByNameaux;
 
-        termsById = importBinaryTerms();
-        termsByName = null;
-        for(Term t : termsById.values()) termsByName.put(t.getName(),t);
+        papersById = importBinaryPapers(tmp);
+        HashMap<String,Paper> papersByNameaux = new HashMap<String,Paper>();
+        for(Paper p: papersById.values()) papersByNameaux.put(p.getName(),p);
+        papersByName = papersByNameaux;
 
-        conferencesById = importBinaryConferences();
-        conferencesByName = null;
-        for(Conference c : conferencesById.values()) conferencesByName.put(c.getName(),c);
+        termsById = importBinaryTerms(tmp);
+        HashMap<String,Term> termsByNameaux = new HashMap<String,Term>();
+        for(Term t : termsById.values()) termsByNameaux.put(t.getName(),t);
+        termsByName = termsByNameaux;
+
+        conferencesById = importBinaryConferences(tmp);
+        HashMap<String,Conference> confByNameaux = new HashMap<String,Conference>();
+        for(Conference c : conferencesById.values()) confByNameaux.put(c.getName(),c);
+        conferencesByName = confByNameaux;
+        testDomain();
     }
 
     public void binaryexport (){
-        File tmp = new File(filepath,"/tmp");
-        if(!tmp.mkdir()) System.out.println("no s'ha creat tmp");
+        String aux  = new File("").getAbsolutePath();
+        File tmp = new File(aux.concat(filepath),"/tmp");
+        if(!tmp.mkdirs()) System.out.println("no s'ha creat tmp");
         exportBinaryAuthors(tmp);
         exportBinaryPapers(tmp);
         exportBinaryTerms(tmp);
@@ -846,11 +857,12 @@ public class DomainPersistanceController {
         }
     }
 
-    private HashMap<Integer,Author> importBinaryAuthors(){
+    private HashMap<Integer,Author> importBinaryAuthors(File tmp){
         HashMap<Integer,Author> authorsById = new HashMap<>();
         try {
-            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(filepath + "/tmp/authors.dat"));
+            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(tmp.getAbsolutePath()+ "/authors.dat"));
             authorsById = (HashMap<Integer,Author>) oin.readObject();
+            if(authorsById == null) System.out.println("autors es null");
             oin.close();
         }
         catch(IOException a){
@@ -862,10 +874,10 @@ public class DomainPersistanceController {
         return authorsById;
     }
 
-    private HashMap<Integer,Paper> importBinaryPapers(){
+    private HashMap<Integer,Paper> importBinaryPapers(File tmp){
         HashMap<Integer,Paper> papersById = new HashMap<>();
         try {
-            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(filepath + "/tmp/papers.dat"));
+            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(tmp.getAbsolutePath() + "/papers.dat"));
             papersById = (HashMap<Integer,Paper>) oin.readObject();
             oin.close();
         }
@@ -878,10 +890,10 @@ public class DomainPersistanceController {
         return papersById;
     }
 
-    private HashMap<Integer,Term> importBinaryTerms(){
+    private HashMap<Integer,Term> importBinaryTerms(File tmp){
         HashMap<Integer,Term> termsById = new HashMap<>();
         try {
-            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(filepath + "/tmp/papers.dat"));
+            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(tmp.getAbsolutePath() + "/terms.dat"));
             termsById = (HashMap<Integer,Term>) oin.readObject();
             oin.close();
         }
@@ -894,10 +906,10 @@ public class DomainPersistanceController {
         return termsById;
     }
 
-    private HashMap<Integer,Conference> importBinaryConferences(){
+    private HashMap<Integer,Conference> importBinaryConferences(File tmp){
         HashMap<Integer,Conference> conferencesById = new HashMap<>();
         try {
-            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(filepath + "/tmp/conferences.dat"));
+            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(tmp.getAbsolutePath() + "/conferences.dat"));
             conferencesById = (HashMap<Integer,Conference>) oin.readObject();
             oin.close();
         }
