@@ -10,9 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * Created by iansangines on 10/05/2016.
- */
 public class PresentationEditGraph extends JFrame {
     private JButton editNodeButton;
     private JButton deleteNodeButton;
@@ -45,7 +42,7 @@ public class PresentationEditGraph extends JFrame {
     }
 
     private void addNodeAction() {
-        System.out.println("DeleteNodeAction");
+        System.out.println("AddNodeAction");
         // TODO: IMPLEMENT ADD
     }
 
