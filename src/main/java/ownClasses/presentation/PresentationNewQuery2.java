@@ -121,13 +121,21 @@ public class PresentationNewQuery2 extends JFrame {
     }
 
     private void setMin() {
-        if(querytype == 3 && isDouble(petitField.getText()))
-            min = Double.parseDouble(petitField.getText());
+        boolean valid = isDouble(petitField.getText());
+        if(querytype == 3 && !valid) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Numero no valid");
+        }
+        else if(!petitField.getText().isEmpty()) min = Double.parseDouble(petitField.getText());
     }
 
     private void setMax() {
-        if(querytype == 3 && isDouble(petitField.getText()))
-            max = Double.parseDouble(granField.getText());
+        boolean valid = isDouble(granField.getText());
+        if(querytype == 3 && !valid) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Numero no valid");
+        }
+        else if(!granField.getText().isEmpty()) max = Double.parseDouble(granField.getText());
     }
 
     private void callresult(DomainMainController mainController, String path) {
@@ -135,9 +143,16 @@ public class PresentationNewQuery2 extends JFrame {
             setMax();
             setMin();
             setN();
+            System.out.println(max+ " "+ min);
             name = nameField.getText();
-            ArrayList<String> resultat = mainController.resultat(path, querytype, ascendent, name, n, max, min);
-            new PresentationResult(resultat,name,path);
+            if(querytype == 3 && min > max){
+                VistaWARNING vw = new VistaWARNING();
+                vw.setVisible("Interval no valid");
+            }
+            else {
+                ArrayList<String> resultat = mainController.resultat(path, querytype, ascendent, name, n, max, min);
+                new PresentationResult(resultat, name, path);
+            }
         }
         else{
             VistaWARNING vw = new VistaWARNING();

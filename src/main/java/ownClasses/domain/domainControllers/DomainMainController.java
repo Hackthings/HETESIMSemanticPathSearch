@@ -116,7 +116,7 @@ public class DomainMainController {
                 total = resultWithMax(resultOrdered, lq);
                 break;
             case(3):
-                IntervaledQuery iq = new IntervaledQuery(query.getPath(), max, min);
+                IntervaledQuery iq = new IntervaledQuery(query.getPath(), min, max);
                 total = resultWithIntervals(resultOrdered, iq);
                 break;
         }
