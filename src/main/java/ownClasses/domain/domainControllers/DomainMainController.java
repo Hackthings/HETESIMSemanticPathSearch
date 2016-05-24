@@ -70,7 +70,7 @@ public class DomainMainController {
 
     }
 
-    public boolean checkName(String name){
+    public boolean checkName(String name, char node){
         boolean check = false;
         if(authorsByName.containsKey(name) || papersByName.containsKey(name) || conferencesByName.containsKey(name) || termsByName.containsKey(name)){
             check = true;
