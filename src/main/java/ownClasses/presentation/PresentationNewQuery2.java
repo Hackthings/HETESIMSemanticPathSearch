@@ -84,21 +84,51 @@ public class PresentationNewQuery2 extends JFrame {
         System.out.println("set type to " + type);
     }
 
+    private static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch(NumberFormatException e) {
+            return false;
+        } catch(NullPointerException e) {
+            return false;
+        }
+        Integer i = Integer.parseInt(s);
+        if(i<0) return false;
+        return true;
+    }
     private void setN() {
-        n = Integer.parseInt(nField.getText());
+        if(querytype == 2) {
+            String nstring = nField.getText();
+
+            if(isInteger(nstring)) n = Integer.parseInt(nstring);
+            else{
+                VistaWARNING vw = new VistaWARNING();
+                vw.setVisible("Numero no valid");
+            }
+        }
     }
 
     private void setMin() {
-        min = Double.parseDouble(petitField.getText());
+        if(querytype == 3)min = Double.parseDouble(petitField.getText());
     }
 
     private void setMax() {
-        max = Double.parseDouble(granField.getText());
+        if(querytype == 3)max = Double.parseDouble(granField.getText());
     }
 
     private void callresult(DomainMainController mainController, String path) {
-        ArrayList<String> resultat = mainController.resultat(path, querytype, ascendent, name, n, max, min);
-        new PresentationResult(resultat,name,path);
+        if(mainController.checkName(nameField.getText())){
+            setMax();
+            setMin();
+            setN();
+            name = nameField.getText();
+            ArrayList<String> resultat = mainController.resultat(path, querytype, ascendent, name, n, max, min);
+            new PresentationResult(resultat,name,path);
+        }
+        else{
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("NOM no trobat");
+        }
     }
 
     private void $$$setupUI$$$() {
