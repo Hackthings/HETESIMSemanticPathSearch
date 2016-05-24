@@ -50,7 +50,7 @@ public class DomainMainController {
         conferenceMaxId = 0;
         termMaxId = 0;
         persistanceController = new DomainPersistanceController(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
-        persistanceController.readAll(null);
+        persistanceController.readAllFromFile("");
         //hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
         scanner = new Scanner(System.in);
         edit=true;

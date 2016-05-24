@@ -13,7 +13,7 @@ import java.util.*;
  * Created by MarcBotet on 21/04/2016.
  */
 public class DomainPersistanceController_Driver {
-
+/*
     public static void main(String[] args) {
         HashMap<Integer, Author> authorsById = new HashMap<Integer, Author>();
         HashMap<Integer, Paper> papersById =  new HashMap<Integer, Paper>();
@@ -34,10 +34,10 @@ public class DomainPersistanceController_Driver {
                 authorsByName,papersByName,
                 conferencesByName,
                 termsByName);
-        dpc.readAll(null);
+        dpc.readAllFromFile("");
 
 
 
         dpc.newEdit();
-    }
+    }*/
 }
