@@ -35,7 +35,7 @@ public class PresentationController extends JFrame {
 
         newQueryButton.addActionListener(e -> new PresentationNewQuery(mainController));
         //newQueryButton.addActionListener(e->mainController.newQuery());
-        editGraphButton.addActionListener(e -> mainController.editGraph());
+        editGraphButton.addActionListener(e -> new PresentationEditGraph(mainController.getPersistanceController()));
         setVisible(true);
     }
 }

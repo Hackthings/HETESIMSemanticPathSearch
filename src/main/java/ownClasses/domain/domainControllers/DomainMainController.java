@@ -57,6 +57,10 @@ public class DomainMainController {
 
     }
 
+    public DomainPersistanceController getPersistanceController() {
+        return persistanceController;
+    }
+
     public void NQ(String path){
         if(edit) {
             DomainHetesimController hetesimController = new DomainHetesimController(getAuthorPaperMatrix(), getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());

@@ -6,9 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-/**
- * Created by Nicola on 15/05/2016.
- */
 public class PresentationNewQuery2 extends JFrame {
     private JPanel panel1;
     private JRadioButton ascendentButton;
@@ -303,9 +300,6 @@ public class PresentationNewQuery2 extends JFrame {
         panel1.add(NEXTButton, gbc);
     }
 
-    /**
-     * @noinspection ALL
-     */
     public JComponent $$$getRootComponent$$$() {
         return panel1;
     }
