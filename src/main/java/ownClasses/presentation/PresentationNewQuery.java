@@ -83,13 +83,8 @@ public class PresentationNewQuery extends JFrame {
         }
     }
 
-    private void createUIComponents() {
-        //simpleRadioButton = new JRadioButton("Simple");
-        //ambFiltresRadioButton = new JRadioButton("Amb Filtres");
-    }
 
     private void $$$setupUI$$$() {
-        createUIComponents();
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         panel.setBorder(BorderFactory.createTitledBorder(""));
