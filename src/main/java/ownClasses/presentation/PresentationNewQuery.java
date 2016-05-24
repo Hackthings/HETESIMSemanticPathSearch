@@ -17,8 +17,6 @@ public class PresentationNewQuery extends JFrame {
     private JButton pButton;
     private JButton tButton;
     private JButton NEXTButton;
-    //private JRadioButton simpleRadioButton;
-    //private JRadioButton ambFiltresRadioButton;
     private JTextArea TextArea1;
     private JButton DeleteButton;
 
@@ -30,17 +28,11 @@ public class PresentationNewQuery extends JFrame {
         super("NEW QUERY");
 
         $$$setupUI$$$();
-      /*  ButtonGroup group = new ButtonGroup();
-
-        group.add(simpleRadioButton);
-        group.add(ambFiltresRadioButton);*/
 
         setContentPane(panel);
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-      //  simpleRadioButton.addActionListener(e1 -> selectTypeAction(-1));
-       // ambFiltresRadioButton.addActionListener(e1 -> selectTypeAction(-2));
 
         aButton.addActionListener(e1 -> concatpath("A"));
         cButton.addActionListener(e1 -> concatpath("C"));
@@ -55,10 +47,6 @@ public class PresentationNewQuery extends JFrame {
         setVisible(true);
     }
 
-    /*private void selectTypeAction(int type) {
-        queryType = type;
-        System.out.println("selected type " + type);
-    }*/
 
     private void concatpath(String Node) {
         if ("".equals(path)) path = Node;

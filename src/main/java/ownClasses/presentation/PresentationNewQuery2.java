@@ -96,6 +96,21 @@ public class PresentationNewQuery2 extends JFrame {
         if(i<0) return false;
         return true;
     }
+
+    private static boolean isDouble(String s) {
+        try {
+            Double.parseDouble(s);
+        } catch(NumberFormatException e) {
+            return false;
+        } catch(NullPointerException e) {
+            return false;
+        }
+        Double i = Double.parseDouble(s);
+        if(i<0.0) return false;
+        return true;
+    }
+
+
     private void setN() {
         if(querytype == 2) {
             String nstring = nField.getText();
@@ -109,11 +124,13 @@ public class PresentationNewQuery2 extends JFrame {
     }
 
     private void setMin() {
-        if(querytype == 3)min = Double.parseDouble(petitField.getText());
+        if(querytype == 3 && isDouble(petitField.getText()))
+            min = Double.parseDouble(petitField.getText());
     }
 
     private void setMax() {
-        if(querytype == 3)max = Double.parseDouble(granField.getText());
+        if(querytype == 3 && isDouble(petitField.getText()))
+            max = Double.parseDouble(granField.getText());
     }
 
     private void callresult(DomainMainController mainController, String path) {
