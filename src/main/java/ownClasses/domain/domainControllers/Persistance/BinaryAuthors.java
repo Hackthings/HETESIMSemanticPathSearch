@@ -14,10 +14,10 @@ public class BinaryAuthors extends BinaryPersistance<HashMap<Integer,Author>>{
     }
 
     public boolean write(HashMap<Integer, Author> element) {
-        return super.write(element, "authors.dat");
+        return super.write(element, "/authors.dat");
     }
 
     public HashMap<Integer, Author> read() {
-        return super.read("authors.dat");
+        return super.read("/authors.dat");
     }
 }

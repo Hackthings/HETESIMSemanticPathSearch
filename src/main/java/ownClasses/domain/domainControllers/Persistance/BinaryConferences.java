@@ -14,10 +14,10 @@ public class BinaryConferences extends BinaryPersistance<HashMap<Integer,Confere
     }
 
     public boolean write(HashMap<Integer, Conference> element) {
-        return super.write(element, "conferences.dat");
+        return super.write(element, "/conferences.dat");
     }
 
     public HashMap<Integer, Conference> read() {
-        return super.read("conferences.dat");
+        return super.read("/conferences.dat");
     }
 }

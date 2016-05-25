@@ -19,7 +19,7 @@ public class BinaryPersistance<E> {
     }
 
     public boolean write(E element, String fileName){
-        File file = new File(tmp.getAbsoluteFile() + fileName);
+        File file = new File(tmp.getPath() + fileName);
         try {
             FileOutputStream fos = new FileOutputStream(file);
             BufferedOutputStream bos = new BufferedOutputStream(fos);

@@ -14,10 +14,10 @@ public class BinaryTerms extends BinaryPersistance<HashMap<Integer,Term>> {
     }
 
     public boolean write(HashMap<Integer, Term> element) {
-        return super.write(element, "terms.dat");
+        return super.write(element, "/terms.dat");
     }
 
     public HashMap<Integer, Term> read() {
-        return super.read("terms.dat");
+        return super.read("/terms.dat");
     }
 }
