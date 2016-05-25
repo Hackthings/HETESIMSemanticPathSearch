@@ -1,17 +1,13 @@
 package main.java.sharedClasses.domain.domainControllers;
 
 
-
 import main.java.sharedClasses.domain.nodes.Author;
 import main.java.sharedClasses.domain.nodes.Conference;
 import main.java.sharedClasses.domain.nodes.Paper;
 import main.java.sharedClasses.domain.nodes.Term;
 
 import java.io.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class DomainPersistanceController {
@@ -138,9 +134,11 @@ public class DomainPersistanceController {
                             System.out.println("Introduïu el nom de l'autor");
                             String nameAuthor = scan.nextLine();
                             Author a = new Author(nameAuthor, Author.getMaxId() + 1);
+                            ArrayList<Paper> addedPapers = new ArrayList<>();
+                            ArrayList<Conference> addedConferences = new ArrayList<>();
                             if (authorsByName.get(a.getName()) != null) {
                                 System.err.println("Aquest autor ja existeix");
-                                break;
+                                return;
                             }
                             System.out.println("En quants articles ha participat?");
                             int numArt = scan.nextInt();
@@ -173,12 +171,19 @@ public class DomainPersistanceController {
                                                 conferencesById.put(c.getId(), c);
                                                 p.setConference(c);
                                                 c.addExposedPaper(p);
-                                                conferencesById.put(c.getId(), c);
-                                                conferencesByName.put(c.getName(), c);
+                                                addedConferences.add(c);
                                             } else {
                                                 System.out.println("L'autor no s'ha creat");
-                                                //elimincar els papers creats relacionats i relacions
-                                                break;
+                                                for (int j = 0; j < addedPapers.size(); j++) {
+                                                    a.removePaper(addedPapers.get(j));
+                                                    papersById.remove(addedPapers.get(j).getId());
+                                                    papersByName.remove(addedPapers.get(j).getName());
+                                                }
+                                                for(int j = 0; j < addedConferences.size(); j++){
+                                                    conferencesById.remove(addedConferences.get(j).getId());
+                                                    conferencesByName.remove(addedConferences.get(j).getName());
+                                                }
+                                                return;
                                             }
                                         } else {
                                             p.setConference(c);
@@ -191,10 +196,19 @@ public class DomainPersistanceController {
                                         p.addAuthor(a);
                                         papersByName.put(p.getName(), p);
                                         papersById.put(p.getId(), p);
+                                        addedPapers.add(p);
                                     } else {
                                         System.out.println("L'autor no s'ha creat");
-                                        //eliminar els papers relacionats i les conferencies creades
-                                        break;
+                                        for (int j = 0; j < addedPapers.size(); j++) {
+                                            a.removePaper(addedPapers.get(j));
+                                            papersById.remove(addedPapers.get(j).getId());
+                                            papersByName.remove(addedPapers.get(j).getName());
+                                        }
+                                        for(int j = 0; j < addedConferences.size(); j++){
+                                            conferencesById.remove(addedConferences.get(j).getId());
+                                            conferencesByName.remove(addedConferences.get(j).getName());
+                                        }
+                                        return;
                                     }
                                 } else {
                                     a.addPaper(p);
@@ -214,8 +228,9 @@ public class DomainPersistanceController {
                             Paper p = new Paper(namePaper, Paper.getMaxId() + 1);
                             if (papersByName.get(p.getName()) != null) {
                                 System.err.println("Aquest article ja existeix");
-                                break;
+                                return;
                             }
+                            ArrayList<Author> addedAuthors = new ArrayList<>();
 
                             System.out.println("Quina és la seva conferència?");
                             String nameConf = scan.nextLine();
@@ -237,7 +252,7 @@ public class DomainPersistanceController {
                                     conferencesById.put(c.getId(), c);
                                 } else {
                                     System.out.println("El paper no s'ha creat");
-                                    break;
+                                    return;
                                 }
                             } else {
                                 p.setConference(c);
@@ -257,12 +272,17 @@ public class DomainPersistanceController {
                                         a = new Author(nameAut, Author.getMaxId() + 1);
                                         authorsByName.put(a.getName(), a);
                                         authorsById.put(a.getId(), a);
+                                        addedAuthors.add(a);
                                         p.addAuthor(a);
                                         a.addPaper(p);
                                     } else {
                                         System.out.println("El paper no s'ha creat");
-                                        //eliminar conferencia, autors i relacions
-                                        break;
+                                        for(int j = 0; j < addedAuthors.size(); i++){
+                                            authorsById.remove(addedAuthors.get(j).getId());
+                                            authorsByName.remove(addedAuthors.get(j).getName());
+                                            p.removeAuthor(addedAuthors.get(j));
+                                        }
+                                        return;
                                     }
                                 } else {
                                     p.addAuthor(a);
@@ -280,9 +300,10 @@ public class DomainPersistanceController {
                             Term t = new Term(nameTerm, Term.getMaxId() + 1);
                             if (termsByName.get(t.getName()) != null) {
                                 System.err.println("\u001B[31m" + "Aquest terme ja existeix" + "\u001B[0m");
-                                break;
+                                return;
                             }
-
+                           /* ArrayList<Paper> addedPapers = new ArrayList<>();
+                            ArrayList<Conference> addedConferences = new ArrayList<>();*/
                             System.out.println("En quants articles ha participat?");
                             numArt = scan.nextInt();
                             scan.nextLine();
@@ -316,7 +337,7 @@ public class DomainPersistanceController {
 
                                             } else {
                                                 System.out.println("El paper no s'ha creat");
-                                                break;
+                                                return;
                                             }
                                         } else {
                                             p.setConference(c);
@@ -341,7 +362,7 @@ public class DomainPersistanceController {
                                                 } else {
                                                     System.out.println("El paper no s'ha creat");
                                                     //eliminar autors i conferencies creats i relacions
-                                                    break;
+                                                    return;
                                                 }
                                             } else {
                                                 p.addAuthor(a);
@@ -352,7 +373,7 @@ public class DomainPersistanceController {
                                         System.out.println("El terme no s'ha creat");
                                         //eliminar autors i conferencies creats i relacions
 
-                                        break;
+                                        return;
                                     }
 
                                     papersById.put(p.getId(), p);
@@ -365,14 +386,14 @@ public class DomainPersistanceController {
                             }
                             termsByName.put(t.getName(), t);
                             termsById.put(t.getId(), t);
-                            break;
+                            return;
 
                         case ("C"): //Conference
                             System.out.println("Introduïu el nom de la conferència");
                             String confname = scan.nextLine();
                             if (conferencesByName.get(confname) != null) {
                                 System.err.println("\u001B[31m" + "la conferència ja existeix" + "\u001B[0m");
-                                break;
+                                return;
                             }
                             Conference co = new Conference(confname, Conference.getMaxId() + 1);
                             System.out.println("Introduïu l'any");
@@ -392,7 +413,7 @@ public class DomainPersistanceController {
                                 Paper pa = new Paper(nameP, Paper.getMaxId() + 1);
                                 if (papersByName.get(pa.getName()) != null) {
                                     System.err.println("\u001B[31m" + "Aquest article ja existeix" + "\u001B[0m");
-                                    break;
+                                    return;
                                 }
                                 System.out.println("Quants autors té aquest article?");
                                 int numAut2 = scan.nextInt();
@@ -410,7 +431,7 @@ public class DomainPersistanceController {
                                         } else {
                                             System.out.println("La conferencia no s'ha creat");
                                             //eliminar conferencia, papers i relacions
-                                            break;
+                                            return;
                                         }
                                     } else {
                                         at.addPaper(pa);
@@ -433,7 +454,7 @@ public class DomainPersistanceController {
                                         } else {
                                             System.out.println("La conferencia no s'ha creat");
                                             //Eliminar conferencia, papers, termes i relacions
-                                            break;
+                                            return;
                                         }
                                     }
                                     t.addPaperWhichTalkAboutIt(papersById.get(pa.getId()));
@@ -447,7 +468,7 @@ public class DomainPersistanceController {
                             }
                             conferencesByName.put(co.getName(), co);
                             conferencesById.put(co.getId(), co);
-                            break;
+                            return;
                     }
                     break;
 
@@ -518,7 +539,7 @@ public class DomainPersistanceController {
 
                                         //RECOMENÇAR UN PROCES DE ELIMINAR PAPER
                                         deletePaperRelationsOnConferences(p);
-                                        deletePaperRelationsOnTerms( p);
+                                        deletePaperRelationsOnTerms(p);
                                         papersById.remove(p.getId());
                                         papersByName.remove(p.getName());
                                     }
@@ -538,9 +559,9 @@ public class DomainPersistanceController {
                                 Paper p = papersByName.get(name);
                                 //eliminar relacions
 
-                                deletePaperRelationsOnConferences( p);
+                                deletePaperRelationsOnConferences(p);
 
-                                deletePaperRelationsOnAuthors( p);
+                                deletePaperRelationsOnAuthors(p);
                                 deletePaperRelationsOnTerms(p);
                                 //eliminar paper
                                 id = p.getId();
@@ -585,7 +606,7 @@ public class DomainPersistanceController {
                                 for (Iterator it = auxiliarp.iterator(); it.hasNext(); ) {
                                     Paper p = (Paper) it.next();
                                     deletePaperRelationsOnAuthors(p);
-                                    deletePaperRelationsOnTerms( p);
+                                    deletePaperRelationsOnTerms(p);
                                     papersById.remove(p.getId());
                                     papersByName.remove(p.getName());
                                 }
@@ -653,7 +674,7 @@ public class DomainPersistanceController {
                 int id = Integer.parseInt(aux[0]);
                 Conference conf = new Conference(aux[1], id);
 //                conf.setYear(Integer.parseInt(aux[2]));
-  //              conf.setContinent(aux[3]);
+                //              conf.setContinent(aux[3]);
                 conferencesById.put(id, conf);
                 conferencesByName.put(aux[1], conf);
             }
@@ -775,147 +796,174 @@ public class DomainPersistanceController {
         }
     }
 
-    public void binaryimport (){
-        String aux  = new File("").getAbsolutePath();
-        File tmp = new File(aux.concat(filepath),"/tmp");
+    public void binaryimport() {
+        String aux = new File("").getAbsolutePath();
+        File tmp = new File(aux.concat(filepath), "/tmp");
 
         authorsById = importBinaryAuthors(tmp);
-        HashMap<String,Author> authorsByNameaux = new HashMap<String,Author>();
-        for(Author a : authorsById.values()) {
-            authorsByNameaux.put(a.getName(),a);
+        HashMap<String, Author> authorsByNameaux = new HashMap<String, Author>();
+        for (Author a : authorsById.values()) {
+            authorsByNameaux.put(a.getName(), a);
         }
         authorsByName = authorsByNameaux;
 
         papersById = importBinaryPapers(tmp);
-        HashMap<String,Paper> papersByNameaux = new HashMap<String,Paper>();
-        for(Paper p: papersById.values()) papersByNameaux.put(p.getName(),p);
+        HashMap<String, Paper> papersByNameaux = new HashMap<String, Paper>();
+        for (Paper p : papersById.values()) papersByNameaux.put(p.getName(), p);
         papersByName = papersByNameaux;
 
         termsById = importBinaryTerms(tmp);
-        HashMap<String,Term> termsByNameaux = new HashMap<String,Term>();
-        for(Term t : termsById.values()) termsByNameaux.put(t.getName(),t);
+        HashMap<String, Term> termsByNameaux = new HashMap<String, Term>();
+        for (Term t : termsById.values()) termsByNameaux.put(t.getName(), t);
         termsByName = termsByNameaux;
 
         conferencesById = importBinaryConferences(tmp);
-        HashMap<String,Conference> confByNameaux = new HashMap<String,Conference>();
-        for(Conference c : conferencesById.values()) confByNameaux.put(c.getName(),c);
+        HashMap<String, Conference> confByNameaux = new HashMap<String, Conference>();
+        for (Conference c : conferencesById.values()) confByNameaux.put(c.getName(), c);
         conferencesByName = confByNameaux;
     }
 
-    public void binaryexport (){
-        String aux  = new File("").getAbsolutePath();
-        File tmp = new File(aux.concat(filepath),"/tmp");
-        if(!tmp.mkdirs()) System.out.println("no s'ha creat tmp");
+    public void binaryexport() {
+        String aux = new File("").getAbsolutePath();
+        File tmp = new File(aux.concat(filepath), "/tmp");
+        if (!tmp.mkdirs()) System.out.println("no s'ha creat tmp");
         exportBinaryAuthors(tmp);
         exportBinaryPapers(tmp);
         exportBinaryTerms(tmp);
         exportBinaryConferences(tmp);
     }
 
-    private void exportBinaryAuthors(File tmp){
+    private void exportBinaryAuthors(File tmp) {
         try {
-            ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(tmp.getAbsolutePath() +"/authors.dat"));
-            oout.writeObject(authorsById);
-            oout.close();
-        }
-        catch(IOException e){
+            FileOutputStream fos = new FileOutputStream(tmp.getAbsolutePath() + "/authors.dat");
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(authorsById);
+            oos.close();
+            bos.close();
+            fos.close();
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void exportBinaryPapers(File tmp){
+    private void exportBinaryPapers(File tmp) {
         try {
-            ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(tmp.getAbsolutePath() +"/papers.dat"));
-            oout.writeObject(papersById);
-            oout.close();
-        }
-        catch(IOException e){
+            FileOutputStream fos = new FileOutputStream(tmp.getAbsolutePath() + "/papers.dat");
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(papersById);
+            oos.close();
+            bos.close();
+            fos.close();
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void exportBinaryTerms(File tmp){
+    private void exportBinaryTerms(File tmp) {
         try {
-            ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(tmp.getAbsolutePath() +"/terms.dat"));
-            oout.writeObject(termsById);
-            oout.close();
-        }
-        catch(IOException e){
+            FileOutputStream fos = new FileOutputStream(tmp.getAbsolutePath() + "/terms.dat");
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(termsById);
+            oos.close();
+            bos.close();
+            fos.close();
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void exportBinaryConferences(File tmp){
+    private void exportBinaryConferences(File tmp) {
         try {
-            ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(tmp.getAbsolutePath() +"/conferences.dat"));
-            oout.writeObject(conferencesById);
-            oout.close();
-        }
-        catch(IOException e){
+            FileOutputStream fos = new FileOutputStream(tmp.getAbsolutePath() + "/conferences.dat");
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(conferencesById);
+            oos.close();
+            bos.close();
+            fos.close();
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private HashMap<Integer,Author> importBinaryAuthors(File tmp){
-        HashMap<Integer,Author> authorsById = new HashMap<>();
+    private HashMap<Integer, Author> importBinaryAuthors(File tmp) {
+        HashMap<Integer, Author> authorsById = new HashMap<>();
         try {
-            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(tmp.getAbsolutePath()+ "/authors.dat"));
-            authorsById = (HashMap<Integer,Author>) oin.readObject();
-            if(authorsById == null) System.out.println("autors es null");
+            FileInputStream fis = new FileInputStream(tmp.getAbsolutePath() + "/authors.dat");
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            ObjectInputStream oin = new ObjectInputStream(bis);
+            authorsById = (HashMap<Integer, Author>) oin.readObject();
+            if (authorsById == null) System.out.println("autors es null");
             oin.close();
-        }
-        catch(IOException a){
+            bis.close();
+            fis.close();
+        } catch (IOException a) {
             a.printStackTrace();
-        }
-        catch(ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return authorsById;
     }
 
-    private HashMap<Integer,Paper> importBinaryPapers(File tmp){
-        HashMap<Integer,Paper> papersById = new HashMap<>();
+    private HashMap<Integer, Paper> importBinaryPapers(File tmp) {
+        HashMap<Integer, Paper> papersById = new HashMap<>();
         try {
-            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(tmp.getAbsolutePath() + "/papers.dat"));
-            papersById = (HashMap<Integer,Paper>) oin.readObject();
+            FileInputStream fis = new FileInputStream(tmp.getAbsolutePath() + "/papers.dat");
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            ObjectInputStream oin = new ObjectInputStream(bis);
+            papersById = (HashMap<Integer, Paper>) oin.readObject();
+            if (papersById == null) System.out.println("papers es null");
             oin.close();
-        }
-        catch(IOException a){
+            bis.close();
+            fis.close();
+        } catch (IOException a) {
             a.printStackTrace();
-        }
-        catch(ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return papersById;
     }
 
-    private HashMap<Integer,Term> importBinaryTerms(File tmp){
-        HashMap<Integer,Term> termsById = new HashMap<>();
+    private HashMap<Integer, Term> importBinaryTerms(File tmp) {
+        HashMap<Integer, Term> termsById = new HashMap<>();
         try {
-            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(tmp.getAbsolutePath() + "/terms.dat"));
-            termsById = (HashMap<Integer,Term>) oin.readObject();
+            FileInputStream fis = new FileInputStream(tmp.getAbsolutePath() + "/terms.dat");
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            ObjectInputStream oin = new ObjectInputStream(bis);
+            termsById = (HashMap<Integer, Term>) oin.readObject();
+            if (termsById == null) System.out.println("terms es null");
             oin.close();
-        }
-        catch(IOException a){
+            bis.close();
+            fis.close();
+        } catch (IOException a) {
             a.printStackTrace();
-        }
-        catch(ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return termsById;
     }
 
-    private HashMap<Integer,Conference> importBinaryConferences(File tmp){
-        HashMap<Integer,Conference> conferencesById = new HashMap<>();
+    private HashMap<Integer, Conference> importBinaryConferences(File tmp) {
+        HashMap<Integer, Conference> conferencesById = new HashMap<>();
         try {
-            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(tmp.getAbsolutePath() + "/conferences.dat"));
-            conferencesById = (HashMap<Integer,Conference>) oin.readObject();
+            FileInputStream fis = new FileInputStream(tmp.getAbsolutePath() + "/conferences.dat");
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            ObjectInputStream oin = new ObjectInputStream(bis);
+            conferencesById = (HashMap<Integer, Conference>) oin.readObject();
+            if (conferencesById == null) System.out.println("conferences es null");
             oin.close();
-        }
-        catch(IOException a){
+            bis.close();
+            fis.close();;
+        } catch (IOException a) {
             a.printStackTrace();
-        }
-        catch(ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return conferencesById;

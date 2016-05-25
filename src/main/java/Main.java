@@ -18,7 +18,7 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
         DomainMainController mainController = new DomainMainController();
-        PresentationController window = new PresentationController(mainController);
+       // PresentationController window = new PresentationController(mainController);
         int option;
         do {
             consolePrinter.printMenu();

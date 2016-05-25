@@ -1,5 +1,9 @@
 package main.java.ownClasses.domain.domainControllers;
 
+import main.java.ownClasses.domain.domainControllers.Persistance.BinaryAuthors;
+import main.java.ownClasses.domain.domainControllers.Persistance.BinaryConferences;
+import main.java.ownClasses.domain.domainControllers.Persistance.BinaryPapers;
+import main.java.ownClasses.domain.domainControllers.Persistance.BinaryTerms;
 import main.java.ownClasses.domain.queries.IntervaledQuery;
 import main.java.ownClasses.domain.queries.LimitedQuery;
 import main.java.ownClasses.domain.queries.OrderedQuery;
@@ -51,6 +55,31 @@ public class DomainMainController {
         termMaxId = 0;
         persistanceController = new DomainPersistanceController(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
         persistanceController.readAllFromFile("");
+        BinaryAuthors binaryAuthors = new BinaryAuthors();
+        BinaryPapers binaryPapers = new BinaryPapers();
+        BinaryConferences binaryConferences = new BinaryConferences();
+        BinaryTerms binaryTerms = new BinaryTerms();
+        System.out.println("Exporta");
+        long timeini = System.currentTimeMillis();
+        //persistanceController.binaryexport();
+        binaryAuthors.write(authorsById);
+        binaryPapers.write(papersById);
+        binaryTerms.write(termsById);
+        binaryConferences.write(conferencesById);
+        long timefinal = System.currentTimeMillis();
+        System.out.println(timefinal-timeini);
+
+        System.out.println("Importa");
+
+        timeini = System.currentTimeMillis();
+        //persistanceController.binaryimport();
+        authorsById = (HashMap<Integer,Author>) binaryAuthors.read();
+        papersById = (HashMap<Integer,Paper>) binaryPapers.read();
+        conferencesById = (HashMap<Integer,Conference>) binaryConferences.read();
+        termsById = (HashMap<Integer,Term>) binaryTerms.read();
+        timefinal = System.currentTimeMillis();
+        System.out.println(timefinal-timeini);
+persistanceController.testDomain();
         //hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
         scanner = new Scanner(System.in);
         edit=true;
