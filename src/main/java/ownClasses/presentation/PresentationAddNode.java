@@ -32,7 +32,7 @@ public class PresentationAddNode extends JFrame {
     String path = "";
 
     public PresentationAddNode(DomainPersistanceController persistanceController, int selectedIndex) {
-        super("NEW QUERY");
+        super("ADD NODE");
 
         selectedNodeType = selectedIndex;
 

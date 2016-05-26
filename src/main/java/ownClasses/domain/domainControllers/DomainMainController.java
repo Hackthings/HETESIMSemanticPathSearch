@@ -79,7 +79,7 @@ public class DomainMainController {
         termsById = (HashMap<Integer,Term>) binaryTerms.read();
         timefinal = System.currentTimeMillis();
         System.out.println(timefinal-timeini);
-persistanceController.testDomain();
+//persistanceController.testDomain();
         //hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
         scanner = new Scanner(System.in);
         edit=true;
