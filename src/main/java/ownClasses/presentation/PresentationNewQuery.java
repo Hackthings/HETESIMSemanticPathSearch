@@ -22,7 +22,23 @@ public class PresentationNewQuery extends JFrame {
     private JRadioButton SiFiltres;
     private JRadioButton NoFiltres;
 
+    private JTextArea Asubset;
+    private JScrollPane scrollPaneA;
+    private JTextArea Csubset;
+    private JScrollPane scrollPaneC;
+    private JTextArea Psubset;
+    private JScrollPane scrollPaneP;
+    private JTextArea Tsubset;
+    private JScrollPane scrollPaneT;
+
+
+    private JLabel A;
+    private JLabel P;
+    private JLabel T;
+    private JLabel C;
+
     String path = "";
+
 
     public PresentationNewQuery(DomainMainController mainController) {
         super("NEW QUERY");
@@ -45,10 +61,17 @@ public class PresentationNewQuery extends JFrame {
 
         DeleteButton.addActionListener(e1 -> deletelast());
 
+        SiFiltres.addActionListener(e1 -> ActivaFiltres(true));
+        NoFiltres.addActionListener(e1 -> ActivaFiltres(false));
+
 
         NEXTButton.addActionListener(e -> callNQ(mainController));
 
         setVisible(true);
+
+
+
+        //setResizable(false);
     }
 
 
@@ -75,6 +98,20 @@ public class PresentationNewQuery extends JFrame {
             TextArea1.setText(path);
         }
     }
+
+    private void ActivaFiltres(boolean act){
+        A.setVisible(act);
+        P.setVisible(act);
+        C.setVisible(act);
+        T.setVisible(act);
+
+        scrollPaneA.setVisible(act);
+        scrollPaneP.setVisible(act);
+        scrollPaneC.setVisible(act);
+        scrollPaneT.setVisible(act);
+        if(act) setSize(300,300);
+    }
+
 
     private void callNQ(DomainMainController mainController) {
         if (!path.isEmpty()) {
@@ -103,6 +140,8 @@ public class PresentationNewQuery extends JFrame {
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         panel.setBorder(BorderFactory.createTitledBorder(""));
+        Dimension d = new Dimension(6,20);
+        panel.setMinimumSize(d);
         GridBagConstraints gbc;
         final JLabel label2 = new JLabel();
         label2.setText("Selecciona el teu PATH");
@@ -201,6 +240,99 @@ public class PresentationNewQuery extends JFrame {
         gbc.gridy = 5;
         gbc.anchor = GridBagConstraints.WEST;
         panel.add(label3, gbc);
+
+
+        ///////////////////////////////Labels Subset
+
+        A = new JLabel();
+        A.setText("A:");
+        A.setVisible(false);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(A, gbc);
+        P = new JLabel();
+        P.setText("P:");
+        P.setVisible(false);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(P, gbc);
+        C = new JLabel();
+        C.setText("C:");
+        C.setVisible(false);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 8;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(C, gbc);
+        T = new JLabel();
+        T.setText("T:");
+        T.setVisible(false);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 9;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(T, gbc);
+
+        /////////////////////////////////// ScrollPanes & TextAreas
+
+
+        scrollPaneA = new JScrollPane();
+        scrollPaneA.setVisible(false);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 6;
+        gbc.gridwidth = 3;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(scrollPaneA, gbc);
+        Asubset = new JTextArea();
+        scrollPaneA.setViewportView(Asubset);
+
+        scrollPaneP = new JScrollPane();
+        scrollPaneP.setVisible(false);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 7;
+        gbc.gridwidth = 3;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(scrollPaneP, gbc);
+        Psubset = new JTextArea();
+        scrollPaneP.setViewportView(Psubset);
+
+        scrollPaneC = new JScrollPane();
+        scrollPaneC.setVisible(false);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 8;
+        gbc.gridwidth = 3;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(scrollPaneC, gbc);
+        Csubset = new JTextArea();
+        scrollPaneC.setViewportView(Csubset);
+
+        scrollPaneT = new JScrollPane();
+        scrollPaneT.setVisible(false);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 9;
+        gbc.gridwidth = 3;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(scrollPaneT, gbc);
+        Tsubset = new JTextArea();
+        scrollPaneT.setViewportView(Tsubset);
+
+
 
     }
 
