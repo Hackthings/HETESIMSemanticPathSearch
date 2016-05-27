@@ -36,7 +36,7 @@ public class Matrix_driver {
 
 
         //Esborra la fila 2 de la matriu.
-        m.deleteRow(2);
+
         System.out.println("S'ha esborrat la fila 2");
         escriu_matriu(m);
 

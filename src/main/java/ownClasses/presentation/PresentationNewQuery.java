@@ -19,15 +19,19 @@ public class PresentationNewQuery extends JFrame {
     private JButton NEXTButton;
     private JTextArea TextArea1;
     private JButton DeleteButton;
+    private JRadioButton SiFiltres;
+    private JRadioButton NoFiltres;
 
-
-    int queryType = 0;
     String path = "";
 
     public PresentationNewQuery(DomainMainController mainController) {
         super("NEW QUERY");
 
         $$$setupUI$$$();
+
+        ButtonGroup group1 = new ButtonGroup();
+        group1.add(SiFiltres);
+        group1.add(NoFiltres);
 
         setContentPane(panel);
         pack();
@@ -83,6 +87,17 @@ public class PresentationNewQuery extends JFrame {
         }
     }
 
+
+
+    private void setupComponent(){
+        final JLabel label2 = new JLabel();
+        label2.setText("Selecciona el teu PATH");
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(label2, gbc);
+    }
 
     private void $$$setupUI$$$() {
         panel = new JPanel();
@@ -165,6 +180,28 @@ public class PresentationNewQuery extends JFrame {
         gbc.gridy = 3;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(DeleteButton, gbc);
+        NoFiltres = new JRadioButton();
+        NoFiltres.setText("NO");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(NoFiltres, gbc);
+        SiFiltres = new JRadioButton();
+        SiFiltres.setText("SI");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 5;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(SiFiltres, gbc);
+        final JLabel label3 = new JLabel();
+        label3.setText("Filtre SubSetQuery?");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(label3, gbc);
+
     }
 
     public JComponent $$$getRootComponent$$$() {
