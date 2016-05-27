@@ -179,7 +179,7 @@ public class DomainPersistanceController {
                                                     papersById.remove(addedPapers.get(j).getId());
                                                     papersByName.remove(addedPapers.get(j).getName());
                                                 }
-                                                for(int j = 0; j < addedConferences.size(); j++){
+                                                for (int j = 0; j < addedConferences.size(); j++) {
                                                     conferencesById.remove(addedConferences.get(j).getId());
                                                     conferencesByName.remove(addedConferences.get(j).getName());
                                                 }
@@ -204,7 +204,7 @@ public class DomainPersistanceController {
                                             papersById.remove(addedPapers.get(j).getId());
                                             papersByName.remove(addedPapers.get(j).getName());
                                         }
-                                        for(int j = 0; j < addedConferences.size(); j++){
+                                        for (int j = 0; j < addedConferences.size(); j++) {
                                             conferencesById.remove(addedConferences.get(j).getId());
                                             conferencesByName.remove(addedConferences.get(j).getName());
                                         }
@@ -277,7 +277,7 @@ public class DomainPersistanceController {
                                         a.addPaper(p);
                                     } else {
                                         System.out.println("El paper no s'ha creat");
-                                        for(int j = 0; j < addedAuthors.size(); i++){
+                                        for (int j = 0; j < addedAuthors.size(); i++) {
                                             authorsById.remove(addedAuthors.get(j).getId());
                                             authorsByName.remove(addedAuthors.get(j).getName());
                                             p.removeAuthor(addedAuthors.get(j));
@@ -796,176 +796,4 @@ public class DomainPersistanceController {
         }
     }
 
-    public void binaryimport() {
-        String aux = new File("").getAbsolutePath();
-        File tmp = new File(aux.concat(filepath), "/tmp");
-
-        authorsById = importBinaryAuthors(tmp);
-        HashMap<String, Author> authorsByNameaux = new HashMap<String, Author>();
-        for (Author a : authorsById.values()) {
-            authorsByNameaux.put(a.getName(), a);
-        }
-        authorsByName = authorsByNameaux;
-
-        papersById = importBinaryPapers(tmp);
-        HashMap<String, Paper> papersByNameaux = new HashMap<String, Paper>();
-        for (Paper p : papersById.values()) papersByNameaux.put(p.getName(), p);
-        papersByName = papersByNameaux;
-
-        termsById = importBinaryTerms(tmp);
-        HashMap<String, Term> termsByNameaux = new HashMap<String, Term>();
-        for (Term t : termsById.values()) termsByNameaux.put(t.getName(), t);
-        termsByName = termsByNameaux;
-
-        conferencesById = importBinaryConferences(tmp);
-        HashMap<String, Conference> confByNameaux = new HashMap<String, Conference>();
-        for (Conference c : conferencesById.values()) confByNameaux.put(c.getName(), c);
-        conferencesByName = confByNameaux;
-    }
-
-    public void binaryexport() {
-        String aux = new File("").getAbsolutePath();
-        File tmp = new File(aux.concat(filepath), "/tmp");
-        if (!tmp.mkdirs()) System.out.println("no s'ha creat tmp");
-        exportBinaryAuthors(tmp);
-        exportBinaryPapers(tmp);
-        exportBinaryTerms(tmp);
-        exportBinaryConferences(tmp);
-    }
-
-    private void exportBinaryAuthors(File tmp) {
-        try {
-            FileOutputStream fos = new FileOutputStream(tmp.getAbsolutePath() + "/authors.dat");
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
-            ObjectOutputStream oos = new ObjectOutputStream(bos);
-            oos.writeObject(authorsById);
-            oos.close();
-            bos.close();
-            fos.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void exportBinaryPapers(File tmp) {
-        try {
-            FileOutputStream fos = new FileOutputStream(tmp.getAbsolutePath() + "/papers.dat");
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
-            ObjectOutputStream oos = new ObjectOutputStream(bos);
-            oos.writeObject(papersById);
-            oos.close();
-            bos.close();
-            fos.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void exportBinaryTerms(File tmp) {
-        try {
-            FileOutputStream fos = new FileOutputStream(tmp.getAbsolutePath() + "/terms.dat");
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
-            ObjectOutputStream oos = new ObjectOutputStream(bos);
-            oos.writeObject(termsById);
-            oos.close();
-            bos.close();
-            fos.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void exportBinaryConferences(File tmp) {
-        try {
-            FileOutputStream fos = new FileOutputStream(tmp.getAbsolutePath() + "/conferences.dat");
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
-            ObjectOutputStream oos = new ObjectOutputStream(bos);
-            oos.writeObject(conferencesById);
-            oos.close();
-            bos.close();
-            fos.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private HashMap<Integer, Author> importBinaryAuthors(File tmp) {
-        HashMap<Integer, Author> authorsById = new HashMap<>();
-        try {
-            FileInputStream fis = new FileInputStream(tmp.getAbsolutePath() + "/authors.dat");
-            BufferedInputStream bis = new BufferedInputStream(fis);
-            ObjectInputStream oin = new ObjectInputStream(bis);
-            authorsById = (HashMap<Integer, Author>) oin.readObject();
-            if (authorsById == null) System.out.println("autors es null");
-            oin.close();
-            bis.close();
-            fis.close();
-        } catch (IOException a) {
-            a.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return authorsById;
-    }
-
-    private HashMap<Integer, Paper> importBinaryPapers(File tmp) {
-        HashMap<Integer, Paper> papersById = new HashMap<>();
-        try {
-            FileInputStream fis = new FileInputStream(tmp.getAbsolutePath() + "/papers.dat");
-            BufferedInputStream bis = new BufferedInputStream(fis);
-            ObjectInputStream oin = new ObjectInputStream(bis);
-            papersById = (HashMap<Integer, Paper>) oin.readObject();
-            if (papersById == null) System.out.println("papers es null");
-            oin.close();
-            bis.close();
-            fis.close();
-        } catch (IOException a) {
-            a.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return papersById;
-    }
-
-    private HashMap<Integer, Term> importBinaryTerms(File tmp) {
-        HashMap<Integer, Term> termsById = new HashMap<>();
-        try {
-            FileInputStream fis = new FileInputStream(tmp.getAbsolutePath() + "/terms.dat");
-            BufferedInputStream bis = new BufferedInputStream(fis);
-            ObjectInputStream oin = new ObjectInputStream(bis);
-            termsById = (HashMap<Integer, Term>) oin.readObject();
-            if (termsById == null) System.out.println("terms es null");
-            oin.close();
-            bis.close();
-            fis.close();
-        } catch (IOException a) {
-            a.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return termsById;
-    }
-
-    private HashMap<Integer, Conference> importBinaryConferences(File tmp) {
-        HashMap<Integer, Conference> conferencesById = new HashMap<>();
-        try {
-            FileInputStream fis = new FileInputStream(tmp.getAbsolutePath() + "/conferences.dat");
-            BufferedInputStream bis = new BufferedInputStream(fis);
-            ObjectInputStream oin = new ObjectInputStream(bis);
-            conferencesById = (HashMap<Integer, Conference>) oin.readObject();
-            if (conferencesById == null) System.out.println("conferences es null");
-            oin.close();
-            bis.close();
-            fis.close();;
-        } catch (IOException a) {
-            a.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return conferencesById;
-    }
 }

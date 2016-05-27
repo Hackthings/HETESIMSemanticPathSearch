@@ -38,16 +38,28 @@ public class PresentationEditGraph extends JFrame {
 
     private void editNodeAction() {
         System.out.println("EditNodeAction");
-        new PresentationAddNode(persistanceController, editList.getSelectedIndex());
+        if(editList.getSelectedIndex() < 0){
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Selecciona l'element a editar");
+        }
+        //TODO: IMPLEMENT EDIT
     }
 
     private void addNodeAction() {
         System.out.println("AddNodeAction");
-        // TODO: IMPLEMENT ADD
+        if(editList.getSelectedIndex() < 0){
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Selecciona l'element a afegir");
+        }
+        else new PresentationAddNode(persistanceController, editList.getSelectedIndex());
     }
 
     private void deleteNodeAction() {
         System.out.println("DeleteNodeAction");
+        if(editList.getSelectedIndex() < 0){
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Selecciona l'element a eliminar");
+        }
         // TODO: IMPLEMENT DELETE
     }
 
