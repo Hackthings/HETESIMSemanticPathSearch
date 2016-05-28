@@ -31,10 +31,6 @@ public class DomainMainController {
     private DomainHetesimController hetesimController;
     private Scanner scanner;
 
-    private Integer authorMaxId; //changed
-    private Integer paperMaxId;
-    private Integer conferenceMaxId;
-    private Integer termMaxId;
 
     private Matrix result;
     private boolean edit;
@@ -53,10 +49,6 @@ public class DomainMainController {
         papersByName = new HashMap<>();
         conferencesByName = new HashMap<>();
         termsByName = new HashMap<>();
-        authorMaxId = 0;
-        paperMaxId = 0;
-        conferenceMaxId = 0;
-        termMaxId = 0;
         persistanceController = new DomainPersistanceController(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
         persistanceController.readAllFromFile("");
         BinaryAuthors binaryAuthors = new BinaryAuthors();
@@ -99,11 +91,8 @@ public class DomainMainController {
 
     public void NQ(String path){
         if(edit) {
-            authorpaper = getAuthorPaperMatrix(null,null);
-            confpaper = getConferencePaperMatrix(null,null);
-            termpaper = getTermPaperMatrix(null,null);
-            hetesimController = new DomainHetesimController(authorpaper,authorpaper.transpose(),termpaper,termpaper.transpose(),confpaper,confpaper.transpose());
-            edit = false;
+            updateMatrix(null,null,null,null);
+
         }
         result = hetesimController.heteSim(path);
 
@@ -581,6 +570,14 @@ public class DomainMainController {
         }
 
         return conferencepaper;
+    }
+
+    public void updateMatrix(String authorname, String papername, String confname, String termname){
+        authorpaper = getAuthorPaperMatrix(authorname,papername);
+        confpaper = getConferencePaperMatrix(confname,papername);
+        termpaper = getTermPaperMatrix(termname,papername);
+        hetesimController = new DomainHetesimController(authorpaper,authorpaper.transpose(),termpaper,termpaper.transpose(),confpaper,confpaper.transpose());
+        edit = false;
     }
 
 }

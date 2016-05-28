@@ -39,6 +39,7 @@ public class PresentationNewQuery extends JFrame {
 
     String path = "";
     boolean subset = false;
+    boolean changed = false;
 
     String author = null;
     String paper = null;
@@ -49,6 +50,8 @@ public class PresentationNewQuery extends JFrame {
         super("NEW QUERY");
 
         $$$setupUI$$$();
+
+        mainController.updateMatrix(null,null,null,null);
 
         ButtonGroup group1 = new ButtonGroup();
         group1.add(SiFiltres);
@@ -113,7 +116,7 @@ public class PresentationNewQuery extends JFrame {
         scrollPaneT.setVisible(act);
 
         subset = act;
-        if(act) setSize(300,300);
+        if(act) setSize(300,340);
         else setSize(274,185);
     }
 
@@ -121,7 +124,14 @@ public class PresentationNewQuery extends JFrame {
     private void callNQ(DomainMainController mainController) {
         if (path.length()>1) {
             if(subset){
-                checkTexts();
+                checkTexts(mainController);
+                mainController.updateMatrix(author,paper,conf,term);
+                System.out.println(author+" "+paper+" "+conf+" "+term);
+                changed = true;
+            }
+            else if(changed){
+                mainController.updateMatrix(null,null,null,null);
+                changed = false;
             }
             mainController.NQ(path);
             PresentationNewQuery2 window = new PresentationNewQuery2(mainController, path);
@@ -136,28 +146,47 @@ public class PresentationNewQuery extends JFrame {
         vw.setVisible(cause);
     }
 
-    private void checkTexts(){
-        for(int i =0; i<path.length();++i){
-            switch (path.charAt(i)){
-                case('A'):
-
-                    break;
-                case('P'):
-                    break;
-                case('C'):
-                    break;
-                case('T'):
-                    break;
+    private void checkTexts(DomainMainController mainController){
+        int count = 0;
+        for(int i =1; i<path.length() && count<3;++i){
+            if(path.charAt(0)!=path.charAt(i)) {
+                switch (path.charAt(i)) {
+                    case ('A'):
+                        if(mainController.checkName(Asubset.getText(),'A')){
+                            author = Asubset.getText();
+                        }
+                        count++;
+                        break;
+                    case ('P'):
+                        if(mainController.checkName(Psubset.getText(),'P')){
+                            paper = Psubset.getText();
+                        }
+                        count++;
+                        break;
+                    case ('C'):
+                        if(mainController.checkName(Csubset.getText(),'C')){
+                            conf = Csubset.getText();
+                        }
+                        count++;
+                        break;
+                    case ('T'):
+                        if(mainController.checkName(Tsubset.getText(),'T')){
+                            term = Tsubset.getText();
+                        }
+                        count++;
+                        break;
+                }
             }
         }
     }
+
 
     private void $$$setupUI$$$() {
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         panel.setBorder(BorderFactory.createTitledBorder(""));
-        Dimension d = new Dimension(6,20);
-        panel.setMinimumSize(d);
+        //Dimension d = new Dimension(6,20);
+        //panel.setMinimumSize(d);
         GridBagConstraints gbc;
         final JLabel label2 = new JLabel();
         label2.setText("Selecciona el teu PATH");
@@ -166,6 +195,12 @@ public class PresentationNewQuery extends JFrame {
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         panel.add(label2, gbc);
+        final JLabel label4 = new JLabel();
+        label4.setText("(només amb els botons)");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(label4, gbc);
         cButton = new JButton();
         cButton.setText("C");
         gbc = new GridBagConstraints();

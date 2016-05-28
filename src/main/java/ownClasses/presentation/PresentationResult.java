@@ -39,8 +39,9 @@ public class PresentationResult extends JFrame {
 
         boolean cercle = (path.charAt(0)==path.charAt(path.length()-1));
 
-        for (int i = 0; i < resultat.size() && !cercle; i++)
+        for (int i = 0; i < resultat.size() && !cercle; i++) {
             textArea1.append("\n" + (i + 1) + ". " + resultat.get(i));
+        }
 
         for (int i = 1; i < resultat.size() && cercle; i++)
             textArea1.append("\n" + i + ". " + resultat.get(i));
