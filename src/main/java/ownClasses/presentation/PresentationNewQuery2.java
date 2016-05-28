@@ -69,8 +69,7 @@ public class PresentationNewQuery2 extends JFrame {
     private void setname(DomainMainController mainController,String path) {
         if(mainController.checkName(nameField.getText(),path.charAt(0))) name = nameField.getText();
         else{
-            VistaWARNING vw = new VistaWARNING();
-            vw.setVisible("NOM no trobat");
+            callWarning("NOM no trobat");
         }
     }
 
@@ -113,8 +112,7 @@ public class PresentationNewQuery2 extends JFrame {
 
             if(isInteger(nstring)) n = Integer.parseInt(nstring);
             else{
-                VistaWARNING vw = new VistaWARNING();
-                vw.setVisible("Numero no valid");
+                callWarning("Numero no valid");
                 return false;
             }
         }
@@ -126,16 +124,14 @@ public class PresentationNewQuery2 extends JFrame {
         boolean validMax = isDouble(granField.getText());
         boolean validMin = isDouble(petitField.getText());
         if(querytype == 3 && !validMax && !validMin) {
-            VistaWARNING vw = new VistaWARNING();
-            vw.setVisible("Numero no valid");
+            callWarning("Numero no valid");
             return false;
         }
         else if(!granField.getText().isEmpty() && !petitField.getText().isEmpty()){
             max = Double.parseDouble(granField.getText());
             min = Double.parseDouble(petitField.getText());
             if(min > max){
-                VistaWARNING vw = new VistaWARNING();
-                vw.setVisible("Interval no valid");
+                callWarning("Interval no valid");
                 return false;
             }
         }
@@ -153,9 +149,13 @@ public class PresentationNewQuery2 extends JFrame {
             }
         }
         else{
-            VistaWARNING vw = new VistaWARNING();
-            vw.setVisible("NOM no trobat");
+            callWarning("NOM no trobat");
         }
+    }
+
+    private void callWarning(String cause){
+        VistaWARNING vw = new VistaWARNING();
+        vw.setVisible(cause);
     }
 
     private void $$$setupUI$$$() {

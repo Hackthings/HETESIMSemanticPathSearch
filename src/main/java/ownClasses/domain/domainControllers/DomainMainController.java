@@ -39,6 +39,10 @@ public class DomainMainController {
     private Matrix result;
     private boolean edit;
 
+    private Matrix authorpaper;
+    private Matrix confpaper;
+    private Matrix termpaper;
+
     public DomainMainController() {
         authorsById = new HashMap<>();
         papersById = new HashMap<>();
@@ -80,7 +84,10 @@ public class DomainMainController {
         timefinal = System.currentTimeMillis();
         System.out.println(timefinal-timeini);
 //persistanceController.testDomain();
-        hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
+        authorpaper = getAuthorPaperMatrix(null,null);
+        confpaper =getConferencePaperMatrix(null,null);
+        termpaper = getTermPaperMatrix(null,null);
+        hetesimController = new DomainHetesimController(authorpaper,authorpaper.transpose(),termpaper,termpaper.transpose(),confpaper,confpaper.transpose());
         scanner = new Scanner(System.in);
         edit=false;
 
@@ -92,7 +99,10 @@ public class DomainMainController {
 
     public void NQ(String path){
         if(edit) {
-            hetesimController = new DomainHetesimController(getAuthorPaperMatrix(), getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
+            authorpaper = getAuthorPaperMatrix(null,null);
+            confpaper = getConferencePaperMatrix(null,null);
+            termpaper = getTermPaperMatrix(null,null);
+            hetesimController = new DomainHetesimController(authorpaper,authorpaper.transpose(),termpaper,termpaper.transpose(),confpaper,confpaper.transpose());
             edit = false;
         }
         result = hetesimController.heteSim(path);
@@ -167,8 +177,7 @@ public class DomainMainController {
 
     public void newQuery() {
 
-        DomainHetesimController hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
-
+        hetesimController = new DomainHetesimController(authorpaper,authorpaper.transpose(),termpaper,termpaper.transpose(),confpaper,confpaper.transpose());
         System.out.println("Quin tipus de cerca vols: -1 Simple o -2 Amb filtres");
         int queryType = scanner.nextInt();
         while(queryType != -1 && queryType != -2){
@@ -473,76 +482,105 @@ public class DomainMainController {
 
 
 
-    private Matrix getAuthorPaperMatrix(){
+    private Matrix getAuthorPaperMatrix(String authorname, String papername){
         Matrix authorpaper = new Matrix();
 
-        for(Author author : authorsById.values()){
-            HashMap<Integer,Paper> papersOfAuthor = author.getPapersById(papersById);
-            for(Paper paper : papersOfAuthor.values()){
+        if(authorname == null && papername ==null) {
+            for (Author author : authorsById.values()) {
+                HashMap<Integer, Paper> papersOfAuthor = author.getPapersById(papersById);
+                for (Paper paper : papersOfAuthor.values()) {
+                    authorpaper.addValue(author.getId(), paper.getId(), 1.0);
+                }
+            }
+        }
+        if(authorname != null && papername ==null) {
+            Author author = authorsByName.get(authorname);
+            HashMap<Integer, Paper> papersOfAuthor = author.getPapersById(papersById);
+            for (Paper paper : papersOfAuthor.values()) {
+                authorpaper.addValue(author.getId(), paper.getId(), 1.0);
+            }
+        }
+        if(authorname == null && papername !=null) {
+            Paper paper = papersByName.get(papername);
+            HashMap<Integer,Author> authorsOfPaper = paper.getAuthorsById(authorsById);
+            for(Author author : authorsOfPaper.values()){
                 authorpaper.addValue(author.getId(),paper.getId(),1.0);
             }
         }
+        if(authorname != null && papername !=null) {
+            Paper paper = papersByName.get(papername);
+            Author author = authorsByName.get(authorname);
+            authorpaper.addValue(author.getId(),paper.getId(),1.0);
+
+        }
+
         return authorpaper;
     }
 
-    private Matrix getPaperAuthorMatrix(){
-        Matrix paperauthor = new Matrix();
-
-        for(Paper paper : papersById.values()){
-            HashMap<Integer,Author> authorsOfPaper = paper.getAuthorsById(authorsById);
-            for(Author author : authorsOfPaper.values()){
-                paperauthor.addValue(paper.getId(),author.getId(),1.0);
-            }
-        }
-        return paperauthor;
-    }
-
-    private Matrix getTermPaperMatrix(){
+    private Matrix getTermPaperMatrix(String termname, String papername){
         Matrix termpaper = new Matrix();
 
-        for(Term term : termsById.values()){
-            HashMap<Integer,Paper> papersOfTerm = term.getPapersWhichTalkAboutThisById(papersById);
-            for(Paper paper : papersOfTerm.values()){
-                termpaper.addValue(term.getId(),paper.getId(),1.0);
+        if(termname == null && papername ==null) {
+            for(Term term : termsById.values()){
+                HashMap<Integer,Paper> papersOfTerm = term.getPapersWhichTalkAboutThisById(papersById);
+                for(Paper paper : papersOfTerm.values()){
+                    termpaper.addValue(term.getId(),paper.getId(),1.0);
+                }
             }
+        }
+        if(termname != null && papername ==null) {
+            Term term = termsByName.get(termname);
+            HashMap<Integer, Paper> papersOfTerm = term.getPapersWhichTalkAboutThisById(papersById);
+            for (Paper paper : papersOfTerm.values()) {
+                authorpaper.addValue(term.getId(), paper.getId(), 1.0);
+            }
+        }
+        if(termname == null && papername !=null) {
+            Paper paper = papersByName.get(papername);
+            HashMap<Integer, Term> termsOfPaper = paper.getTermsById(termsById);
+            for (Term term : termsOfPaper.values()) {
+                termpaper.addValue(term.getId(),paper.getId(), 1.0);
+            }
+        }
+        if(termname != null && papername !=null) {
+            Paper paper = papersByName.get(papername);
+            Term term = termsByName.get(termname);
+            authorpaper.addValue(term.getId(),paper.getId(),1.0);
         }
 
         return termpaper;
     }
 
-    private Matrix getPaperTermMatrix() {
-        Matrix paperterm = new Matrix();
-
-        for (Paper paper : papersById.values()) {
-            HashMap<Integer, Term> termsOfPaper = paper.getTermsById(termsById);
-            for (Term term : termsOfPaper.values()) {
-                paperterm.addValue(paper.getId(), term.getId(), 1.0);
-            }
-        }
-        return paperterm;
-    }
-
-    private Matrix getConferencePaperMatrix(){
+    private Matrix getConferencePaperMatrix(String confname, String papername){
         Matrix conferencepaper = new Matrix();
 
-        for(Conference conf : conferencesById.values()){
-            HashMap<Integer,Paper> papersOfConf = conf.getExposedPapersById(papersById);
-            for(Paper paper : papersOfConf.values()){
-                conferencepaper.addValue(conf.getId(),paper.getId(),1.0);
+        if(confname == null && papername ==null) {
+            for(Conference conf : conferencesById.values()){
+                HashMap<Integer,Paper> papersOfConf = conf.getExposedPapersById(papersById);
+                for(Paper paper : papersOfConf.values()){
+                    conferencepaper.addValue(conf.getId(),paper.getId(),1.0);
+                }
             }
+        }
+        if(confname != null && papername ==null) {
+            Conference conf = conferencesByName.get(confname);
+            HashMap<Integer, Paper> papersOfConf = conf.getExposedPapersById(papersById);
+            for (Paper paper : papersOfConf.values()) {
+                conferencepaper.addValue(conf.getId(), paper.getId(), 1.0);
+            }
+        }
+        if(confname == null && papername !=null) {
+            Paper paper = papersByName.get(papername);
+            conferencepaper.addValue(paper.getConference().getId(),paper.getId(), 1.0);
+        }
+        if(confname != null && papername !=null) {
+            Paper paper = papersByName.get(papername);
+            Conference conference = conferencesByName.get(confname);
+            if(conference.getId()==paper.getConference().getId())
+                conferencepaper.addValue(conference.getId(),paper.getId(),1.0);
         }
 
         return conferencepaper;
-    }
-
-    private Matrix getPaperConferenceMatrix(){
-        Matrix paperconference = new Matrix();
-
-        for(Paper paper : papersById.values()){
-            paperconference.addValue(paper.getId(),paper.getConference().getId(),1.0);
-        }
-
-        return paperconference;
     }
 
 }

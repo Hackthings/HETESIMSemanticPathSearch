@@ -40,10 +40,10 @@ public class PresentationNewQuery extends JFrame {
     String path = "";
     boolean subset = false;
 
-    String author = "";
-    String paper = "";
-    String term = "";
-    String conf = "";
+    String author = null;
+    String paper = null;
+    String term = null;
+    String conf = null;
 
     public PresentationNewQuery(DomainMainController mainController) {
         super("NEW QUERY");
@@ -83,8 +83,7 @@ public class PresentationNewQuery extends JFrame {
         else {
             char last = path.charAt(path.length() - 1);
             if (last == 'P' && "P".equals(Node)) {
-                VistaWARNING vw = new VistaWARNING();
-                vw.setVisible("Sintaxi de paths incorrecte");
+                callWarning("Sintaxi de paths incorrecte");
             } else {
                 if (last != 'P' && !"P".equals(Node)) path = path.concat("P" + Node);
                 else path = path.concat(Node);
@@ -122,14 +121,34 @@ public class PresentationNewQuery extends JFrame {
     private void callNQ(DomainMainController mainController) {
         if (path.length()>1) {
             if(subset){
-
+                checkTexts();
             }
             mainController.NQ(path);
             PresentationNewQuery2 window = new PresentationNewQuery2(mainController, path);
             System.out.println("DONE");
         } else {
-            VistaWARNING vw = new VistaWARNING();
-            vw.setVisible("PATH no valid");
+            callWarning("Path no valid");
+        }
+    }
+
+    private void callWarning(String cause){
+        VistaWARNING vw = new VistaWARNING();
+        vw.setVisible(cause);
+    }
+
+    private void checkTexts(){
+        for(int i =0; i<path.length();++i){
+            switch (path.charAt(i)){
+                case('A'):
+
+                    break;
+                case('P'):
+                    break;
+                case('C'):
+                    break;
+                case('T'):
+                    break;
+            }
         }
     }
 
