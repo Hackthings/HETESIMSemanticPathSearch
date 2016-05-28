@@ -18,10 +18,33 @@ public class PresentationResult extends JFrame {
         pack();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+        String nodefinal = "";
+        switch (path.charAt(path.length()-1)){
+            case ('A'):
+                nodefinal = "Authors";
+                break;
+            case ('P'):
+                nodefinal = "Papers";
+                break;
+            case ('C'):
+                nodefinal = "Conferences";
+                break;
+            case ('T'):
+                nodefinal = "Terms";
+                break;
 
+        }
 
-        for (int i = 0; i < resultat.size(); i++)
+        textArea1.append(nodefinal+" relacionats amb "+ name +" amb el path "+ path +":");
+
+        boolean cercle = (path.charAt(0)==path.charAt(path.length()-1));
+
+        for (int i = 0; i < resultat.size() && !cercle; i++)
             textArea1.append("\n" + (i + 1) + ". " + resultat.get(i));
+
+        for (int i = 1; i < resultat.size() && cercle; i++)
+            textArea1.append("\n" + i + ". " + resultat.get(i));
+
 
         setVisible(true);
     }

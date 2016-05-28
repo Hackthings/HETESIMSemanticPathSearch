@@ -28,7 +28,7 @@ public class DomainMainController {
     private HashMap<String, Conference> conferencesByName;
     private HashMap<String, Term> termsByName;
     private DomainPersistanceController persistanceController;
-    //private DomainHetesimController hetesimController;
+    private DomainHetesimController hetesimController;
     private Scanner scanner;
 
     private Integer authorMaxId; //changed
@@ -80,9 +80,9 @@ public class DomainMainController {
         timefinal = System.currentTimeMillis();
         System.out.println(timefinal-timeini);
 //persistanceController.testDomain();
-        //hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
+        hetesimController = new DomainHetesimController(getAuthorPaperMatrix(),getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
         scanner = new Scanner(System.in);
-        edit=true;
+        edit=false;
 
     }
 
@@ -92,17 +92,28 @@ public class DomainMainController {
 
     public void NQ(String path){
         if(edit) {
-            DomainHetesimController hetesimController = new DomainHetesimController(getAuthorPaperMatrix(), getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
-            result = hetesimController.heteSim(path);
+            hetesimController = new DomainHetesimController(getAuthorPaperMatrix(), getPaperAuthorMatrix(), getTermPaperMatrix(), getPaperTermMatrix(), getConferencePaperMatrix(), getPaperConferenceMatrix());
             edit = false;
         }
+        result = hetesimController.heteSim(path);
 
     }
 
     public boolean checkName(String name, char node){
         boolean check = false;
-        if(authorsByName.containsKey(name) || papersByName.containsKey(name) || conferencesByName.containsKey(name) || termsByName.containsKey(name)){
-            check = true;
+        switch (node) {
+            case ('A'):
+                check = authorsByName.containsKey(name);
+                break;
+            case ('P'):
+                check = papersByName.containsKey(name);
+                break;
+            case ('C'):
+                check = conferencesByName.containsKey(name);
+                break;
+            case ('T'):
+                check = termsByName.containsKey(name);
+                break;
         }
         return check;
     }

@@ -38,7 +38,12 @@ public class PresentationNewQuery extends JFrame {
     private JLabel C;
 
     String path = "";
+    boolean subset = false;
 
+    String author = "";
+    String paper = "";
+    String term = "";
+    String conf = "";
 
     public PresentationNewQuery(DomainMainController mainController) {
         super("NEW QUERY");
@@ -69,9 +74,7 @@ public class PresentationNewQuery extends JFrame {
 
         setVisible(true);
 
-
-
-        //setResizable(false);
+        setResizable(false);
     }
 
 
@@ -109,31 +112,25 @@ public class PresentationNewQuery extends JFrame {
         scrollPaneP.setVisible(act);
         scrollPaneC.setVisible(act);
         scrollPaneT.setVisible(act);
+
+        subset = act;
         if(act) setSize(300,300);
+        else setSize(274,185);
     }
 
 
     private void callNQ(DomainMainController mainController) {
-        if (!path.isEmpty()) {
+        if (path.length()>1) {
+            if(subset){
+
+            }
             mainController.NQ(path);
             PresentationNewQuery2 window = new PresentationNewQuery2(mainController, path);
             System.out.println("DONE");
         } else {
             VistaWARNING vw = new VistaWARNING();
-            vw.setVisible("PATH buit");
+            vw.setVisible("PATH no valid");
         }
-    }
-
-
-
-    private void setupComponent(){
-        final JLabel label2 = new JLabel();
-        label2.setText("Selecciona el teu PATH");
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        gbc.anchor = GridBagConstraints.WEST;
-        panel.add(label2, gbc);
     }
 
     private void $$$setupUI$$$() {

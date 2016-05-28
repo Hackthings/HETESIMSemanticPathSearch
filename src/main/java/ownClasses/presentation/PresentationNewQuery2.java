@@ -149,7 +149,7 @@ public class PresentationNewQuery2 extends JFrame {
             name = nameField.getText();
             if(querytype == 1 || (querytype == 2 && rightN) || (querytype==3 && maxmin) ) {
                 ArrayList<String> resultat = mainController.resultat(path, querytype, ascendent, name, n, max, min);
-                new PresentationResult(resultat, name, path);
+                new PresentationResult(resultat, path, name);
             }
         }
         else{
