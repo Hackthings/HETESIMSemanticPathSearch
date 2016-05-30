@@ -7,6 +7,7 @@ import main.java.sharedClasses.domain.nodes.Paper;
 import main.java.sharedClasses.domain.nodes.Term;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -111,6 +112,150 @@ public class DomainPersistanceController {
         //testDomain();
     }
 
+    public boolean AddNewAuthor(String authorName, ArrayList<Paper> papersToRelate) {
+        Author a = new Author(authorName, Author.getMaxId() + 1);
+        if (authorsByName.get(a.getName()) != null) {
+            System.err.println("Aquest autor ja existeix");
+            return false;
+        }
+        authorsById.put(a.getId(), a);
+        authorsByName.put(a.getName(), a);
+        for (int i = 0; i < papersToRelate.size(); i++) {
+            a.addPaper(papersToRelate.get(i));
+            papersToRelate.get(i).addAuthor(a);
+        }
+        return true;
+    }
+
+    public boolean addNewPaper(String paperName, ArrayList<Author> authorsToRelate, ArrayList<Term> termsToRelate, Conference confToRelate) {
+        Paper p = new Paper(paperName, Paper.getMaxId() + 1);
+        if (papersByName.get(p.getName()) != null) {
+            System.err.println("Aquest article ja existeix");
+            return false;
+        }
+        for (int i = 0; i < authorsToRelate.size(); i++) {
+            p.addAuthor(authorsToRelate.get(i));
+            authorsToRelate.get(i).addPaper(p);
+        }
+        for (int i = 0; i < termsToRelate.size(); i++) {
+            p.addTerm(termsToRelate.get(i));
+            termsToRelate.get(i).addPaperWhichTalkAboutIt(p);
+        }
+        p.setConference(confToRelate);
+        confToRelate.addExposedPaper(p);
+        return true;
+    }
+
+    public boolean addNewTerm(String termName, ArrayList<Paper> papersToRelate) {
+        Term t = new Term(termName, Term.getMaxId() + 1);
+        if (termsByName.get(t.getName()) != null) {
+            System.err.println("Aquest article ja existeix");
+            return false;
+        }
+        for (int i = 0; i < papersToRelate.size(); i++) {
+            t.addPaperWhichTalkAboutIt(papersToRelate.get(i));
+            papersToRelate.get(i).addTerm(t);
+        }
+        return true;
+    }
+
+    public boolean addNewConference(String confName, ArrayList<Paper> papersToRelate) {
+        Conference c = new Conference(confName, Conference.getMaxId() + 1);
+        if (conferencesByName.get(c.getName()) != null) {
+            System.err.println("Aquesta conferencia ja existeix");
+            return false;
+        }
+        for (int i = 0; i < papersToRelate.size(); i++) {
+            c.addExposedPaper(papersToRelate.get(i));
+            papersToRelate.get(i).setConference(c);
+        }
+        return true;
+    }
+
+    public boolean deleteAuthor(String authorName) {
+        try {
+            Author a = authorsByName.get(authorName);
+            HashMap<Integer, Paper> aux = a.getPapersById(papersById);
+            for (Paper p : aux.values()) {
+                p.removeAuthor(a);
+                if (p.getAuthorsById(authorsById).size() < 1) {
+                    deletePaperRelationsOnConferences(p);
+                    deletePaperRelationsOnTerms(p);
+                    papersById.remove(p.getId());
+                    papersByName.remove(p.getName());
+                }
+            }
+            //eliminem l'autor
+            int id = a.getId();
+            authorsByName.remove(authorName);
+            authorsById.remove(id);
+            return true;
+        } catch (NullPointerException ex) {
+            System.out.println("\u001B[31m" + "Aquest autor no existeix." + "\u001B[0m");
+            return false;
+        }
+    }
+
+    public boolean deletePaper(String paperName){
+        try {
+            Paper p = papersByName.get(paperName);
+            deletePaperRelationsOnConferences(p);
+            deletePaperRelationsOnAuthors(p);
+            deletePaperRelationsOnTerms(p);
+            int id = p.getId();
+            papersByName.remove(paperName);
+            papersById.remove(id);
+            return true;
+        } catch (NullPointerException ex) {
+            System.out.println("\u001B[31m" + "Aquest article no existeix." + "\u001B[0m");
+            return false;
+        }
+    }
+
+    public boolean deleteTerm(String termName){
+        try {
+            Term t = termsByName.get(termName);
+            Collection<Paper> auxiliar = t.getPapersWhichTalkAboutThisById(papersById).values();
+            for (Iterator it = auxiliar.iterator(); it.hasNext(); ) {
+                Paper p = (Paper) it.next();
+                p.removeTerm(t);
+                if (p.getTermsById(termsById).size() < 1) { //Eliminar paper i relacions
+                    deletePaperRelationsOnAuthors(p);
+                    deletePaperRelationsOnConferences(p);
+                    papersByName.remove(p.getName());
+                    papersById.remove(p.getId());
+                }
+            }
+            int id = t.getId();
+            termsByName.remove(termName);
+            termsById.remove(id);
+            return true;
+        } catch (NullPointerException ex) {
+            System.out.println("\u001B[31m" + "Aquest terme no existeix." + "\u001B[0m");
+            return false;
+        }
+    }
+
+    public boolean deleteConference(String confName){
+        try {
+            Conference c = conferencesByName.get(confName);
+            Collection<Paper> auxiliarp = c.getExposedPapersById(papersById).values();
+            for (Iterator it = auxiliarp.iterator(); it.hasNext(); ) {
+                Paper p = (Paper) it.next();
+                deletePaperRelationsOnAuthors(p);
+                deletePaperRelationsOnTerms(p);
+                papersById.remove(p.getId());
+                papersByName.remove(p.getName());
+            }
+            int id = c.getId();
+            conferencesByName.remove(confName);
+            conferencesById.remove(id);
+            return true;
+        } catch (NullPointerException ex) {
+            System.out.println("\u001B[31m" + "Aquesta conferencia no existeix." + "\u001B[0m");
+            return false;
+        }
+    }
     public void newEdit() {
 
         Scanner scan = new Scanner(System.in);
