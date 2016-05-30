@@ -1,24 +1,27 @@
 package main.java.sharedClasses.utils;
 
+import java.util.*;
 
-
-import java.util.Set;
-import java.util.HashMap;
-
+/**
+ * @author Oriol Parcerisa
+ */
 
 public class Matrix {
-    private HashMap<Integer, HashMap<Integer, Double>> matrix;
-    private HashMap<Integer, HashMap<Integer, Double>> mTrans;
+    //private LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> matrix;
+    //private LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> mTrans;
+
+    private HashMap<Integer, LinkedList<Vertex>> matrix;
+    private HashMap<Integer, LinkedList<Vertex>> mTrans;
 
     //Constructora de la classe
     //Pre: Cert
     //Post: Crea una matriu buida i inicialitza el pair
     public Matrix() {
-        this.matrix = new HashMap<Integer, HashMap<Integer, Double>>();
-        this.mTrans = new HashMap<Integer, HashMap<Integer, Double>>();
+        this.matrix = new LinkedHashMap<>();
+        this.mTrans = new LinkedHashMap<>();
     }
 
-    private Matrix(HashMap<Integer, HashMap<Integer, Double>> m, HashMap<Integer, HashMap<Integer, Double>> mTrans) {
+    private Matrix(HashMap<Integer, LinkedList<Vertex>> m, HashMap<Integer, LinkedList<Vertex>> mTrans) {
         this.matrix = m;
         this.mTrans = mTrans;
     }
@@ -35,37 +38,48 @@ public class Matrix {
         return this.mTrans.keySet();
     }
 
-
     //Pre: Existeix la fila key
-    //Post: Retorna un vector amb les columnes valides de la fila key
-    public HashMap<Integer, Double> columns(int key) {
+    //Post: Retorna un vector amb els valors de les columnes de la fila key
+    public LinkedList<Vertex> getRow(int key) {
         return this.matrix.get(key);
     }
 
+    //Pre: Existeix la columna key
+    //Post: Retorna un vector amb els valors de les files de la columna key
+    private LinkedList<Vertex> getColumn(int key) {
+        return this.mTrans.get(key);
+    }
 
     //Pre: Cert
-    //Post: Afegeix una fila buida (un HashMap<Integer, Double>> buit)
-    private void addRow(int i){
-        this.matrix.put(i, new HashMap<Integer, Double>());
+    //Post: Afegeix una fila buida (un LinkedHashMap<Integer, Double>> buit)
+    public void addRow(int i, LinkedList<Vertex> l){
+        this.matrix.put(i, l);
     }
 
-    private void addRowTranspose(int j) {
-        this.mTrans.put(j, new HashMap<Integer, Double>());
+    private void addRowTranspose(int j, LinkedList<Vertex> l) {
+        this.mTrans.put(j, l);
     }
 
 
     //Pre: Cert
-    //Post: Elimina la fila i de la matriu (elimina l'ArrayList amb id i)
-    public void deleteRow(int i){
-        HashMap<Integer, Double> tmp = this.matrix.remove(i);
-        HashMap<Integer, Double> tmp2 = this.mTrans.remove(i);
-    }
+    //Post: Elimina la fila i de la matriu.
+    /*public void deleteRow(int i) {
+        LinkedList<Vertex> tmp = this.matrix.remove(i);
+        for (Vertex p : tmp) {
+            this.mTrans.get(p.getFirst()).remove(p);
+        }
+    }*/
+
 
     //Pre: Existeix la posicio i,j
     //Post: Elimina el valor de la posicio i,j
     private void deleteValue(int i, int j) {
-        this.matrix.get(i).remove(j);
-        this.mTrans.get(j).remove(i);
+        try {
+            this.matrix.get(i).remove(j);
+            this.mTrans.get(j).remove(i);
+        } catch (NullPointerException e) {
+            System.out.println("No existeix la posició " + i + "," + j);
+        }
     }
 
 
@@ -73,25 +87,57 @@ public class Matrix {
     //Post: Afegeix el valor value a la posició i,j. Afegeix una fila si es necessari.
     //      Si el valor es 0, comprova si cal eliminar la fila.
     public void addValue(int i, int j, double value){
-        if (value == 0) {
+        if (value == 0) { //Si el valor es 0 i existeix a la matriu, s'elimina.
             if (getValue(i, j) != -1) {
                 deleteValue(i, j);
             }
-        } else {
-            if (getValue(i, j) != -1) {
-                this.matrix.get(i).replace(j, value);
-                this.mTrans.get(j).replace(i, value);
-            } else {
-                if (!this.matrix.containsKey(i)) {
-                    addRow(i);
+        } else {    //Sino:
+            Vertex p = new Vertex(i, j, value);
+            Vertex pt = new Vertex(j, i, value);
+            //Insercio a matrix:
+            if (rows().contains(i)) {
+                if (getRow(i).getLast().getSecond() < j) { //Si l'index de la columna és més gran que la columna, inserta al final.
+                    getRow(i).addLast(p);
+                } else {        //Sinó busca on ha d'insertar.
+                    ListIterator<Vertex> it = getRow(i).listIterator();
+                    Vertex aux = null;
+                    if (it.hasNext())aux = it.next();
+                    //Busca la posició on l'ha d'insertar.
+                    while (aux.getSecond() < j) {
+                        if (it.hasNext()) aux = it.next();
+                    }
+                    aux = it.previous();
+                    it.add(p);
                 }
-                if(!this.mTrans.containsKey(j)){
-                    addRowTranspose(j);
+            } else { //Sino crea una nova columna amb el valor.
+                LinkedList<Vertex> newRow = new LinkedList<>();
+                newRow.add(p);
+                addRow(i, newRow);
+            }
+
+            //Insercio a mTrans:
+            if (cols().contains(j)) {
+                if (getColumn(j).getLast().getSecond() < i) {//Si l'index de la columna és més gran que la columna, inserta al final.
+                    getColumn(j).addLast(pt);
+                } else {    //Sinó busca on ha d'insertar.
+                    ListIterator<Vertex> it = getColumn(j).listIterator();
+                    Vertex aux = null;
+                    if (it.hasNext()) aux = it.next();
+                    //Busca la posició on l'ha d'insertar.
+                    while (aux.getSecond() < i) {
+                        if (it.hasNext()) aux = it.next();
+                    }
+                    aux = it.previous();
+                    it.add(pt);
                 }
-                this.matrix.get(i).put(j, value);
-                this.mTrans.get(j).put(i, value);
+            } else {    //Sino crea una nova columna amb el valor.
+                LinkedList<Vertex> newCol = new LinkedList<>();
+                newCol.add(pt);
+                addRowTranspose(j, newCol);
             }
         }
+        //Collections.sort(this.matrix.get(i));
+        //Collections.sort(this.mTrans.get(j));
     }
 
 
@@ -99,10 +145,11 @@ public class Matrix {
     //Post: Retorna el valor de i, j, si existeix, sino retorna -1.
     public double getValue(int i, int j){
         if (this.matrix.containsKey(i)) {
-            if (this.matrix.get(i).containsKey(j)) {
-                return this.matrix.get(i).get(j);
-
-            } else return -1;
+            for (Vertex p : getRow(i)) {
+                if (p.getSecond() == j) return p.getValue();
+                else if (p.getSecond() > j) return -1;
+            }
+            return -1;
         } else return -1;
     }
 
@@ -117,23 +164,16 @@ public class Matrix {
     //Pre: el paràmetre implícit té el mateix nombre de columnes que files té m
     //Post: retorna la matriu producte del paràmetre implícit amb m
     public Matrix multiply(Matrix m){
-        /*try {
-            //if (cols().size() != m.rows().size()) {
-                //throw new Exception("No es poden multiplicar les matrius!");
-            //}
-        } catch (Exception error) {
-            //Falta error
-        }*/
         Matrix mult = new Matrix();
         Set<Integer> r = rows();
         Set<Integer> c = m.cols();
 
-        System.out.println("inici multiplicacio");
         int tam = r.size();
         int i = 0;
         int j = 0;
-        System.out.println(j+"%");
+
         for (int x : r) {
+
             int ji = (i*100)/tam;
             if(j<ji){
                 System.out.println(ji+"%");
@@ -142,30 +182,65 @@ public class Matrix {
 
             for (int y : c) {
                 double value = 0;
-                Set<Integer> cr = columns(x).keySet();
-                for (int z : cr) {
-                    double val1 = getValue(x, z);
-                    double val2 = m.getValue(z, y);
-                    if (val1 != -1 && val2 != -1) {
-                        value += val1 * val2;
+                ListIterator<Vertex> itR = getRow(x).listIterator();
+                ListIterator<Vertex> itC = m.getColumn(y).listIterator();
+                Vertex p, s;
+                while (itR.hasNext() && itC.hasNext()) {
+                    p = itR.next();
+                    while (itC.hasNext()) {
+                        s = itC.next();
+                        if (p.getSecond() == s.getSecond()) {
+                            value += p.getValue()*s.getValue();
+                            break;
+                        } else if (p.getSecond() < s.getSecond()) {
+                            s = itC.previous();
+                            break;
+                        }
                     }
                 }
                 mult.addValue(x, y, value);
             }
             ++i;
         }
-
         return mult;
     }
+
+
+    //Pre: el paràmetre implícit té el mateix nombre de columnes que files té m
+    //Post: retorna la divisó de cada cel·la de la matriu del paràmetre implícit amb m
+    public Matrix dividycells(Matrix m){
+        Matrix div = new Matrix();
+        Set<Integer> r = rows();
+        for (int x : r) {
+            ListIterator<Vertex> itA = getRow(x).listIterator();
+            ListIterator<Vertex> itB = m.getRow(x).listIterator();
+            while (itA.hasNext() && itB.hasNext()) {
+                Vertex p = itA.next();
+                Vertex s = itB.next();
+                if (p.getSecond() == s.getSecond()) {
+                    double val1 = p.getValue();
+                    double val2 = s.getValue();
+                    if (val1 != -1 && val2 != -1) {
+                        double value = val1 / val2;
+                        div.addValue(x, p.getSecond(), value);
+                    }
+                } else if (p.getSecond() > s.getSecond()) {
+                    if (itB.hasNext()) itB.next();
+                } else if (itA.hasNext()) itA.next();
+            }
+        }
+        return div;
+    }
+
 
     //Pre: Cert
     //Post: retorna el modul de la fila i. Si no existeix, retorna 0.
     public double rowModulus(int i) {
         if (this.matrix.containsKey(i)) {
+            LinkedList<Vertex> list = this.matrix.get(i);
             double m = 0;
-            for (int j : columns(i).keySet()) {
-            	double d = getValue(i, j);
-                m += d*d;
+            for (Vertex p : list) {
+                m += p.getValue() * p.getValue();
             }
             return Math.sqrt(m);
         } else return 0;
@@ -176,56 +251,89 @@ public class Matrix {
     //Post: retorna el modul de la columna j. Si no existeix, retorna 0.
     public double columModulus(int j) {
         if (this.mTrans.containsKey(j)) {
-            Set<Integer> list = this.mTrans.get(j).keySet();
+            LinkedList<Vertex> list = this.mTrans.get(j);
             double m = 0;
-            for (int i : list) {
-                m += this.mTrans.get(j).get(i) * this.mTrans.get(j).get(i);
+            for (Vertex p : list) {
+                m += p.getValue() * p.getValue();
             }
             return Math.sqrt(m);
         } else return 0;
     }
 
 
-    //Pre: La matriu conte nomes 1s i 0s (no cal tirar excepcio)
+    //Pre: la matriu nomes conte 1s i 0s.
+    //Post: Divideix totes les files per el nombre de valors
+    public Matrix normalize_bin(){
+        Matrix n = new Matrix();
+        for (int i : rows()) {
+            double valor = 0;
+            if (getRow(i) != null) valor = getRow(i).size();
+            for (ListIterator<Vertex> it = getRow(i).listIterator(); it.hasNext();) {
+                Vertex p = it.next();
+                n.addValue(i, p.getSecond(), p.getValue()/valor);
+            }
+        }
+        return n;
+    }
+
+    //Pre: la matriu nomes qualsevol valor
     //Post: Divideix totes les files per el nombre de valors
     public Matrix normalize(){
         Matrix n = new Matrix();
-        for (int i : this.matrix.keySet()) {
-            double valor = columns(i).keySet().size();
-            for (int j : this.matrix.get(i).keySet()) {
-                n.addValue(i, j, getValue(i,j)/valor);
+        Set<Integer> r = rows();
+        for (int i : r) {
+            double valor = 0;
+            if (getRow(i) != null) {
+                for (ListIterator<Vertex> it = getRow(i).listIterator(); it.hasNext();) {
+                    double val = it.next().getValue();
+
+                    valor += val * val;
+                }
+
+                valor = Math.sqrt(valor);
+
+                for (ListIterator<Vertex> it = getRow(i).listIterator(); it.hasNext();) {
+                    Vertex p = it.next();
+                    n.addValue(i, p.getSecond(), p.getValue()/valor);
+                }
             }
+
         }
         return n;
     }
-    
-    public HashMap<Integer, Double> rows(int key) {
-        return this.mTrans.get(key);
-    }
-    
-    public Matrix normalizeRows(){
-    	Matrix n = new Matrix();
-        for (int j : this.mTrans.keySet()) {
-            double valor = rows(j).keySet().size();
-            for (int i : this.mTrans.get(j).keySet()) {
-                n.addValue(i, j, getValue(i,j)/valor);
+
+    public Matrix normalize2(){
+        Matrix n = new Matrix();
+        Set<Integer> r = rows();
+        for (int i : r) {
+            if (getRow(i) != null) {
+                double valor = getRow(i).size();
+                valor = 1/Math.sqrt(valor);
+
+                for (ListIterator<Vertex> it = getRow(i).listIterator(); it.hasNext();) {
+                    Vertex p = it.next();
+                    n.addValue(i, p.getSecond(), valor);
+                }
             }
+
         }
         return n;
     }
-    
+
+    //Pre: Cert
+    //Post: Imprimeix la matriu del parametre implicit
     public void print(){
-    	System.out.println("-------");
-    	for(Integer x : rows()){
-    		for(Integer y : columns(x).keySet()){
-    			System.out.print(x);
-    			System.out.print(",");
-    			System.out.print(y);
-    			System.out.print(":");
-    			System.out.println(getValue(x,y));
-    		}
-    	}
-    	System.out.println("-------");
+        System.out.println("------------");
+        for(int x : rows()){
+            for (Vertex p : getRow(x)) {
+                System.out.print(x);
+                System.out.print(",");
+                System.out.print(p.getSecond());
+                System.out.print(":");
+                System.out.println(p.getValue());
+            }
+        }
+        System.out.println("------------");
     }
 
 }

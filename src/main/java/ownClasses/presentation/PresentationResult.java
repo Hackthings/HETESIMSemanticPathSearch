@@ -9,7 +9,7 @@ public class PresentationResult extends JFrame {
     private JTextArea textArea1;
     private JPanel panel;
 
-    public PresentationResult(ArrayList<String> resultat, String path,String name) {
+    public PresentationResult(ArrayList<String> resultat, String path,String name, String firstlast) {
         super("RESULTAT");
 
         $$$setupUI$$$();
@@ -37,14 +37,23 @@ public class PresentationResult extends JFrame {
 
         textArea1.append(nodefinal+" relacionats amb "+ name +" amb el path "+ path +":");
 
-        boolean cercle = (path.charAt(0)==path.charAt(path.length()-1));
-
-        for (int i = 0; i < resultat.size() && !cercle; i++) {
-            textArea1.append("\n" + (i + 1) + ". " + resultat.get(i));
+        int count =0;
+        for (int i = 0; i < resultat.size(); i++) {
+            String namedone[] = resultat.get(i).split("  ->  ");
+            if(!namedone[0].equals(name)) {
+                if (firstlast == null) {
+                    textArea1.append("\n" + (i + 1 - count) + ". " + resultat.get(i));
+                }
+                else{
+                    if(namedone[0].equals(firstlast))
+                        textArea1.append("\n" + (i + 1 - count) + ". " + resultat.get(i));
+                }
+            }
+            else{
+                count+=1;
+            }
         }
 
-        for (int i = 1; i < resultat.size() && cercle; i++)
-            textArea1.append("\n" + i + ". " + resultat.get(i));
 
 
         setVisible(true);

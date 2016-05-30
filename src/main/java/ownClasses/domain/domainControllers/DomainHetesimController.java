@@ -1,8 +1,10 @@
 package main.java.ownClasses.domain.domainControllers;
 
-import main.java.sharedClasses.utils.Matrix;
 
-class DomainHetesimController {
+import main.java.sharedClasses.utils.Matrix;
+import main.java.sharedClasses.utils.Vertex;
+
+public class DomainHetesimController {
     private Matrix probAuthorPaper;
     private Matrix probPaperAuthor;
     private Matrix probTermPaper;
@@ -70,11 +72,13 @@ class DomainHetesimController {
 
         Double rmod = 0.0;
         Double cmod = 0.0;
-        for (Integer row : result.rows()) {
+        Matrix r2 = result;
+        result = new Matrix();
+        for (Integer row : r2.rows()) {
             rmod = pmPl.rowModulus(row);
-            for (Integer column : result.columns(row).keySet()) {
-                cmod = pmPri.rowModulus(column);
-                result.addValue(row, column, result.getValue(row, column) / (rmod * cmod));
+            for (Vertex column : r2.getRow(row)) {
+                cmod = pmPri.rowModulus(column.getSecond());
+                result.addValue(row, column.getSecond(), r2.getValue(row, column.getSecond()) / (rmod * cmod));
             }
         }
         return result;
@@ -88,14 +92,12 @@ class DomainHetesimController {
         int c = 0;
         int i = 0;
         for (int row : middleMatrix.rows()) {
-            for (int column : middleMatrix.columns(row).keySet()) {
-                auxiliarObjectL.addValue(row, i, middleMatrix.getValue(row, column));
-                auxiliarObjectR.addValue(i, column, 1.0);
+            for (Vertex column : middleMatrix.getRow(row)) {
+                auxiliarObjectL.addValue(row, i, middleMatrix.getValue(row, column.getSecond()));
+                auxiliarObjectR.addValue(i, column.getSecond(), 1.0);
                 i += 1;
             }
         }
         auxiliarObjectR = auxiliarObjectR.transpose().normalize();
     }
 }
-
-

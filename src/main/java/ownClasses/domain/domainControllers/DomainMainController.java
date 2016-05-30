@@ -15,6 +15,7 @@ import main.java.sharedClasses.domain.nodes.Paper;
 import main.java.sharedClasses.domain.nodes.Term;
 import main.java.sharedClasses.utils.Matrix;
 import main.java.sharedClasses.utils.Pair;
+import main.java.sharedClasses.utils.Vertex;
 
 import java.util.*;
 
@@ -140,8 +141,11 @@ public class DomainMainController {
                 break;
         }
 
-        HashMap<Integer, Double> resultquery = new HashMap<>();
-        if (result.columns(queryId) != null) resultquery = result.columns(queryId);
+        /*TreeMap<Integer,Double> resultquery = new TreeMap<>();
+        if (result.column(queryId) != null) resultquery = result.column(queryId);*/
+
+        LinkedList<Vertex> resultquery = new LinkedList<>();
+        if(result.getRow(queryId)!= null) resultquery = result.getRow(queryId);
 
 
         ArrayList<Pair<Integer,Double>> resultOrdered = resultWithOrder(resultquery, query);
@@ -253,8 +257,10 @@ public class DomainMainController {
                 }
             }
 
-            HashMap<Integer, Double> resultquery = new HashMap<>();
-            if (result.columns(queryId) != null) resultquery = result.columns(queryId);
+            /*TreeMap<Integer, Double> resultquery = new TreeMap<>();
+            if (result.column(queryId) != null) resultquery = result.column(queryId);*/
+            LinkedList<Vertex> resultquery = new LinkedList<>();
+            if(result.getRow(queryId)!= null) resultquery = result.getRow(queryId);
 
 
             ArrayList<Pair<Integer,Double>> resultOrdered = resultWithOrder(resultquery, query);
@@ -358,38 +364,41 @@ public class DomainMainController {
         }
     }
 
-    private ArrayList<Pair<Integer,Double>> resultWithOrder(HashMap<Integer, Double> resultquery, OrderedQuery query){
+    private ArrayList<Pair<Integer,Double>> resultWithOrder(LinkedList<Vertex> resultquery, OrderedQuery query){
         /*char tipus = query.getPath().charAt(query.getPath().length()-1);
         System.out.println(" NOM  ->  rellevancia");*/
 
-        Iterator<Map.Entry<Integer, Double>> it= resultquery.entrySet().iterator();
+        //Iterator<Map.Entry<Integer, Double>> it= resultquery.entrySet().iterator();
+        ListIterator<Vertex> it = resultquery.listIterator();
         ArrayList<Pair<Integer,Double>> resultOrdered = new ArrayList<>();
         while(it.hasNext()) {
-            Map.Entry<Integer, Double> resultat = it.next();
-            int id = Integer.parseInt(resultat.getKey().toString());
-            double relevance = Double.parseDouble(resultat.getValue().toString());
+            //Map.Entry<Integer, Double> resultat = it.next();
+            //int id = Integer.parseInt(resultat.getKey().toString());
+            //double relevance = Double.parseDouble(resultat.getValue().toString());
+            Vertex v = it.next();
             if(resultOrdered.isEmpty()){
-                resultOrdered.add(new Pair<Integer, Double>(id,relevance));
+                //resultOrdered.add(new Pair<Integer, Double>(id,relevance));
+                resultOrdered.add(new Pair<Integer, Double>(v.getSecond(),v.getValue()));
             }
             else{
                 boolean end=false;
                 if(query.isAscendent()) {
                     for (int i = 0; i < resultOrdered.size() && !end; ++i) {
-                        if(resultOrdered.get(i).getSecond()>= relevance){
-                            resultOrdered.add(i,new Pair<Integer, Double>(id,relevance));
+                        if(resultOrdered.get(i).getSecond()>= v.getValue()){
+                            resultOrdered.add(i,new Pair<Integer, Double>(v.getSecond(),v.getValue()));
                             end = true;
                         }
                     }
                 }
                 else{
                     for(int i = 0; i < resultOrdered.size() && !end; ++i) {
-                        if(resultOrdered.get(i).getSecond()<= relevance){
-                            resultOrdered.add(i,new Pair<Integer, Double>(id,relevance));
+                        if(resultOrdered.get(i).getSecond()<= v.getValue()){
+                            resultOrdered.add(i,new Pair<Integer, Double>(v.getSecond(),v.getValue()));
                             end = true;
                         }
                     }
                 }
-                if(!end) resultOrdered.add(new Pair<Integer, Double>(id,relevance));
+                if(!end) resultOrdered.add(new Pair<Integer, Double>(v.getSecond(),v.getValue()));
             }
         }
 
@@ -483,6 +492,7 @@ public class DomainMainController {
             }
         }
         if(authorname != null && papername ==null) {
+            System.out.println("HELLO AUTHOR");
             Author author = authorsByName.get(authorname);
             HashMap<Integer, Paper> papersOfAuthor = author.getPapersById(papersById);
             for (Paper paper : papersOfAuthor.values()) {
@@ -552,6 +562,7 @@ public class DomainMainController {
             }
         }
         if(confname != null && papername ==null) {
+            System.out.print("HELLO CONF");
             Conference conf = conferencesByName.get(confname);
             HashMap<Integer, Paper> papersOfConf = conf.getExposedPapersById(papersById);
             for (Paper paper : papersOfConf.values()) {

@@ -46,6 +46,8 @@ public class PresentationNewQuery extends JFrame {
     String term = null;
     String conf = null;
 
+    String firstlast = null;
+
     public PresentationNewQuery(DomainMainController mainController) {
         super("NEW QUERY");
 
@@ -117,7 +119,10 @@ public class PresentationNewQuery extends JFrame {
 
         subset = act;
         if(act) setSize(300,340);
-        else setSize(274,185);
+        else{
+            setSize(274,185);
+            firstlast = null;
+        }
     }
 
 
@@ -125,6 +130,7 @@ public class PresentationNewQuery extends JFrame {
         if (path.length()>1) {
             if(subset){
                 checkTexts(mainController);
+                System.out.println();
                 mainController.updateMatrix(author,paper,conf,term);
                 System.out.println(author+" "+paper+" "+conf+" "+term);
                 changed = true;
@@ -133,8 +139,11 @@ public class PresentationNewQuery extends JFrame {
                 mainController.updateMatrix(null,null,null,null);
                 changed = false;
             }
+            long timeini = System.currentTimeMillis();
             mainController.NQ(path);
-            PresentationNewQuery2 window = new PresentationNewQuery2(mainController, path);
+            long timefinal = System.currentTimeMillis();
+            System.out.println("Triga :"+(timefinal-timeini)+" milisegons en fer el path "+path);
+            PresentationNewQuery2 window = new PresentationNewQuery2(mainController, path,firstlast);
             System.out.println("DONE");
         } else {
             callWarning("Path no valid");
@@ -153,29 +162,53 @@ public class PresentationNewQuery extends JFrame {
                 switch (path.charAt(i)) {
                     case ('A'):
                         if(mainController.checkName(Asubset.getText(),'A')){
-                            author = Asubset.getText();
+                            author = Asubset.getText(); firstlast = null;
                         }
                         count++;
                         break;
                     case ('P'):
                         if(mainController.checkName(Psubset.getText(),'P')){
-                            paper = Psubset.getText();
+                            paper = Psubset.getText(); firstlast = null;
                         }
                         count++;
                         break;
                     case ('C'):
                         if(mainController.checkName(Csubset.getText(),'C')){
-                            conf = Csubset.getText();
+                            conf = Csubset.getText(); firstlast = null;
                         }
                         count++;
                         break;
                     case ('T'):
                         if(mainController.checkName(Tsubset.getText(),'T')){
-                            term = Tsubset.getText();
+                            term = Tsubset.getText(); firstlast = null;
                         }
                         count++;
                         break;
                 }
+            }
+        }
+        if(path.charAt(0)==path.charAt(path.length()-1)){
+            switch (path.charAt(0)) {
+                case ('A'):
+                    if(mainController.checkName(Asubset.getText(),'A')){
+                        firstlast = Asubset.getText();
+                    }
+                    break;
+                case ('P'):
+                    if(mainController.checkName(Psubset.getText(),'P')){
+                        firstlast = Psubset.getText();
+                    }
+                    break;
+                case ('C'):
+                    if(mainController.checkName(Csubset.getText(),'C')){
+                        firstlast = Csubset.getText();
+                    }
+                    break;
+                case ('T'):
+                    if(mainController.checkName(Tsubset.getText(),'T')){
+                        firstlast = Tsubset.getText();
+                    }
+                    break;
             }
         }
     }

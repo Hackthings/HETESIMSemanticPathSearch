@@ -27,7 +27,7 @@ public class PresentationNewQuery2 extends JFrame {
 
     int querytype = 1;
 
-    public PresentationNewQuery2(DomainMainController mainController, String path) {
+    public PresentationNewQuery2(DomainMainController mainController, String path, String firstlast) {
         super("NEW QUERY2");
 
         $$$setupUI$$$();
@@ -55,7 +55,7 @@ public class PresentationNewQuery2 extends JFrame {
 
         nameField.addActionListener(e -> setname(mainController,path));
 
-        NEXTButton.addActionListener(e -> callresult(mainController, path));
+        NEXTButton.addActionListener(e -> callresult(mainController, path, firstlast));
 
         setVisible(true);
 
@@ -138,14 +138,14 @@ public class PresentationNewQuery2 extends JFrame {
         return true;
     }
 
-    private void callresult(DomainMainController mainController, String path) {
+    private void callresult(DomainMainController mainController, String path, String firstlast) {
         if(mainController.checkName(nameField.getText(),path.charAt(0))){
             boolean maxmin = setMaxMin();
             boolean rightN = setN();
             name = nameField.getText();
             if(querytype == 1 || (querytype == 2 && rightN) || (querytype==3 && maxmin) ) {
                 ArrayList<String> resultat = mainController.resultat(path, querytype, ascendent, name, n, max, min);
-                new PresentationResult(resultat, path, name);
+                new PresentationResult(resultat, path, name, firstlast);
             }
         }
         else{
