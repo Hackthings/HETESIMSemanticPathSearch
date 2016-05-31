@@ -1127,7 +1127,7 @@ public class DomainPersistanceController {
        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,false))) {
            String line;
            for(Paper p:papersById.values()){
-               ArrayList<Integer> terms = p .getRelationesTerms();
+               ArrayList<Integer> terms = p .getRelatedTerms();
                for(int i = 0; i < terms.size(); i++) {
                    line = Integer.toString(p.getId()) + "\t" + Integer.toString(terms.get(i));
                    writer.write(line);

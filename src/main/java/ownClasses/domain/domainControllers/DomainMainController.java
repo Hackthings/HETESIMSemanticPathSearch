@@ -572,7 +572,7 @@ public class DomainMainController {
 
     public void editGraph() {
         DomainPersistanceController domainPersistanceController = new DomainPersistanceController(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
-       // domainPersistanceController.newEdit();
+        domainPersistanceController.newEdit();
         edit = true;
     }
 

@@ -199,7 +199,7 @@ public class Paper extends Node {
      * @return      ArrayList with all the ids of the terms related with the Paper
      * @see         ArrayList
      */
-    public ArrayList<Integer> getRelationesTerms(){
+    public ArrayList<Integer> getRelatedTerms(){
         return termsById;
     }
 
