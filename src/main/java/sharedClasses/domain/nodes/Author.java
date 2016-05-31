@@ -13,11 +13,10 @@ public class Author extends Node{
     /**
      * Constructor function for the Author node.
      * <p>
-     * The Author node represents a node of the kind Author in out graph.
+     * The Author node represents a node of the kind Author in our graph.
      *
      * @param  name the name of the author
      * @param  id the id of the author
-     * @return      the Author object which represents this node
      * @see         Author
      */
     public Author(String name, int id) {
@@ -30,9 +29,9 @@ public class Author extends Node{
     }
 
     /**
-     * Returns the greater id of any Author in the node.
+     * Returns the greater id of any Author in the graph.
      *
-     * @return      the greater id of any Author in the node.
+     * @return      the greater id of any Author in the graph.
      * @see         int
      */
     public static int getMaxId() {

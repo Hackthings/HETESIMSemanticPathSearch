@@ -1,4 +1,4 @@
-package main.java.sharedClasses.utils;
+package main.java.ownClasses.domain.utils;
 
 public class Pair<Integer,Double> {
     private int first;    //Primer element del parell: clau
