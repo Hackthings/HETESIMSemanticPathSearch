@@ -51,7 +51,7 @@ public class PresentationEditGraph extends JFrame {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("Selecciona l'element a afegir");
         }
-        else new PresentationAddNode(persistanceController, editList.getSelectedIndex());
+       // else new PresentationAddNodes();
     }
 
     private void deleteNodeAction() {

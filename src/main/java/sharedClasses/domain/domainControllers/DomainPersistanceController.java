@@ -196,7 +196,7 @@ public class DomainPersistanceController {
         }
     }
 
-    public boolean deletePaper(String paperName){
+    public boolean deletePaper(String paperName) {
         try {
             Paper p = papersByName.get(paperName);
             deletePaperRelationsOnConferences(p);
@@ -212,7 +212,7 @@ public class DomainPersistanceController {
         }
     }
 
-    public boolean deleteTerm(String termName){
+    public boolean deleteTerm(String termName) {
         try {
             Term t = termsByName.get(termName);
             Collection<Paper> auxiliar = t.getPapersWhichTalkAboutThisById(papersById).values();
@@ -236,7 +236,7 @@ public class DomainPersistanceController {
         }
     }
 
-    public boolean deleteConference(String confName){
+    public boolean deleteConference(String confName) {
         try {
             Conference c = conferencesByName.get(confName);
             Collection<Paper> auxiliarp = c.getExposedPapersById(papersById).values();
@@ -256,6 +256,62 @@ public class DomainPersistanceController {
             return false;
         }
     }
+
+    private boolean editAuthor(String authorName, String newName) {
+        try {
+            Author a = authorsByName.get(authorName);
+            a.setName(newName);
+            authorsByName.remove(authorName);
+            authorsByName.put(newName, a);
+            return true;
+        }
+        catch(NullPointerException ex){
+            System.err.println("Aquest autor no existeix");
+            return false;
+        }
+    }
+
+    private boolean editPaper(String paperName, String newName) {
+        try {
+            Paper p = papersByName.get(paperName);
+            p.setName(newName);
+            papersByName.remove(paperName);
+            papersByName.put(newName, p);
+            return true;
+        }
+        catch(NullPointerException ex){
+            System.err.println("Aquest article no existeix");
+            return false;
+        }
+    }
+    private boolean editTerm(String termName, String newName) {
+        try {
+            Term t = termsByName.get(termName);
+            t.setName(newName);
+            termsByName.remove(termName);
+            termsByName.put(newName, t);
+            return true;
+        }
+        catch(NullPointerException ex){
+            System.err.println("Aquest terme no existeix");
+            return false;
+        }
+    }
+    private boolean editConference(String confName, String newName) {
+        try {
+            Conference c = conferencesByName.get(confName);
+            c.setName(newName);
+            conferencesByName.remove(confName);
+            conferencesByName.put(newName, c);
+            return true;
+        }
+        catch(NullPointerException ex){
+            System.err.println("Aquesta conferencia no existeix");
+            return false;
+        }
+    }
+
+
     public void newEdit() {
 
         Scanner scan = new Scanner(System.in);
