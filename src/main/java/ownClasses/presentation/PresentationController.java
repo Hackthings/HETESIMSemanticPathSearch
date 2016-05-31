@@ -15,11 +15,12 @@ public class PresentationController extends JFrame {
         super("HETESIM SEMANTIC PATH SEARCH");
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3,1));
+        panel.setLayout(new GridLayout(0, 1));
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         final JLabel label1 = new JLabel();
         label1.setText("Hetesim Semantic Path Search");
+        label1.setHorizontalAlignment(SwingConstants.CENTER);
         JButton newQueryButton = new JButton();
         newQueryButton.setText("New Query");
         JButton editGraphButton = new JButton();
@@ -28,6 +29,9 @@ public class PresentationController extends JFrame {
         panel.add(label1);
         panel.add(newQueryButton);
         panel.add(editGraphButton);
+
+        BrowseFileController browseFileController = new BrowseFileController(mainController.getPersistanceController());
+        panel.add(browseFileController);
 
         setContentPane(panel);
         pack();

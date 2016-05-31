@@ -1,5 +1,7 @@
 package main.java.ownClasses.presentation;
 
+import main.java.sharedClasses.domain.domainControllers.DomainPersistanceController;
+
 import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -13,10 +15,12 @@ public class BrowseFileController extends JPanel
     JButton importButton, exportButton;
     JTextArea log;
     JFileChooser fc;
+    DomainPersistanceController domainPersistanceController;
 
-    public BrowseFileController() {
+    public BrowseFileController(DomainPersistanceController persistanceController) {
         super(new BorderLayout());
 
+        domainPersistanceController = persistanceController;
         //Create the log first, because the action listeners
         //need to refer to it.
         log = new JTextArea(5,20);
@@ -34,7 +38,7 @@ public class BrowseFileController extends JPanel
         //to be selected.  If you leave these lines commented out,
         //then the default mode (FILES_ONLY) will be used.
         //
-        //fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         //fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
         //Create the open button.  We use the image from the JLF
@@ -67,6 +71,7 @@ public class BrowseFileController extends JPanel
                 File file = fc.getSelectedFile();
                 //This is where a real application would open the file.
                 log.append("Importing: " + file.getName() + "." + newline);
+                domainPersistanceController.readAllFromFile(file.getAbsolutePath());
             } else {
                 log.append("Import command cancelled by user." + newline);
             }
@@ -79,6 +84,7 @@ public class BrowseFileController extends JPanel
                 File file = fc.getSelectedFile();
                 //This is where a real application would save the file.
                 log.append("Exporting: " + file.getName() + "." + newline);
+                // TODO: ADD WRITE ALL TO FILE
             } else {
                 log.append("Export command by user." + newline);
             }
@@ -95,23 +101,5 @@ public class BrowseFileController extends JPanel
             System.err.println("Couldn't find file: " + path);
             return null;
         }
-    }
-
-    /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event dispatch thread.
-     */
-    private static void createAndShowGUI() {
-        //Create and set up the window.
-        JFrame frame = new JFrame("BrowseFileController");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //Add content to the window.
-        frame.add(new BrowseFileController());
-
-        //Display the window.
-        frame.pack();
-        frame.setVisible(true);
     }
 }
