@@ -95,7 +95,7 @@ public class DomainPersistanceController {
     }
 
     public void readAllFromFile(String path) {
-        if (path != null) {
+        if (path != null && !path.equals("")) {
             filepath = path;
         }
         readAuthorsFromFile();
@@ -128,14 +128,16 @@ public class DomainPersistanceController {
 
     public ArrayList<String> addNewAuthor(String authorName, ArrayList<String> papersToRelate) {
         Author a = new Author(authorName, Author.getMaxId() + 1);
-        if (authorsByName.get(a.getName()) != null) {
+        Author b = authorsByName.get(a.getName());
+        ArrayList<String> newPapers = new ArrayList<>();
+        if (b != null) {
             System.err.println("Aquest autor ja existeix");
-            return null;
+            newPapers.add("Ja Existeix");
+            return newPapers;
         }
         authorsById.put(a.getId(), a);
         authorsByName.put(a.getName(), a);
         Paper p = null;
-        ArrayList<String> newPapers = new ArrayList<>();
         for (int i = 0; i < papersToRelate.size(); i++) {
             p = papersByName.get(papersToRelate.get(i));
             if (p == null) newPapers.add(papersToRelate.get(i));
@@ -169,7 +171,7 @@ public class DomainPersistanceController {
     public boolean addNewTerm(String termName, ArrayList<Paper> papersToRelate) {
         Term t = new Term(termName, Term.getMaxId() + 1);
         if (termsByName.get(t.getName()) != null) {
-            System.err.println("Aquest article ja existeix");
+            System.err.println("Aquest terme ja existeix");
             return false;
         }
         for (int i = 0; i < papersToRelate.size(); i++) {

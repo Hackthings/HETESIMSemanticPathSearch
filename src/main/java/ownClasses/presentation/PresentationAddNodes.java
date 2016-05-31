@@ -20,6 +20,7 @@ public class PresentationAddNodes extends JFrame {
     private JTextField aName3;
     private JTextField aName4;
     private JTextField aName5;
+    private JTextField aName6;
     private JTextField aName7;
     private JTextField aName8;
     private JTextField aName9;
@@ -34,6 +35,7 @@ public class PresentationAddNodes extends JFrame {
     private JTextField tName7;
     private JTextField tName8;
     private JTextField tName9;
+    private JTextField tName10;
     private JLabel Num1;
     private JLabel Nom;
     private JLabel Conferencia;
@@ -41,8 +43,6 @@ public class PresentationAddNodes extends JFrame {
     private JButton acceptarButton;
     private JButton cancelarButton;
     private JLabel addNode;
-    private JTextField aName6;
-    private JTextField tName10;
     private ArrayList<JTextField> firstTextFields;
     private ArrayList<JTextField> secondTextFields;
     private DomainPersistanceController persistanceController;
@@ -93,6 +93,8 @@ public class PresentationAddNodes extends JFrame {
                 Num2.setVisible(false);
                 comboBox2.setVisible(false);
                 for(int i = 0; i < secondTextFields.size(); i++) secondTextFields.get(i).setVisible(false);
+                Conferencia.setVisible(false);
+                cName.setVisible(false);
                 acceptarButton.addActionListener(e1-> callAddAuthor());
             }
             case (1): { //PAPER
@@ -111,7 +113,7 @@ public class PresentationAddNodes extends JFrame {
 
     private void enableFields(ArrayList<JTextField> a, JComboBox b){
         int numF = Integer.parseInt((String)b.getSelectedItem());
-        for(int i = 0; i < numF; i++) a.get(i).setDragEnabled(true);
+        for(int i = 0; i < numF; i++) a.get(i).setEnabled(true);
     }
 
     private void callAddAuthor(){
@@ -133,8 +135,9 @@ public class PresentationAddNodes extends JFrame {
                     papersToAdd.add(pName);
                 }
             }
-            ArrayList<String> newPapers = persistanceController.addNewAuthor(authorName,papersToAdd);
         }
+        ArrayList<String> newPapers = persistanceController.addNewAuthor(authorName,papersToAdd);
+
     }
 
     /**
@@ -246,7 +249,7 @@ public class PresentationAddNodes extends JFrame {
         aName2.setVisible(true);
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
-        gbc.gridy = 11;
+        gbc.gridy = 3;
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -260,7 +263,7 @@ public class PresentationAddNodes extends JFrame {
         aName3.setVisible(true);
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -274,7 +277,7 @@ public class PresentationAddNodes extends JFrame {
         aName4.setVisible(true);
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -288,19 +291,31 @@ public class PresentationAddNodes extends JFrame {
         aName5.setVisible(true);
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(3, 10, 3, 10);
         panel1.add(aName5, gbc);
+        aName6 = new JTextField();
+        aName6.setMinimumSize(new Dimension(14, 28));
+        aName6.setPreferredSize(new Dimension(14, 28));
+        aName6.setVisible(true);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 3;
+        gbc.gridy = 7;
+        gbc.gridwidth = 3;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(3, 10, 3, 10);
+        panel1.add(aName6, gbc);
         aName7 = new JTextField();
         aName7.setMinimumSize(new Dimension(14, 28));
         aName7.setPreferredSize(new Dimension(14, 28));
         aName7.setVisible(true);
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
-        gbc.gridy = 6;
+        gbc.gridy = 8;
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -313,7 +328,7 @@ public class PresentationAddNodes extends JFrame {
         aName8.setVisible(true);
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
-        gbc.gridy = 7;
+        gbc.gridy = 9;
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -325,7 +340,7 @@ public class PresentationAddNodes extends JFrame {
         aName9.setVisible(true);
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
-        gbc.gridy = 9;
+        gbc.gridy = 10;
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -338,7 +353,7 @@ public class PresentationAddNodes extends JFrame {
         aName10.setVisible(true);
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
-        gbc.gridy = 10;
+        gbc.gridy = 11;
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -473,18 +488,7 @@ public class PresentationAddNodes extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 20, 0, 0);
         panel1.add(comboBox1, gbc);
-        aName6 = new JTextField();
-        aName6.setMinimumSize(new Dimension(14, 28));
-        aName6.setPreferredSize(new Dimension(14, 28));
-        aName6.setVisible(true);
-        gbc = new GridBagConstraints();
-        gbc.gridx = 3;
-        gbc.gridy = 8;
-        gbc.gridwidth = 3;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(3, 10, 3, 10);
-        panel1.add(aName6, gbc);
+
         tName10 = new JTextField();
         tName10.setMinimumSize(new Dimension(14, 28));
         tName10.setPreferredSize(new Dimension(14, 28));
