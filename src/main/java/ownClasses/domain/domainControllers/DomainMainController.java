@@ -40,6 +40,7 @@ public class DomainMainController {
     private Matrix confpaper;
     private Matrix termpaper;
 
+
     public DomainMainController() {
         authorsById = new HashMap<>();
         papersById = new HashMap<>();
@@ -86,9 +87,57 @@ public class DomainMainController {
 
     }
 
+
+    /**
+     * Returns the attribute persistanceController
+     *
+     * @return   returns the persistanceController
+     * @see         DomainPersistanceController
+     */
+
     public DomainPersistanceController getPersistanceController() {
         return persistanceController;
     }
+
+    HashMap<Integer,Author> getAuthorsById(){
+        return authorsById;
+    }
+
+    HashMap<Integer,Paper> getPapersById(){
+        return papersById;
+    }
+
+    HashMap<Integer,Conference> getConferencesById(){
+        return conferencesById;
+    }
+
+    HashMap<Integer,Term> getTermsById(){
+        return termsById;
+    }
+
+    HashMap<String,Author> getAuthorsByName(){
+        return authorsByName;
+    }
+
+    HashMap<String,Paper> getPapersByName(){
+        return papersByName;
+    }
+
+    HashMap<String,Conference> getConferencesByName(){
+        return conferencesByName;
+    }
+
+    HashMap<String,Term> getTermsByName(){
+        return termsByName;
+    }
+
+
+    /**
+     * If it has been edited, update Matrix and calculate the new result Matrix calling
+     * the hetesimController
+     *
+     * @param  path the path which Hetesim will calculate the new Matrix result.
+     */
 
     public void NQ(String path){
         if(edit) {
@@ -98,6 +147,15 @@ public class DomainMainController {
         result = hetesimController.heteSim(path);
 
     }
+
+    /**
+     * Returns true if the name is at the corresponding HashMap of the Node type node,
+     * Otherwise, false.
+     *
+     * @param  name the name of the Node
+     * @param node indicates the type of Node
+     * @see         main.java.sharedClasses.domain.nodes.Node
+     */
 
     public boolean checkName(String name, char node){
         boolean check = false;
@@ -117,6 +175,20 @@ public class DomainMainController {
         }
         return check;
     }
+
+    /**
+     * Returns an ArrayList with all the nodes related with the node identified by name by the path
+     * with a filter applied in function of the parameter querytype.
+     *
+     * @param  path the corresponding path of the result
+     * @param querytype the type of query that is requested
+     * @param ascendent if true, the result will be ordered ascending, otherwise descending
+     * @param name indicates the name of the principal node that determines the result.
+     * @param n indicates the number of Strings that will be added to the ArrayList that will be returned
+     * @param max indicates the maximum relevance of the elements that will be added to the ArrayList
+     * @param min indicates the minimum relevance of the elements that will be added to the ArrayList
+     * @return  ArrayList with all the
+     */
 
     public ArrayList<String> resultat(String path, int querytype,boolean ascendent,String name,int n,double max,double min){
         OrderedQuery query = new OrderedQuery(path,ascendent);
@@ -141,8 +213,6 @@ public class DomainMainController {
                 break;
         }
 
-        /*TreeMap<Integer,Double> resultquery = new TreeMap<>();
-        if (result.column(queryId) != null) resultquery = result.column(queryId);*/
 
         LinkedList<Vertex> resultquery = new LinkedList<>();
         if(result.getRow(queryId)!= null) resultquery = result.getRow(queryId);
@@ -167,6 +237,11 @@ public class DomainMainController {
 
         return total;
     }
+
+    /**
+     * function that will show the corresponding result if function of the options
+     * selected by the user and asked before.
+     */
 
     public void newQuery() {
 
@@ -323,6 +398,19 @@ public class DomainMainController {
 
     }
 
+    /**
+     * Returns a string composed by the name of the node identified by the char tipus
+     * and the Integer id, the string " -> " and the relevance
+     *
+     * @param tipus indicates the type of the node
+     * @param id the id of the node
+     * @param relevance a double that indicates the relevance of the node with another node.
+     *
+     * @return The string composed by the name of the node identified by the char tipus
+     * and the Integer id, the string " -> " and the relevance
+     */
+
+
     private String GetString(char tipus, Integer id, Double relevance){
         if (relevance > 1.0) relevance = 1.0;
         else if (relevance < 0.0) relevance = 0.0;
@@ -344,6 +432,11 @@ public class DomainMainController {
         return row;
 
     }
+
+    /**
+     * Shows at the screen the string composed by the name of the node identified by the char tipus
+     * and the Integer id, the string " -> " and the relevance
+     */
 
     private void printresult(char tipus, Integer id, Double relevance){
         if (relevance > 1.0) relevance = 1.0;
