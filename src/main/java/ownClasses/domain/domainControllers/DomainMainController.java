@@ -576,8 +576,6 @@ public class DomainMainController {
         //domainPersistanceController.newEdit();
         edit = true;
     }
-
-
     private Matrix getAuthorpaperMatrixFilter(ArrayList<String> authors, ArrayList<String> papers){
         Matrix authorpaper = new Matrix();
 
