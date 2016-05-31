@@ -624,7 +624,6 @@ public class DomainMainController {
         return authorpaper;
     }
 
-
     private Matrix getTermpaperMatrixFilter(ArrayList<String> terms, ArrayList<String> papers){
         Matrix termpaper = new Matrix();
 
