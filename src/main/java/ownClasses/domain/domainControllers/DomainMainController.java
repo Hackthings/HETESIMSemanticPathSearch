@@ -95,27 +95,27 @@ public class DomainMainController {
         return persistanceController;
     }
 
-    HashMap<Integer,Author> getAuthorsById(){
+    public HashMap<Integer,Author> getAuthorsById(){
         return authorsById;
     }
 
-    HashMap<Integer,Paper> getPapersById(){
+    public HashMap<Integer,Paper> getPapersById(){
         return papersById;
     }
 
-    HashMap<Integer,Conference> getConferencesById(){
+    public HashMap<Integer,Conference> getConferencesById(){
         return conferencesById;
     }
 
-    HashMap<Integer,Term> getTermsById(){ return termsById; }
+    public HashMap<Integer,Term> getTermsById(){ return termsById; }
 
-    HashMap<String,Author> getAuthorsByName(){ return authorsByName; }
+    public HashMap<String,Author> getAuthorsByName(){ return authorsByName; }
 
-    HashMap<String,Paper> getPapersByName(){ return papersByName;}
+    public HashMap<String,Paper> getPapersByName(){ return papersByName;}
 
-    HashMap<String,Conference> getConferencesByName(){return conferencesByName;}
+    public HashMap<String,Conference> getConferencesByName(){return conferencesByName;}
 
-    HashMap<String,Term> getTermsByName(){return termsByName;}
+    public HashMap<String,Term> getTermsByName(){return termsByName;}
 
 
     /**
@@ -577,7 +577,25 @@ public class DomainMainController {
     }
 
 
+    private Matrix getAuthorpaperMatrixFilter(ArrayList<String> authors, ArrayList<String> papers){
+        Matrix authorpaper = new Matrix();
 
+        if(authors == null && papers == null){
+            for (Author author : authorsById.values()) {
+                HashMap<Integer, Paper> papersOfAuthor = author.getPapersById(papersById);
+                for (Paper paper : papersOfAuthor.values()) {
+                    authorpaper.addValue(author.getId(), paper.getId(), 1.0);
+                }
+            }
+        }
+
+        if(authors != null){
+
+        }
+
+
+        return authorpaper;
+    }
     private Matrix getAuthorPaperMatrix(String authorname, String papername){
         Matrix authorpaper = new Matrix();
 
