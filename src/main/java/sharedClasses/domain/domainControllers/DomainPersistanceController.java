@@ -99,7 +99,7 @@ public class DomainPersistanceController {
     }
 
     public void readAllFromFile(String path) {
-        if(path != null || !path.equals("")) {
+        if (path != null) {
             filepath = path;
         }
         readAuthorsFromFile();
@@ -114,7 +114,7 @@ public class DomainPersistanceController {
         //testDomain();
     }
 
-    public ArrayList<String> readNames(String path){   //NOMES PEL SUBSETQUERY
+    public ArrayList<String> readNames(String path) {   //NOMES PEL SUBSETQUERY
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(path));
         ArrayList<String> names = new ArrayList<>();
@@ -142,7 +142,7 @@ public class DomainPersistanceController {
         ArrayList<String> newPapers = new ArrayList<>();
         for (int i = 0; i < papersToRelate.size(); i++) {
             p = papersByName.get(papersToRelate.get(i));
-            if (p == null)  newPapers.add(papersToRelate.get(i));
+            if (p == null) newPapers.add(papersToRelate.get(i));
             else {
                 a.addPaper(p);
                 p.addAuthor(a);
@@ -288,8 +288,7 @@ public class DomainPersistanceController {
             authorsByName.remove(authorName);
             authorsByName.put(newName, a);
             return true;
-        }
-        catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             System.err.println("Aquest autor no existeix");
             return false;
         }
@@ -302,12 +301,12 @@ public class DomainPersistanceController {
             papersByName.remove(paperName);
             papersByName.put(newName, p);
             return true;
-        }
-        catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             System.err.println("Aquest article no existeix");
             return false;
         }
     }
+
     private boolean editTerm(String termName, String newName) {
         try {
             Term t = termsByName.get(termName);
@@ -315,12 +314,12 @@ public class DomainPersistanceController {
             termsByName.remove(termName);
             termsByName.put(newName, t);
             return true;
-        }
-        catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             System.err.println("Aquest terme no existeix");
             return false;
         }
     }
+
     private boolean editConference(String confName, String newName) {
         try {
             Conference c = conferencesByName.get(confName);
@@ -328,8 +327,7 @@ public class DomainPersistanceController {
             conferencesByName.remove(confName);
             conferencesByName.put(newName, c);
             return true;
-        }
-        catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             System.err.println("Aquesta conferencia no existeix");
             return false;
         }
@@ -1021,4 +1019,135 @@ public class DomainPersistanceController {
         }
     }
 
+
+    private void writeAuthorsToFile() {
+        String p = new File("").getAbsolutePath();
+        File inputFile = new File(p.concat(filepath + "author.txt"));
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile, false));
+            for (Author a : authorsById.values()) {
+                String line = Integer.toString(a.getId()) + "\t" + a.getName();
+                writer.write(line);
+            }
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+
+    }
+/*
+    private void readPapersFromFile() {
+        String p = new File("").getAbsolutePath();
+        File inputFile = new File(p.concat(filepath + "paper.txt"));
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] aux = line.split("	");
+                int id = Integer.parseInt(aux[0]);
+                Paper paper = new Paper(aux[1], id);
+                papersById.put(id, paper);
+                papersByName.put(aux[1], paper);
+            }
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+    }
+
+    private void readConferencesFromFile() {
+        String p = new File("").getAbsolutePath();
+        File inputFile = new File(p.concat(filepath + "conf.txt"));
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] aux = line.split("	");
+                int id = Integer.parseInt(aux[0]);
+                Conference conf = new Conference(aux[1], id);
+//                conf.setYear(Integer.parseInt(aux[2]));
+                //              conf.setContinent(aux[3]);
+                conferencesById.put(id, conf);
+                conferencesByName.put(aux[1], conf);
+            }
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+    }
+
+
+    private void readTermsFromFile() {
+        String p = new File("").getAbsolutePath();
+        File inputFile = new File(p.concat(filepath + "term.txt"));
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] aux = line.split("	");
+                int id = Integer.parseInt(aux[0]);
+                Term term = new Term(aux[1], id);
+                termsById.put(id, term);
+                termsByName.put(aux[1], term);
+            }
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+    }
+
+
+    private void readPaperAuthorRelations() {
+        String p1 = new File("").getAbsolutePath();
+        File inputFile = new File(p1.concat(filepath + "paper_author.txt"));
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+            String line;
+            Paper p;
+            Author a;
+            while ((line = reader.readLine()) != null) {
+                String aux[] = line.split("	");
+                p = papersById.get(Integer.parseInt(aux[0]));
+                a = authorsById.get(Integer.parseInt(aux[1]));
+
+                p.addAuthor(a);
+                a.addPaper(p);
+            }
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+    }
+
+    private void readConferenceRelations() {
+        String p1 = new File("").getAbsolutePath();
+        File inputFile = new File(p1.concat(filepath + "paper_conf.txt"));
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+            String line;
+            Paper p;
+            Conference c;
+            while ((line = reader.readLine()) != null) {
+                String aux[] = line.split("	");
+                p = papersById.get(Integer.parseInt(aux[0]));
+                c = conferencesById.get(Integer.parseInt(aux[1]));
+
+                p.setConference(c);
+                c.addExposedPaper(p);
+            }
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+    }
+
+   private void readTermRelations() {
+        String p1 = new File("").getAbsolutePath();
+        File inputFile = new File(p1.concat(filepath + "paper_term.txt"));
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+            String line;
+            Paper p;
+            Term t;
+            while ((line = reader.readLine()) != null) {
+                String aux[] = line.split("	");
+                p = papersById.get(Integer.parseInt(aux[0]));
+                t = termsById.get(Integer.parseInt(aux[1]));
+
+                p.addTerm(t);
+                t.addPaperWhichTalkAboutIt(p);
+            }
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+    }
+*/
 }

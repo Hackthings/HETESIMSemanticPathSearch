@@ -52,7 +52,7 @@ public class DomainMainController {
         conferencesByName = new HashMap<>();
         termsByName = new HashMap<>();
         persistanceController = new DomainPersistanceController(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
-        persistanceController.readAllFromFile("");
+        persistanceController.readAllFromFile(null);
         BinaryAuthors binaryAuthors = new BinaryAuthors();
         BinaryPapers binaryPapers = new BinaryPapers();
         BinaryConferences binaryConferences = new BinaryConferences();
