@@ -11,7 +11,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 
-public class GraphViewController extends JFrame{
+public class GraphViewController{
     private Graph graph;
 
     private final String styleSheet =
@@ -32,9 +32,6 @@ public class GraphViewController extends JFrame{
         "}";
 
     public GraphViewController(DomainMainController d, String name, String path){
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3,1));
-        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         graph = new SingleGraph(path);
 
         graph.setAutoCreate(true);
@@ -44,10 +41,7 @@ public class GraphViewController extends JFrame{
         graph.addEdge("BC", "B", "C");
         graph.addAttribute("ui.stylesheet", styleSheet);
 
-
-        Viewer viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
-        View view = viewer.addDefaultView(false);   // false indicates "no JFrame".
-        panel.add((Component) view);
+        graph.display();
     }
 
     private void genGraph(DomainMainController d, String path){
