@@ -1,5 +1,8 @@
 package main.java.sharedClasses.utils;
 
+import main.java.sharedClasses.domain.nodes.Author;
+import main.java.sharedClasses.domain.nodes.Paper;
+
 import java.util.*;
 
 /**
@@ -7,72 +10,99 @@ import java.util.*;
  */
 
 public class Matrix {
-    //private LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> matrix;
-    //private LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> mTrans;
-
     private HashMap<Integer, LinkedList<Vertex>> matrix;
     private HashMap<Integer, LinkedList<Vertex>> mTrans;
 
-    //Constructora de la classe
-    //Pre: Cert
-    //Post: Crea una matriu buida i inicialitza el pair
+    /**
+     * Basic constructor function for the Matrix.
+     *
+     * @see         Matrix
+     */
     public Matrix() {
         this.matrix = new LinkedHashMap<>();
         this.mTrans = new LinkedHashMap<>();
     }
 
+    /**
+     * Constructor function for the Matrix class.
+     *
+     * @param  m the matrix HashMap
+     * @param  mTrans the transposed matrix HashMap
+     * @see         Matrix
+     */
     private Matrix(HashMap<Integer, LinkedList<Vertex>> m, HashMap<Integer, LinkedList<Vertex>> mTrans) {
         this.matrix = m;
         this.mTrans = mTrans;
     }
 
-    //Pre: Cert
-    //Post: Retorna un vector amb les files valides
+    /**
+     * Returns the valid rows of the Matrix
+     *
+     * @return      the valid rows of the Matrix
+     * @see         Set
+     */
     public Set<Integer> rows() {
         return this.matrix.keySet();
     }
 
-    //Pre: Cert
-    //Post: Retorna un vector amb les columnes valides
+    /**
+     * Returns the valid columns of the Matrix
+     *
+     * @return      the valid columns of the Matrix
+     * @see         Set
+     */
     public Set<Integer> cols() {
         return this.mTrans.keySet();
     }
 
-    //Pre: Existeix la fila key
-    //Post: Retorna un vector amb els valors de les columnes de la fila key
+    /**
+     * Returns the rows related to the column key of the Matrix
+     *
+     * @param   key the column of the Matrix which has to be the key for the rows we want
+     * @return      the rows related to the column key of the Matrix
+     * @see         LinkedList
+     */
     public LinkedList<Vertex> getRow(int key) {
         return this.matrix.get(key);
     }
 
-    //Pre: Existeix la columna key
-    //Post: Retorna un vector amb els valors de les files de la columna key
+    /**
+     * Returns the columns related to the row key of the Matrix
+     *
+     * @param   key the row of the Matrix which has to be the key for the columns we want
+     * @return      the columns related to the column key of the Matrix
+     * @see         LinkedList
+     */
     private LinkedList<Vertex> getColumn(int key) {
         return this.mTrans.get(key);
     }
 
-    //Pre: Cert
-    //Post: Afegeix una fila buida (un LinkedHashMap<Integer, Double>> buit)
-    public void addRow(int i, LinkedList<Vertex> l){
+    /**
+     * Adds a row to the Matrix
+     *
+     * @param  i the position where we want to put the row
+     * @param  l the row we want to add to the Matrix
+     */
+    private void addRow(int i, LinkedList<Vertex> l){
         this.matrix.put(i, l);
     }
 
+    /**
+     * Adds a transposed row to the Matrix
+     *
+     * @param  j the position where we want to put the row
+     * @param  l the row we want to add to the Matrix
+     */
     private void addRowTranspose(int j, LinkedList<Vertex> l) {
         this.mTrans.put(j, l);
     }
 
-
-    //Pre: Cert
-    //Post: Elimina la fila i de la matriu.
-    /*public void deleteRow(int i) {
-        LinkedList<Vertex> tmp = this.matrix.remove(i);
-        for (Vertex p : tmp) {
-            this.mTrans.get(p.getFirst()).remove(p);
-        }
-    }*/
-
-
-    //Pre: Existeix la posicio i,j
-    //Post: Elimina el valor de la posicio i,j
+    /**
+     * Deletes the value at the (i, j) position of the Matrix
+     *
+     * @param  i the row where the value is located
+     * @param  j the coloumn where the value is located
+     */
     private void deleteValue(int i, int j) {
         try {
             this.matrix.get(i).remove(j);
@@ -83,9 +113,13 @@ public class Matrix {
     }
 
 
-    //Pre: Cert
-    //Post: Afegeix el valor value a la posició i,j. Afegeix una fila si es necessari.
-    //      Si el valor es 0, comprova si cal eliminar la fila.
+    /**
+     * Adds the value at the (i, j) position of the Matrix
+     *
+     * @param  i the row where the value is located
+     * @param  j the coloumn where the value is located
+     * @param  value the value to add at (i, j)
+     */
     public void addValue(int i, int j, double value){
         if (value == 0) { //Si el valor es 0 i existeix a la matriu, s'elimina.
             if (getValue(i, j) != -1) {
@@ -141,8 +175,14 @@ public class Matrix {
     }
 
 
-    //Pre: Cert.
-    //Post: Retorna el valor de i, j, si existeix, sino retorna -1.
+    /**
+     * Adds the value at the (i, j) position of the Matrix
+     *
+     * @param  i the row where the value is located
+     * @param  j the coloumn where the value is located
+     * @return  the value at the (i, j) position of the Matrix
+     * @see double
+     */
     public double getValue(int i, int j){
         if (this.matrix.containsKey(i)) {
             for (Vertex p : getRow(i)) {
@@ -154,15 +194,24 @@ public class Matrix {
     }
 
 
-    //Pre: Cert
-    //Post: Retorna la matriu transposada.
+    /**
+     * Returns the transposed matrix of our Matrix
+     *
+     * @see         Matrix
+     */
     public Matrix transpose(){
         return new Matrix(this.mTrans, this.matrix);
     }
 
 
-    //Pre: el paràmetre implícit té el mateix nombre de columnes que files té m
-    //Post: retorna la matriu producte del paràmetre implícit amb m
+    /**
+     * Returns the product of our Matrix with the matrix m
+     *
+     * @param  m the matrix to be multiplied to our Matrix
+     * @return   the product of our Matrix with the matrix m
+     *
+     * @see Matrix
+     */
     public Matrix multiply(Matrix m){
         Matrix mult = new Matrix();
         Set<Integer> r = rows();
@@ -206,8 +255,14 @@ public class Matrix {
     }
 
 
-    //Pre: el paràmetre implícit té el mateix nombre de columnes que files té m
-    //Post: retorna la divisó de cada cel·la de la matriu del paràmetre implícit amb m
+    /**
+     * Returns the division of every cell of our Matrix with every cell of the matrix m
+     *
+     * @param  m the matrix to do the divisions
+     * @return   the division of every cell of our Matrix with every cell of the matrix m
+     *
+     * @see Matrix
+     */
     public Matrix dividycells(Matrix m){
         Matrix div = new Matrix();
         Set<Integer> r = rows();
@@ -233,8 +288,13 @@ public class Matrix {
     }
 
 
-    //Pre: Cert
-    //Post: retorna el modul de la fila i. Si no existeix, retorna 0.
+    /**
+     * Returns the modulous of the row i or 0 if the row doesn't exists
+     *
+     * @param  i the row we want to do the modulous
+     * @return  the modulous of the row i or 0 if the row doesn't exists
+     * @see double
+     */
     public double rowModulus(int i) {
         if (this.matrix.containsKey(i)) {
             LinkedList<Vertex> list = this.matrix.get(i);
@@ -247,8 +307,13 @@ public class Matrix {
     }
 
 
-    //Pre: Cert
-    //Post: retorna el modul de la columna j. Si no existeix, retorna 0.
+    /**
+     * Returns the modulous of the column i or 0 if the row doesn't exists
+     *
+     * @param  j the column we want to do the modulous
+     * @return  the modulous of the column i or 0 if the row doesn't exists
+     * @see double
+     */
     public double columModulus(int j) {
         if (this.mTrans.containsKey(j)) {
             LinkedList<Vertex> list = this.mTrans.get(j);
@@ -260,32 +325,20 @@ public class Matrix {
         } else return 0;
     }
 
-
-    //Pre: la matriu nomes conte 1s i 0s.
-    //Post: Divideix totes les files per el nombre de valors
-    public Matrix normalize_bin(){
-        Matrix n = new Matrix();
-        for (int i : rows()) {
-            double valor = 0;
-            if (getRow(i) != null) valor = getRow(i).size();
-            for (ListIterator<Vertex> it = getRow(i).listIterator(); it.hasNext();) {
-                Vertex p = it.next();
-                n.addValue(i, p.getSecond(), p.getValue()/valor);
-            }
-        }
-        return n;
-    }
-
-    //Pre: la matriu nomes qualsevol valor
-    //Post: Divideix totes les files per el nombre de valors
+    /**
+     * Normalizes the Matrix
+     *
+     * @return  the normalized Matrix
+     * @see Matrix
+     */
     public Matrix normalize(){
         Matrix n = new Matrix();
         Set<Integer> r = rows();
         for (int i : r) {
             double valor = 0;
             if (getRow(i) != null) {
-                for (ListIterator<Vertex> it = getRow(i).listIterator(); it.hasNext();) {
-                    double val = it.next().getValue();
+                for (Vertex vertex : getRow(i)) {
+                    double val = vertex.getValue();
 
                     valor += val * val;
                 }
@@ -300,40 +353,6 @@ public class Matrix {
 
         }
         return n;
-    }
-
-    public Matrix normalize2(){
-        Matrix n = new Matrix();
-        Set<Integer> r = rows();
-        for (int i : r) {
-            if (getRow(i) != null) {
-                double valor = getRow(i).size();
-                valor = 1/Math.sqrt(valor);
-
-                for (ListIterator<Vertex> it = getRow(i).listIterator(); it.hasNext();) {
-                    Vertex p = it.next();
-                    n.addValue(i, p.getSecond(), valor);
-                }
-            }
-
-        }
-        return n;
-    }
-
-    //Pre: Cert
-    //Post: Imprimeix la matriu del parametre implicit
-    public void print(){
-        System.out.println("------------");
-        for(int x : rows()){
-            for (Vertex p : getRow(x)) {
-                System.out.print(x);
-                System.out.print(",");
-                System.out.print(p.getSecond());
-                System.out.print(":");
-                System.out.println(p.getValue());
-            }
-        }
-        System.out.println("------------");
     }
 
 }
