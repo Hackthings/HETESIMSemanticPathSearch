@@ -120,11 +120,35 @@ public class PresentationAddNodes extends JFrame {
                         firstTextFields.get(i).setVisible(false);
                     }
                 }
+                else if(termaux != null){
+                    textField1.setText(paperaux);
+                    textField1.setEnabled(false);
+                    comboBox2.setEnabled(false);
+                    secondTextFields.get(0).setText(termaux);
+                    secondTextFields.get(0).setEnabled(false);
+                    for(int i = 1; i < firstTextFields.size();i++){
+                        secondTextFields.get(i).setVisible(false);
+                    }
+                }
+                else if(confaux != null){
+                    textField1.setText(paperaux);
+                    textField1.setEnabled(false);
+                    comboBox1.setEnabled(false);
+                    cName.setText(confaux);
+                    cName.setEnabled(false);
+                }
                 acceptarButton.addActionListener(e2-> callAddPaper());
                 break;
             }
             case (2): { //TERM
                 addNode.setText("Afegir Terme");
+                Num1.setText("Número d'Articles:");
+                Num2.setVisible(false);
+                comboBox2.setVisible(false);
+                for(int i = 0; i < secondTextFields.size(); i++) secondTextFields.get(i).setVisible(false);
+                Conferencia.setVisible(false);
+                cName.setVisible(false);
+                acceptarButton.addActionListener(e1-> callAddTerm());
                 break;
             }
             case (3): { //CONFERENCES
@@ -149,7 +173,7 @@ public class PresentationAddNodes extends JFrame {
             vw.setVisible("Introdueix un nom per l'Autor");
             return;
         }
-        if(paperaux != null) {
+        if(paperaux == null) {
             for (int i = 0; i < firstTextFields.size(); i++) {
                 if (firstTextFields.get(i).isEnabled()) {
                     String pName = firstTextFields.get(i).getText();
@@ -164,7 +188,7 @@ public class PresentationAddNodes extends JFrame {
             }
         }
         else {
-            papersToAdd.add(firstTextFields.get(0).getText());
+            papersToAdd.add(paperaux);
         }
         ArrayList<String> newPapers = persistanceController.addNewAuthor(authorName,papersToAdd);
         if(newPapers.size() == 0){
@@ -181,7 +205,7 @@ public class PresentationAddNodes extends JFrame {
             int op = JOptionPane.showOptionDialog(panel1, "Hi ha Articles que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
             if(op == JOptionPane.YES_OPTION){
                 for(int i = 0; i < newPapers.size(); i++){
-                    new PresentationAddNodes(persistanceController,1,authorName,newPapers.get(i),null,null);
+                    new PresentationAddNodes(persistanceController,1,authoraux,newPapers.get(i), null, null);
                 }
             }
             else{
@@ -255,19 +279,19 @@ public class PresentationAddNodes extends JFrame {
             vw.setVisible("L'article ja existeix");
         }
         else {
+            paperaux = paperName;
             Object[] options = {"Acceptar", "Cancelar"};
             int op = JOptionPane.showOptionDialog(panel1, "Hi ha Autors que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
             if(op == JOptionPane.YES_OPTION) {
                 ArrayList<String> newAuthors = newNodes.get("A");
                 for (int i = 0; i < newAuthors.size(); i++) {
-                    paperaux = paperName;
                     callAddAuthor();
                 }
             }
 
             ArrayList<String> newTerms = newNodes.get("T");
             for(int i = 0; i < newTerms.size(); i++){
-               // new PresentationAddNodes(persistanceController,2,null,paperName,null,null);
+               callAddTerm();
             }
 
             ArrayList<String> newConference = newNodes.get("C");
@@ -276,6 +300,57 @@ public class PresentationAddNodes extends JFrame {
             }
 
         }
+    }
+
+    private void callAddTerm(){
+        ArrayList<String> papersToAdd = new ArrayList<>();
+        String termName = textField1.getText();
+        if(termName == null || termName.equals("")){
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Introdueix un nom per el Terme");
+            return;
+        }
+        if(paperaux != null) {
+            for (int i = 0; i < firstTextFields.size(); i++) {
+                if (firstTextFields.get(i).isEnabled()) {
+                    String pName = firstTextFields.get(i).getText();
+                    if (pName == null || pName.equals("")) {
+                        VistaWARNING vw = new VistaWARNING();
+                        vw.setVisible("Introdueix un nom per l'Article");
+                        return;
+                    } else {
+                        papersToAdd.add(pName);
+                    }
+                }
+            }
+        }
+        else {
+            papersToAdd.add(firstTextFields.get(0).getText());
+        }
+        ArrayList<String> newPapers = persistanceController.addNewTerm(termName,papersToAdd);
+        if(newPapers.size() == 0){
+            //SHA CREAT TO BIEN
+            return;
+        }
+        else if(newPapers.get(0).equals("Ja Existeix")){
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Aquest terme ja existeix");
+            return;
+        }
+        else {
+            Object[] options = {"Acceptar", "Cancelar"};
+            int op = JOptionPane.showOptionDialog(panel1, "Hi ha Articles que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            if(op == JOptionPane.YES_OPTION){
+                for(int i = 0; i < newPapers.size(); i++){
+                    new PresentationAddNodes(persistanceController,1,null,newPapers.get(i),termName,null);
+                }
+            }
+            else{
+                persistanceController.deleteTerm(termName);
+                return;
+            }
+        }
+        super.dispose();
     }
     /**
      * Method generated by IntelliJ IDEA GUI Designer
