@@ -95,27 +95,27 @@ public class DomainMainController {
         return persistanceController;
     }
 
-    HashMap<Integer,Author> getAuthorsById(){
+    public HashMap<Integer,Author> getAuthorsById(){
         return authorsById;
     }
 
-    HashMap<Integer,Paper> getPapersById(){
+    public HashMap<Integer,Paper> getPapersById(){
         return papersById;
     }
 
-    HashMap<Integer,Conference> getConferencesById(){
+    public HashMap<Integer,Conference> getConferencesById(){
         return conferencesById;
     }
 
-    HashMap<Integer,Term> getTermsById(){ return termsById; }
+    public HashMap<Integer,Term> getTermsById(){ return termsById; }
 
-    HashMap<String,Author> getAuthorsByName(){ return authorsByName; }
+    public HashMap<String,Author> getAuthorsByName(){ return authorsByName; }
 
-    HashMap<String,Paper> getPapersByName(){ return papersByName;}
+    public HashMap<String,Paper> getPapersByName(){ return papersByName;}
 
-    HashMap<String,Conference> getConferencesByName(){return conferencesByName;}
+    public HashMap<String,Conference> getConferencesByName(){return conferencesByName;}
 
-    HashMap<String,Term> getTermsByName(){return termsByName;}
+    public HashMap<String,Term> getTermsByName(){return termsByName;}
 
 
     /**
@@ -572,7 +572,7 @@ public class DomainMainController {
 
     public void editGraph() {
         DomainPersistanceController domainPersistanceController = new DomainPersistanceController(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
-        domainPersistanceController.newEdit();
+        //domainPersistanceController.newEdit();
         edit = true;
     }
 
