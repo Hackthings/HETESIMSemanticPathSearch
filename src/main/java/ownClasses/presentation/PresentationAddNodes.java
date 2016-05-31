@@ -79,9 +79,21 @@ public class PresentationAddNodes extends JFrame {
         secondTextFields.add(tName9);
         secondTextFields.add(tName10);
 
+        for(int i = 1; i < firstTextFields.size(); i++) firstTextFields.get(i).setEnabled(false);
+
+        for(int i = 0; i < secondTextFields.size(); i++) secondTextFields.get(i).setEnabled(false);
+
+
+        comboBox1.addActionListener(e-> enableFields(firstTextFields,comboBox1));
+        comboBox2.addActionListener(e-> enableFields(secondTextFields,comboBox2));
+
         switch (selectedIndex) {
             case (0): { //AUTHOR
-
+                Num1.setText("Número d'Articles:");
+                Num2.setVisible(false);
+                comboBox2.setVisible(false);
+                for(int i = 0; i < secondTextFields.size(); i++) secondTextFields.get(i).setVisible(false);
+                acceptarButton.addActionListener(e1-> callAddAuthor());
             }
             case (1): { //PAPER
 
@@ -95,6 +107,34 @@ public class PresentationAddNodes extends JFrame {
         }
 
         setVisible(true);
+    }
+
+    private void enableFields(ArrayList<JTextField> a, JComboBox b){
+        int numF = Integer.parseInt((String)b.getSelectedItem());
+        for(int i = 0; i < numF; i++) a.get(i).setDragEnabled(true);
+    }
+
+    private void callAddAuthor(){
+        ArrayList<String> papersToAdd = new ArrayList<>();
+        String authorName = textField1.getText();
+        if(authorName == null || authorName.equals("")){
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Introdueix un nom per l'Autor");
+            return;
+        }
+        for(int i = 0; i < firstTextFields.size(); i++){
+            if(firstTextFields.get(i).isEnabled()){
+                String pName = firstTextFields.get(i).getText();
+                if(pName == null || pName.equals("")) {
+                    VistaWARNING vw = new VistaWARNING();
+                    vw.setVisible("Introdueix un nom per l'Article");
+                }
+                else {
+                    papersToAdd.add(pName);
+                }
+            }
+            ArrayList<String> newPapers = persistanceController.addNewAuthor(authorName,papersToAdd);
+        }
     }
 
     /**
@@ -152,9 +192,10 @@ public class PresentationAddNodes extends JFrame {
         gbc.ipady = 20;
         gbc.insets = new Insets(0, 20, 0, 0);
         panel1.add(Num2, gbc);
-        comboBox2 = new JComboBox();
-        final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
-        comboBox2.setModel(defaultComboBoxModel1);
+        String[] numbers = {"1","2","3","4","5","6","7","8","9","10"};
+        comboBox2 = new JComboBox(numbers);
+       // final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
+       // comboBox2.setModel(defaultComboBoxModel1);
         comboBox2.setVisible(true);
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
@@ -421,9 +462,9 @@ public class PresentationAddNodes extends JFrame {
         gbc.ipady = 30;
         gbc.insets = new Insets(0, 20, 0, 0);
         panel1.add(addNode, gbc);
-        comboBox1 = new JComboBox();
-        final DefaultComboBoxModel defaultComboBoxModel2 = new DefaultComboBoxModel();
-        comboBox1.setModel(defaultComboBoxModel2);
+        comboBox1 = new JComboBox(numbers);
+        //final DefaultComboBoxModel defaultComboBoxModel2 = new DefaultComboBoxModel();
+        //comboBox1.setModel(defaultComboBoxModel2);
         comboBox1.setVisible(true);
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
