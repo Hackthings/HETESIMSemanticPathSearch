@@ -52,7 +52,7 @@ public class DomainMainController {
         conferencesByName = new HashMap<>();
         termsByName = new HashMap<>();
         persistanceController = new DomainPersistanceController(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
-       // persistanceController.readAllFromFile("");
+        persistanceController.readAllFromFile("");
         BinaryAuthors binaryAuthors = new BinaryAuthors();
         BinaryPapers binaryPapers = new BinaryPapers();
         BinaryConferences binaryConferences = new BinaryConferences();
@@ -60,10 +60,10 @@ public class DomainMainController {
       //  System.out.println("Exporta");
         long timeini = System.currentTimeMillis();
         //persistanceController.binaryexport();
-       /* binaryAuthors.write(authorsById);
+        binaryAuthors.write(authorsById);
         binaryPapers.write(papersById);
         binaryTerms.write(termsById);
-        binaryConferences.write(conferencesById);*/
+        binaryConferences.write(conferencesById);
         long timefinal = System.currentTimeMillis();
         System.out.println(timefinal-timeini);
         System.out.println("Importa");
@@ -436,6 +436,10 @@ public class DomainMainController {
     /**
      * Shows at the screen the string composed by the name of the node identified by the char tipus
      * and the Integer id, the string " -> " and the relevance
+     *
+     * @param tipus indicates the type of the node
+     * @param id the id of the node
+     * @param relevance a double that indicates the relevance of the node with another node.
      */
 
     private void printresult(char tipus, Integer id, Double relevance){
@@ -456,6 +460,8 @@ public class DomainMainController {
                 break;
         }
     }
+
+
 
     private ArrayList<Pair<Integer,Double>> resultWithOrder(LinkedList<Vertex> resultquery, OrderedQuery query){
         /*char tipus = query.getPath().charAt(query.getPath().length()-1);
@@ -585,7 +591,6 @@ public class DomainMainController {
             }
         }
         if(authorname != null && papername ==null) {
-            System.out.println("HELLO AUTHOR");
             Author author = authorsByName.get(authorname);
             HashMap<Integer, Paper> papersOfAuthor = author.getPapersById(papersById);
             for (Paper paper : papersOfAuthor.values()) {
