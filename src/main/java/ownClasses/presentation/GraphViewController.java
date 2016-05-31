@@ -30,32 +30,35 @@ public class GraphViewController{
         "}";
 
     public GraphViewController(DomainMainController d, String name, String path){
+        System.out.println(path);
         graph = new SingleGraph(path);
+
 
         graph.setAutoCreate(true);
         graph.setStrict(false);
-        //graph.addEdge("AB", "A", "B");
-        //graph.addEdge("AC", "A", "C");
-        //graph.addEdge("BC", "B", "C");
-        //Node a = graph.getNode("A");
-        //a.setAttribute("ui.class", "author");
+        /*
+        graph.addEdge("AB", "A", "B");
+        graph.addEdge("AC", "A", "C");
+        graph.addEdge("BC", "B", "C");
+        Node a = graph.getNode("A");
+        a.setAttribute("ui.class", "A");*/
 
         graph.addNode(name);
         /*
         Node n = graph.getNode(name);
         n.addAttribute("ui.class", path.charAt(0));
         n.addAttribute("ui.label", name);*/
-        genGraph(d, name, path);
 
+        genGraph(d, name, path);
         graph.addAttribute("ui.stylesheet", styleSheet);
         graph.display();
     }
 
     private void genGraph(DomainMainController d,String name, String path){
         Node n = graph.getNode(name);
-        n.addAttribute("ui.class", path.charAt(0));
+        n.addAttribute("ui.class", Character.toString(path.charAt(0)));
         n.addAttribute("ui.label", name);
-        if(name.length() > 1){
+        if(path.length() > 1){
             switch (path.charAt(0)) {
                 case 'A':
                     Author a = d.getAuthorsByName().get(name);
@@ -64,6 +67,7 @@ public class GraphViewController{
                         graph.addEdge(name+paper.getName(), name, paper.getName());
                         genGraph(d, paper.getName(), path.substring(1));
                     }
+                    break;
                 case 'P':
                     Paper p = d.getPapersByName().get(name);
                     switch (path.charAt(1)){
@@ -73,24 +77,30 @@ public class GraphViewController{
                                 graph.addEdge(name+auth.getName(), name, auth.getName());
                                 genGraph(d, auth.getName(), path.substring(1));
                             }
+                            break;
                         case 'C':
                             Conference c = p.getConference();
                             graph.addEdge(name+c.getName(), name, c.getName());
                             genGraph(d, c.getName(), path.substring(1));
+                            break;
                         case 'T':
                             for(Integer i : p.getRelatedTerms()){
                                 Term t = d.getTermsById().get(i);
                                 graph.addEdge(name+t.getName(), name, t.getName());
                                 genGraph(d, t.getName(), path.substring(1));
                             }
+                            break;
                     }
+                    break;
                 case 'C':
+                    System.out.println("NO");
                     Conference c = d.getConferencesByName().get(name);
                     for(Integer i : c.getExposedPapers()){
                         Paper paper = d.getPapersById().get(i);
                         graph.addEdge(name+paper.getName(), name, paper.getName());
                         genGraph(d, paper.getName(), path.substring(1));
                     }
+                    break;
                 case 'T':
                     Term t = d.getTermsByName().get(name);
                     for(Integer i : t.getPapersWhichTalkAboutThis()){
@@ -98,6 +108,7 @@ public class GraphViewController{
                         graph.addEdge(name+paper.getName(), name, paper.getName());
                         genGraph(d, paper.getName(), path.substring(1));
                     }
+                    break;
             }
         }
     }
