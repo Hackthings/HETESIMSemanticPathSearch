@@ -14,7 +14,7 @@ import main.java.sharedClasses.domain.nodes.Conference;
 import main.java.sharedClasses.domain.nodes.Paper;
 import main.java.sharedClasses.domain.nodes.Term;
 import main.java.sharedClasses.utils.Matrix;
-import main.java.sharedClasses.utils.Pair;
+import main.java.ownClasses.domain.utils.Pair;
 import main.java.sharedClasses.utils.Vertex;
 
 import java.util.*;

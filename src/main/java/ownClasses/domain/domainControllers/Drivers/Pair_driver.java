@@ -1,7 +1,7 @@
 package main.java.ownClasses.domain.domainControllers.Drivers;
 
 
-import main.java.sharedClasses.utils.Pair;
+import main.java.ownClasses.domain.utils.Pair;
 
 public class Pair_driver {
 
