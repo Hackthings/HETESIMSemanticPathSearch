@@ -51,21 +51,20 @@ public class DomainMainController {
         conferencesByName = new HashMap<>();
         termsByName = new HashMap<>();
         persistanceController = new DomainPersistanceController(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
-        persistanceController.readAllFromFile("");
+       // persistanceController.readAllFromFile("");
         BinaryAuthors binaryAuthors = new BinaryAuthors();
         BinaryPapers binaryPapers = new BinaryPapers();
         BinaryConferences binaryConferences = new BinaryConferences();
         BinaryTerms binaryTerms = new BinaryTerms();
-        System.out.println("Exporta");
+      //  System.out.println("Exporta");
         long timeini = System.currentTimeMillis();
         //persistanceController.binaryexport();
-        binaryAuthors.write(authorsById);
+       /* binaryAuthors.write(authorsById);
         binaryPapers.write(papersById);
         binaryTerms.write(termsById);
-        binaryConferences.write(conferencesById);
+        binaryConferences.write(conferencesById);*/
         long timefinal = System.currentTimeMillis();
         System.out.println(timefinal-timeini);
-
         System.out.println("Importa");
 
         timeini = System.currentTimeMillis();

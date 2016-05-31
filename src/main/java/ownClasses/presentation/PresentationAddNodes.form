@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="main.java.ownClasses.presentation.PresentationAddNodes">
   <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="152" y="42" width="515" height="528"/>
+      <xy x="90" y="42" width="602" height="844"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -23,16 +23,18 @@
         </constraints>
         <properties>
           <text value="Num 1:"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="4d833" class="javax.swing.JTextField" binding="textField1" default-binding="true">
         <constraints>
-          <grid row="1" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="1" column="1" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="20" bottom="0" right="0" weightx="1.0" weighty="0.0" ipadx="100"/>
+          <gridbag top="0" left="20" bottom="0" right="20" weightx="1.0" weighty="0.0" ipadx="100"/>
         </constraints>
         <properties>
+          <maximumSize width="14" height="24"/>
           <preferredSize width="14" height="28"/>
         </properties>
       </component>
@@ -43,6 +45,7 @@
         </constraints>
         <properties>
           <text value="Num 2:"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="e128e" class="javax.swing.JComboBox" binding="comboBox2" default-binding="true">
@@ -52,6 +55,7 @@
         </constraints>
         <properties>
           <model/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="ef798" class="javax.swing.JLabel" binding="Conferencia">
@@ -61,241 +65,265 @@
         </constraints>
         <properties>
           <text value="Conferencia"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="e0f4e" class="javax.swing.JTextField" binding="cName">
         <constraints>
-          <grid row="22" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="22" column="2" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="20" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="0" left="20" bottom="0" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
           <preferredSize width="14" height="28"/>
           <text value=""/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="3a12a" class="javax.swing.JTextField" binding="aName1">
         <constraints>
-          <grid row="2" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="2" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0" ipadx="150"/>
+          <gridbag top="0" left="10" bottom="0" right="10" weightx="0.0" weighty="0.0" ipadx="150"/>
         </constraints>
         <properties>
+          <minimumSize width="14" height="28"/>
           <preferredSize width="14" height="28"/>
           <text value=""/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="157f7" class="javax.swing.JTextField" binding="aName2">
         <constraints>
-          <grid row="11" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="11" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0" ipadx="100"/>
+          <gridbag top="0" left="10" bottom="0" right="10" weightx="0.0" weighty="0.0" ipadx="150"/>
         </constraints>
         <properties>
+          <minimumSize width="14" height="28"/>
           <preferredSize width="14" height="28"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="8f6fd" class="javax.swing.JTextField" binding="aName3">
         <constraints>
-          <grid row="3" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="3" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0" ipadx="150"/>
         </constraints>
         <properties>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
           <text value=""/>
-          <visible value="false"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="3583d" class="javax.swing.JTextField" binding="aName4">
         <constraints>
-          <grid row="4" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="4" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0" ipadx="150"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <text value=""/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="655a3" class="javax.swing.JTextField" binding="aName5">
         <constraints>
-          <grid row="5" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="5" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <text value=""/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="476e7" class="javax.swing.JTextField" binding="aName7">
         <constraints>
-          <grid row="6" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="6" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="44731" class="javax.swing.JTextField" binding="aName8">
         <constraints>
-          <grid row="7" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="7" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <text value=""/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="ffdec" class="javax.swing.JTextField" binding="aName9">
         <constraints>
-          <grid row="9" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="9" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="2bb7d" class="javax.swing.JTextField" binding="aName10">
         <constraints>
-          <grid row="10" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="10" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <text value=""/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="359b5" class="javax.swing.JTextField" binding="tName1">
         <constraints>
-          <grid row="12" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="12" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="5bf97" class="javax.swing.JTextField" binding="tName2">
         <constraints>
-          <grid row="13" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="13" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="89fdc" class="javax.swing.JTextField" binding="tName3">
         <constraints>
-          <grid row="20" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="20" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="cdcf9" class="javax.swing.JTextField" binding="tName4">
         <constraints>
-          <grid row="19" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="19" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="e1808" class="javax.swing.JTextField" binding="tName5">
         <constraints>
-          <grid row="18" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="18" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="fddc8" class="javax.swing.JTextField" binding="tName6">
         <constraints>
-          <grid row="17" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="17" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="1f44b" class="javax.swing.JTextField" binding="tName7">
         <constraints>
-          <grid row="16" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="16" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="455fc" class="javax.swing.JTextField" binding="tName8">
         <constraints>
-          <grid row="15" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="15" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="74142" class="javax.swing.JTextField" binding="tName9">
         <constraints>
-          <grid row="14" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="14" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
-        </properties>
-      </component>
-      <component id="dfb87" class="javax.swing.JButton" binding="acceptarButton" default-binding="true">
-        <constraints>
-          <grid row="23" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="0.0" weighty="0.0" ipadx="30"/>
-        </constraints>
-        <properties>
-          <text value="Acceptar"/>
-        </properties>
-      </component>
-      <component id="91825" class="javax.swing.JButton" binding="cancelarButton" default-binding="true">
-        <constraints>
-          <grid row="23" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0" ipadx="10"/>
-        </constraints>
-        <properties>
-          <text value="Cancelar"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="f834" class="javax.swing.JLabel" binding="addNode">
         <constraints>
-          <grid row="0" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="2" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="0" left="20" bottom="0" right="0" weightx="0.0" weighty="0.0" ipadx="100" ipady="30"/>
         </constraints>
         <properties>
@@ -309,28 +337,53 @@
         </constraints>
         <properties>
           <model/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="992db" class="javax.swing.JTextField" binding="aName6">
         <constraints>
-          <grid row="8" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="8" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="24872" class="javax.swing.JTextField" binding="tName10">
         <constraints>
-          <grid row="21" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="21" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <gridbag weightx="0.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <visible value="false"/>
+          <minimumSize width="14" height="28"/>
+          <preferredSize width="14" height="28"/>
+          <text value=""/>
+          <visible value="true"/>
+        </properties>
+      </component>
+      <component id="91825" class="javax.swing.JButton" binding="cancelarButton" default-binding="true">
+        <constraints>
+          <grid row="23" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag top="0" left="0" bottom="10" right="20" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value="Cancelar"/>
+        </properties>
+      </component>
+      <component id="dfb87" class="javax.swing.JButton" binding="acceptarButton" default-binding="true">
+        <constraints>
+          <grid row="23" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="0" left="0" bottom="10" right="200" weightx="0.0" weighty="0.0" ipadx="30"/>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="0"/>
+          <text value="Acceptar"/>
         </properties>
       </component>
     </children>
