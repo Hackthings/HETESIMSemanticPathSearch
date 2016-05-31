@@ -51,7 +51,7 @@ public class PresentationEditGraph extends JFrame {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("Selecciona l'element a afegir");
         }
-         else new PresentationAddNodes(persistanceController,editList.getSelectedIndex());
+         else new PresentationAddNodes(persistanceController,editList.getSelectedIndex(),null,null,null,null);
     }
 
     private void deleteNodeAction() {
@@ -108,10 +108,10 @@ public class PresentationEditGraph extends JFrame {
         buttons.add(addNodeButton, gbc);
         editList = new JList();
         final DefaultListModel defaultListModel1 = new DefaultListModel();
-        defaultListModel1.addElement("Author");
-        defaultListModel1.addElement("Paper");
-        defaultListModel1.addElement("Term");
-        defaultListModel1.addElement("Conference");
+        defaultListModel1.add(0,"Author");
+        defaultListModel1.add(1,"Paper");
+        defaultListModel1.add(2,"Term");
+        defaultListModel1.add(3,"Conference");
         editList.setModel(defaultListModel1);
         editList.setVisible(true);
         gbc = new GridBagConstraints();

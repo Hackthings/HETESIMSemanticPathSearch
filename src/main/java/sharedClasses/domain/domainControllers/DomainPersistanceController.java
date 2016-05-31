@@ -135,8 +135,7 @@ public class DomainPersistanceController {
             newPapers.add("Ja Existeix");
             return newPapers;
         }
-        authorsById.put(a.getId(), a);
-        authorsByName.put(a.getName(), a);
+
         Paper p = null;
         for (int i = 0; i < papersToRelate.size(); i++) {
             p = papersByName.get(papersToRelate.get(i));
@@ -146,26 +145,53 @@ public class DomainPersistanceController {
                 p.addAuthor(a);
             }
         }
+        authorsById.put(a.getId(), a);
+        authorsByName.put(a.getName(), a);
         return newPapers;
     }
 
-    public boolean addNewPaper(String paperName, ArrayList<Author> authorsToRelate, ArrayList<Term> termsToRelate, Conference confToRelate) {
+    public HashMap<String,ArrayList<String>> addNewPaper(String paperName, ArrayList<String> authorsToRelate, ArrayList<String> termsToRelate, String confToRelate) {
         Paper p = new Paper(paperName, Paper.getMaxId() + 1);
+        ArrayList<String> newAuthors = new ArrayList<>();
+        ArrayList<String> newTerms = new ArrayList<>();
+        ArrayList<String> newConf = new ArrayList<>();
+        HashMap<String,ArrayList<String>> ret = new HashMap<>();
         if (papersByName.get(p.getName()) != null) {
             System.err.println("Aquest article ja existeix");
-            return false;
+            ret.put("Fail",null);
+            return ret;
         }
+        Author a = null;
+        Term t = null;
+        Conference c = null;
         for (int i = 0; i < authorsToRelate.size(); i++) {
-            p.addAuthor(authorsToRelate.get(i));
-            authorsToRelate.get(i).addPaper(p);
+            a = authorsByName.get(authorsToRelate.get(i));
+            if(a == null) newAuthors.add(authorsToRelate.get(i));
+            else {
+                p.addAuthor(a);
+                a.addPaper(p);
+            }
         }
         for (int i = 0; i < termsToRelate.size(); i++) {
-            p.addTerm(termsToRelate.get(i));
-            termsToRelate.get(i).addPaperWhichTalkAboutIt(p);
+            t = termsByName.get(termsToRelate.get(i));
+            if(t == null) newTerms.add(termsToRelate.get(i));
+            else {
+                p.addTerm(t);
+                t.addPaperWhichTalkAboutIt(p);
+            }
         }
-        p.setConference(confToRelate);
-        confToRelate.addExposedPaper(p);
-        return true;
+        c = conferencesByName.get(confToRelate);
+        if (c == null) newConf.add(confToRelate);
+        else {
+            p.setConference(c);
+            c.addExposedPaper(p);
+        }
+        papersById.put(p.getId(),p);
+        papersByName.put(p.getName(),p);
+        ret.put("A", newAuthors);
+        ret.put("T", newTerms);
+        ret.put("C",newConf);
+        return ret;
     }
 
     public boolean addNewTerm(String termName, ArrayList<Paper> papersToRelate) {

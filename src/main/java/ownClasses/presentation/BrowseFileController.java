@@ -84,7 +84,7 @@ public class BrowseFileController extends JPanel
                 File file = fc.getSelectedFile();
                 //This is where a real application would save the file.
                 log.append("Exporting: " + file.getName() + "." + newline);
-                // TODO: ADD WRITE ALL TO FILE
+                domainPersistanceController.writeAllToFile(file.getAbsolutePath());
             } else {
                 log.append("Export command by user." + newline);
             }
