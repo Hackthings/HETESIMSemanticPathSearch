@@ -2,10 +2,6 @@ package main.java.sharedClasses.utils;
 
 import java.util.*;
 
-/**
- * @author Oriol Parcerisa
- */
-
 public class Matrix {
     //private LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> matrix;
     //private LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> mTrans;
