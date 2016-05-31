@@ -518,6 +518,13 @@ public class DomainMainController {
         return total;
     }
 
+    /**
+     *
+     * @param resultquery
+     * @param query
+     * @return
+     */
+
     private ArrayList<String> resultWithIntervals(ArrayList<Pair<Integer,Double>> resultquery, IntervaledQuery query){
         char tipus = query.getPath().charAt(query.getPath().length()-1);
         //System.out.println(" NOM  ->  rellevancia");
