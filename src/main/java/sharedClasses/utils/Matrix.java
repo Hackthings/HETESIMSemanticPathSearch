@@ -5,10 +5,6 @@ import main.java.sharedClasses.domain.nodes.Paper;
 
 import java.util.*;
 
-/**
- * @author Oriol Parcerisa
- */
-
 public class Matrix {
     private HashMap<Integer, LinkedList<Vertex>> matrix;
     private HashMap<Integer, LinkedList<Vertex>> mTrans;

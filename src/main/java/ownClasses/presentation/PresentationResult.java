@@ -56,6 +56,8 @@ public class PresentationResult extends JFrame {
 
 
 
+
+
         setVisible(true);
     }
 

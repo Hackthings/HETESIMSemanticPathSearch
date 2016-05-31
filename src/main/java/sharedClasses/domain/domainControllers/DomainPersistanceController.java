@@ -99,7 +99,9 @@ public class DomainPersistanceController {
     }
 
     public void readAllFromFile(String path) {
-        //filepath = path;
+        if(path != null || !path.equals("")) {
+            filepath = path;
+        }
         readAuthorsFromFile();
         readPapersFromFile();
         readConferencesFromFile();
@@ -112,19 +114,41 @@ public class DomainPersistanceController {
         //testDomain();
     }
 
-    public boolean AddNewAuthor(String authorName, ArrayList<Paper> papersToRelate) {
+    public ArrayList<String> readNames(String path){   //NOMES PEL SUBSETQUERY
+        String p = new File("").getAbsolutePath();
+        File inputFile = new File(p.concat(path));
+        ArrayList<String> names = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                names.add(line);
+            }
+            return names;
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+            return null;
+        }
+    }
+
+    public ArrayList<String> addNewAuthor(String authorName, ArrayList<String> papersToRelate) {
         Author a = new Author(authorName, Author.getMaxId() + 1);
         if (authorsByName.get(a.getName()) != null) {
             System.err.println("Aquest autor ja existeix");
-            return false;
+            return null;
         }
         authorsById.put(a.getId(), a);
         authorsByName.put(a.getName(), a);
+        Paper p = null;
+        ArrayList<String> newPapers = new ArrayList<>();
         for (int i = 0; i < papersToRelate.size(); i++) {
-            a.addPaper(papersToRelate.get(i));
-            papersToRelate.get(i).addAuthor(a);
+            p = papersByName.get(papersToRelate.get(i));
+            if (p == null)  newPapers.add(papersToRelate.get(i));
+            else {
+                a.addPaper(p);
+                p.addAuthor(a);
+            }
         }
-        return true;
+        return newPapers;
     }
 
     public boolean addNewPaper(String paperName, ArrayList<Author> authorsToRelate, ArrayList<Term> termsToRelate, Conference confToRelate) {
