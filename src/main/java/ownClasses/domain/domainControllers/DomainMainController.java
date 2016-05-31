@@ -57,9 +57,7 @@ public class DomainMainController {
         BinaryPapers binaryPapers = new BinaryPapers();
         BinaryConferences binaryConferences = new BinaryConferences();
         BinaryTerms binaryTerms = new BinaryTerms();
-      //  System.out.println("Exporta");
         long timeini = System.currentTimeMillis();
-        //persistanceController.binaryexport();
         binaryAuthors.write(authorsById);
         binaryPapers.write(papersById);
         binaryTerms.write(termsById);
@@ -69,7 +67,6 @@ public class DomainMainController {
         System.out.println("Importa");
 
         timeini = System.currentTimeMillis();
-        //persistanceController.binaryimport();
         authorsById = (HashMap<Integer,Author>) binaryAuthors.read();
         papersById = (HashMap<Integer,Paper>) binaryPapers.read();
         conferencesById = (HashMap<Integer,Conference>) binaryConferences.read();
@@ -110,26 +107,15 @@ public class DomainMainController {
         return conferencesById;
     }
 
-    HashMap<Integer,Term> getTermsById(){
-        return termsById;
+    HashMap<Integer,Term> getTermsById(){ return termsById; }
 
-    }
+    HashMap<String,Author> getAuthorsByName(){ return authorsByName; }
 
-    HashMap<String,Author> getAuthorsByName(){
-        return authorsByName;
-    }
+    HashMap<String,Paper> getPapersByName(){ return papersByName;}
 
-    HashMap<String,Paper> getPapersByName(){
-        return papersByName;
-    }
+    HashMap<String,Conference> getConferencesByName(){return conferencesByName;}
 
-    HashMap<String,Conference> getConferencesByName(){
-        return conferencesByName;
-    }
-
-    HashMap<String,Term> getTermsByName(){
-        return termsByName;
-    }
+    HashMap<String,Term> getTermsByName(){return termsByName;}
 
 
     /**
@@ -239,7 +225,7 @@ public class DomainMainController {
     }
 
     /**
-     * function that will show the corresponding result if function of the options
+     * function that will show the corresponding result in function of the options
      * selected by the user and asked before.
      */
 
@@ -461,22 +447,21 @@ public class DomainMainController {
         }
     }
 
-
+    /**
+     * Returns an ArrayList of Pair<Integer,Double> ordered by the second paramenter in function of the paramenter of
+     * the ordered query
+     *
+     * @param resultquery the linkedlist with the result values of the requested node
+     * @param query the Ordered query that contains the path and the boolean that indicates the type of order of the ArrayList
+     * @return ArrayList of Pair<Integer,Double> ordered by the second paramenter in function of the parameter of the ordered query
+     */
 
     private ArrayList<Pair<Integer,Double>> resultWithOrder(LinkedList<Vertex> resultquery, OrderedQuery query){
-        /*char tipus = query.getPath().charAt(query.getPath().length()-1);
-        System.out.println(" NOM  ->  rellevancia");*/
-
-        //Iterator<Map.Entry<Integer, Double>> it= resultquery.entrySet().iterator();
         ListIterator<Vertex> it = resultquery.listIterator();
         ArrayList<Pair<Integer,Double>> resultOrdered = new ArrayList<>();
         while(it.hasNext()) {
-            //Map.Entry<Integer, Double> resultat = it.next();
-            //int id = Integer.parseInt(resultat.getKey().toString());
-            //double relevance = Double.parseDouble(resultat.getValue().toString());
             Vertex v = it.next();
             if(resultOrdered.isEmpty()){
-                //resultOrdered.add(new Pair<Integer, Double>(id,relevance));
                 resultOrdered.add(new Pair<Integer, Double>(v.getSecond(),v.getValue()));
             }
             else{
@@ -501,12 +486,19 @@ public class DomainMainController {
             }
         }
 
-        /*for (Pair<Integer, Double> aResultOrdered : resultOrdered) {
-            printresult(tipus, aResultOrdered.getFirst(), aResultOrdered.getSecond());
-        }*/
 
         return resultOrdered;
     }
+
+    /**
+     *
+     * Returns an ArrayList of Pair<Integer,Double> ordered by the second paramenter in function of the paramenter of
+     * the ordered query
+     *
+     * @param resultquery the linkedlist with the result values of the requested node
+     * @param query the Ordered query that contains the path and the boolean that indicates the type of order of the ArrayList
+     * @return ArrayList of Pair<Integer,Double> ordered by the second paramenter in function of the parameter of the ordered query
+     */
 
     private ArrayList<String> resultWithMax(ArrayList<Pair<Integer,Double>> resultquery, LimitedQuery query) {
         char tipus = query.getPath().charAt(query.getPath().length()-1);
