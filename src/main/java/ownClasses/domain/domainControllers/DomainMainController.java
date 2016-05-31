@@ -113,6 +113,7 @@ public class DomainMainController {
 
     HashMap<Integer,Term> getTermsById(){
         return termsById;
+
     }
 
     HashMap<String,Author> getAuthorsByName(){
