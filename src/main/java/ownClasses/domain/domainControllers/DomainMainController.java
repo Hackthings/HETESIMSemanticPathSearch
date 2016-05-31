@@ -107,7 +107,8 @@ public class DomainMainController {
         return conferencesById;
     }
 
-    public HashMap<Integer,Term> getTermsById(){ return termsById; }
+    public HashMap<Integer,Term> getTermsById(){
+        return termsById; }
 
     public HashMap<String,Author> getAuthorsByName(){ return authorsByName; }
 
@@ -572,7 +573,7 @@ public class DomainMainController {
 
     public void editGraph() {
         DomainPersistanceController domainPersistanceController = new DomainPersistanceController(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
-        domainPersistanceController.newEdit();
+        //domainPersistanceController.newEdit();
         edit = true;
     }
 
