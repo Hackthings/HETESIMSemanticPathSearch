@@ -1,13 +1,9 @@
 package main.java.sharedClasses.domain.domainControllers;
-
-
 import main.java.sharedClasses.domain.nodes.Author;
 import main.java.sharedClasses.domain.nodes.Conference;
 import main.java.sharedClasses.domain.nodes.Paper;
 import main.java.sharedClasses.domain.nodes.Term;
-
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -114,7 +110,7 @@ public class DomainPersistanceController {
         //testDomain();
     }
 
-    public ArrayList<String> readNames(String path) {   //NOMES PEL SUBSETQUERY
+    public ArrayList<String> readNames(String path) {   //NOMÉS PEL SUBSETQUERY
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(path));
         ArrayList<String> names = new ArrayList<>();
@@ -334,7 +330,7 @@ public class DomainPersistanceController {
     }
 
 
-    public void newEdit() {
+   /* public void newEdit() {
 
         Scanner scan = new Scanner(System.in);
         System.out.println("Quants edits vols fer?");
@@ -525,8 +521,7 @@ public class DomainPersistanceController {
                                 System.err.println("\u001B[31m" + "Aquest terme ja existeix" + "\u001B[0m");
                                 return;
                             }
-                           /* ArrayList<Paper> addedPapers = new ArrayList<>();
-                            ArrayList<Conference> addedConferences = new ArrayList<>();*/
+
                             System.out.println("En quants articles ha participat?");
                             numArt = scan.nextInt();
                             scan.nextLine();
@@ -850,8 +845,7 @@ public class DomainPersistanceController {
         }
 
         //testDomain(authorsById,papersById,conferencesById,termsById);
-    }
-
+    }*/
 
     private void readAuthorsFromFile() {
         String p = new File("").getAbsolutePath();
@@ -1029,125 +1023,132 @@ public class DomainPersistanceController {
                 String line = Integer.toString(a.getId()) + "\t" + a.getName();
                 writer.write(line);
             }
+            writer.flush();
+            writer.close();
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
 
     }
-/*
-    private void readPapersFromFile() {
-        String p = new File("").getAbsolutePath();
-        File inputFile = new File(p.concat(filepath + "paper.txt"));
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] aux = line.split("	");
-                int id = Integer.parseInt(aux[0]);
-                Paper paper = new Paper(aux[1], id);
-                papersById.put(id, paper);
-                papersByName.put(aux[1], paper);
+
+    private void writePaperToFile() {
+        String s = new File("").getAbsolutePath();
+        File inputFile = new File(s.concat(filepath + "paper.txt"));
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile, false));
+            for(Paper p : papersById.values()) {
+                String line = Integer.toString(p.getId()) + "\t" + p.getName();
+                writer.write(line);
             }
+            writer.flush();
+            writer.close();
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
+
     }
 
-    private void readConferencesFromFile() {
+    private void writeConferencesToFile() {
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(filepath + "conf.txt"));
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] aux = line.split("	");
-                int id = Integer.parseInt(aux[0]);
-                Conference conf = new Conference(aux[1], id);
-//                conf.setYear(Integer.parseInt(aux[2]));
-                //              conf.setContinent(aux[3]);
-                conferencesById.put(id, conf);
-                conferencesByName.put(aux[1], conf);
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile, false));
+            for (Conference c : conferencesById.values()) {
+                String line = Integer.toString(c.getId()) + "\t" + c.getName();
+                writer.write(line);
             }
+            writer.flush();
+            writer.close();
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
+
     }
 
 
-    private void readTermsFromFile() {
+    private void writeTermsToFile() {
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(filepath + "term.txt"));
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] aux = line.split("	");
-                int id = Integer.parseInt(aux[0]);
-                Term term = new Term(aux[1], id);
-                termsById.put(id, term);
-                termsByName.put(aux[1], term);
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile, false));
+            for (Term t : termsById.values()) {
+                String line = Integer.toString(t.getId()) + "\t" + t.getName();
+                writer.write(line);
             }
+            writer.flush();
+            writer.close();
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
+
     }
 
 
-    private void readPaperAuthorRelations() {
+    private void writePaperAuthorRelations() {
         String p1 = new File("").getAbsolutePath();
         File inputFile = new File(p1.concat(filepath + "paper_author.txt"));
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,false))) {
             String line;
-            Paper p;
-            Author a;
-            while ((line = reader.readLine()) != null) {
-                String aux[] = line.split("	");
-                p = papersById.get(Integer.parseInt(aux[0]));
-                a = authorsById.get(Integer.parseInt(aux[1]));
-
-                p.addAuthor(a);
-                a.addPaper(p);
+            for(Paper p:papersById.values()){
+                ArrayList<Integer> authors = p .getRelatedAuthors();
+                for(int i = 0; i < authors.size(); i++) {
+                    line = Integer.toString(p.getId()) + "\t" + Integer.toString(authors.get(i));
+                    writer.write(line);
+                }
             }
+            writer.flush();
+            writer.close();
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
     }
 
-    private void readConferenceRelations() {
+    private void writePaperConferenceRelations() {
         String p1 = new File("").getAbsolutePath();
         File inputFile = new File(p1.concat(filepath + "paper_conf.txt"));
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,false))) {
             String line;
-            Paper p;
-            Conference c;
-            while ((line = reader.readLine()) != null) {
-                String aux[] = line.split("	");
-                p = papersById.get(Integer.parseInt(aux[0]));
-                c = conferencesById.get(Integer.parseInt(aux[1]));
-
-                p.setConference(c);
-                c.addExposedPaper(p);
+            for(Paper p:papersById.values()){
+                line = Integer.toString(p.getId()) + "\t" + Integer.toString(p.getConference().getId());
+                writer.write(line);
             }
+            writer.flush();
+            writer.close();
         } catch (IOException x) {
             System.err.format("IOException: %s%n", x);
         }
     }
 
-   private void readTermRelations() {
-        String p1 = new File("").getAbsolutePath();
-        File inputFile = new File(p1.concat(filepath + "paper_term.txt"));
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
-            String line;
-            Paper p;
-            Term t;
-            while ((line = reader.readLine()) != null) {
-                String aux[] = line.split("	");
-                p = papersById.get(Integer.parseInt(aux[0]));
-                t = termsById.get(Integer.parseInt(aux[1]));
+   private void writePaperTermRelations() {
+       String p1 = new File("").getAbsolutePath();
+       File inputFile = new File(p1.concat(filepath + "paper_term.txt"));
+       try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,false))) {
+           String line;
+           for(Paper p:papersById.values()){
+               ArrayList<Integer> terms = p .getRelationesTerms();
+               for(int i = 0; i < terms.size(); i++) {
+                   line = Integer.toString(p.getId()) + "\t" + Integer.toString(terms.get(i));
+                   writer.write(line);
+               }
+           }
+           writer.flush();
+           writer.close();
+       } catch (IOException x) {
+           System.err.format("IOException: %s%n", x);
+       }
+   }
 
-                p.addTerm(t);
-                t.addPaperWhichTalkAboutIt(p);
-            }
-        } catch (IOException x) {
-            System.err.format("IOException: %s%n", x);
+    public void writeAllToFile(String path){
+        if (path != null) {
+            filepath = path;
         }
+        writeAuthorsToFile();
+        writePaperToFile();
+        writeConferencesToFile();
+        writeTermsToFile();
+        writePaperAuthorRelations();
+        writePaperTermRelations();
+        writePaperConferenceRelations();
     }
-*/
+
 }
