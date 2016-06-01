@@ -120,6 +120,13 @@ public class DomainMainController {
     public HashMap<Integer,Term> getTermsById(){ return termsById; }
 
     /**
+     * Returns the HashMap that contains all the conferences ordered by ID
+     * @return the hashmap conferences by Id
+     */
+
+    public HashMap<Integer,Conference> getConferencesById(){ return conferencesById; }
+
+    /**
      * Returns the HashMap that contains all the authors ordered by name
      * @return the hashmap authors by name
      */

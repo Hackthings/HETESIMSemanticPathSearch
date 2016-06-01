@@ -27,6 +27,8 @@ public class PresentationdeleteNode extends JFrame {
 
         this.domainMainController = domainMainController;
 
+        cancelarButton.addActionListener(e->super.dispose());
+
         switch (selectedIndex) {
             case (0):
                 acceptarButton.addActionListener(e -> deleteAuthor());
@@ -59,6 +61,7 @@ public class PresentationdeleteNode extends JFrame {
                 vm.setVisible("L'autor no existeix");
             } else {
                 JOptionPane.showMessageDialog(panel1, "S'ha eliminat l'Autor");
+                super.dispose();
             }
         }
 
@@ -79,6 +82,7 @@ public class PresentationdeleteNode extends JFrame {
                 vm.setVisible("L'Article no existeix");
             } else {
                 JOptionPane.showMessageDialog(panel1, "S'ha eliminat l'Article");
+                super.dispose();
             }
         }
 
@@ -99,6 +103,7 @@ public class PresentationdeleteNode extends JFrame {
                 vm.setVisible("El Terme no existeix");
             } else {
                 JOptionPane.showMessageDialog(panel1, "S'ha eliminat el Terme");
+                super.dispose();
             }
         }
 
@@ -119,6 +124,7 @@ public class PresentationdeleteNode extends JFrame {
                 vm.setVisible("La conferencia no existeix");
             } else {
                 JOptionPane.showMessageDialog(panel1, "S'ha eliminat la Conferencia");
+                super.dispose();
             }
 
         }

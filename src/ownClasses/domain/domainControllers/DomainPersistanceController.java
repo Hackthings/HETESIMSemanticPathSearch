@@ -692,4 +692,35 @@ public class DomainPersistanceController {
         writePaperConferenceRelations(papersById);
     }
 
+    public String newRelationPaperAuthor(String paperName, String authorName, HashMap<String,Paper> papersByName, HashMap<String,Author> authorsByName){
+        Paper p = papersByName.get(paperName);
+        if(p == null) return "NP";
+        Author a = authorsByName.get(authorName);
+        if(a == null) return "NA";
+        p.addAuthor(a);
+        a.addPaper(p);
+        return null;
+    }
+
+    public String newRelationPaperTerm(String paperName, String termName, HashMap<String,Paper> papersByName, HashMap<String,Term> termsByName){
+        Paper p = papersByName.get(paperName);
+        if(p == null) return "NP";
+        Term t = termsByName.get(termName);
+        if(t == null) return "NT";
+        p.addTerm(t);
+        t.addPaperWhichTalkAboutIt(p);
+        return null;
+    }
+
+    public String newRelationPaperConference(String paperName, String confName, HashMap<String,Paper> papersByName, HashMap<String,Conference> conferencesByName){
+        Paper p = papersByName.get(paperName);
+        if(p == null) return "NP";
+        Conference c = conferencesByName.get(confName);
+        if(c == null) return "NC";
+        p.getConference().removeExposedPaperBy(p);
+        p.setConference(c);
+        c.addExposedPaper(p);
+        return null;
+    }
+
 }

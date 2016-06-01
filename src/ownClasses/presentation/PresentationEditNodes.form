@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ownClasses.presentation.PresentationEditNodes">
+  <grid id="27dc6" layout-manager="GridBagLayout">
+    <constraints>
+      <xy x="20" y="20" width="557" height="456"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <hspacer id="6be89">
+        <constraints>
+          <grid row="0" column="1" row-span="3" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+      </hspacer>
+      <component id="b1faa" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="0" left="20" bottom="0" right="0" weightx="0.0" weighty="0.0" ipady="30"/>
+        </constraints>
+        <properties>
+          <text value="Nom:"/>
+        </properties>
+      </component>
+      <component id="ca6f0" class="javax.swing.JTextField" binding="nomField">
+        <constraints>
+          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <gridbag top="0" left="0" bottom="0" right="20" weightx="0.0" weighty="0.0" ipadx="300" ipady="6"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="a9bb0" class="javax.swing.JLabel" binding="nom1">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="0" left="20" bottom="0" right="0" weightx="0.0" weighty="0.0" ipady="30"/>
+        </constraints>
+        <properties>
+          <text value="Nom Autor:"/>
+        </properties>
+      </component>
+      <component id="88744" class="javax.swing.JTextField" binding="textField2" default-binding="true">
+        <constraints>
+          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <gridbag top="0" left="0" bottom="0" right="20" weightx="0.0" weighty="0.0" ipady="6"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="e5133" class="javax.swing.JLabel" binding="nom2">
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="0" left="20" bottom="0" right="0" weightx="0.0" weighty="0.0" ipady="30"/>
+        </constraints>
+        <properties>
+          <text value="Nom Terme:"/>
+        </properties>
+      </component>
+      <component id="b49fa" class="javax.swing.JTextField" binding="textField3" default-binding="true">
+        <constraints>
+          <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <gridbag top="0" left="0" bottom="0" right="20" weightx="0.0" weighty="0.0" ipady="6"/>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="5da37" class="javax.swing.JLabel" binding="nom3">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="0" left="20" bottom="0" right="0" weightx="0.0" weighty="0.0" ipady="30"/>
+        </constraints>
+        <properties>
+          <text value="Nom Conferència:"/>
+        </properties>
+      </component>
+      <component id="83c8a" class="javax.swing.JTextField" binding="textField4" default-binding="true">
+        <constraints>
+          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <gridbag top="0" left="0" bottom="0" right="20" weightx="0.0" weighty="0.0" ipady="6"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="c92a5" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="30" left="100" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value="Edit Node"/>
+        </properties>
+      </component>
+      <component id="f2efe" class="javax.swing.JButton" binding="eliminaRelacioButton" default-binding="true">
+        <constraints>
+          <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag top="0" left="0" bottom="20" right="20" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value="Elimina Relacio"/>
+        </properties>
+      </component>
+      <component id="a05ed" class="javax.swing.JButton" binding="afegeixRelacioButton" default-binding="true">
+        <constraints>
+          <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag top="20" left="0" bottom="20" right="20" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value="Afegeix Relacio"/>
+        </properties>
+      </component>
+      <component id="b55dd" class="javax.swing.JButton" binding="cancelaButton" default-binding="true">
+        <constraints>
+          <grid row="9" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag top="20" left="0" bottom="20" right="20" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value="Cancela"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>
