@@ -45,7 +45,7 @@ public class Term_driver {
         System.out.println("Esborrem l'article 1 amb nom The NP Problem i comprovem que no hi es");
 
         System.out.println("Articles restants on apareix el terme per id");
-        TreeMap <Integer,Paper> keyMap4 = new TreeMap<>();
+        HashMap <Integer,Paper> keyMap4 = new HashMap<>();
         keyMap4 = t.getPapersWhichTalkAboutThisById(keyMap4);
         for (Paper p : keyMap4.values()) {
             System.out.println(p.getId()+" "+p.getName());

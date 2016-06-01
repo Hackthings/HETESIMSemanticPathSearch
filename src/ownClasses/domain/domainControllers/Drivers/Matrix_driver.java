@@ -1,7 +1,7 @@
 package ownClasses.domain.domainControllers.Drivers;
 
-import Classes_compartides.Domini.Matrix;
-import Classes_compartides.Domini.Vertex;
+import sharedClasses.utils.Matrix;
+import sharedClasses.utils.Vertex;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
