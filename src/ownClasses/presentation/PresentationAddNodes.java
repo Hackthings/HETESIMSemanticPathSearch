@@ -328,7 +328,6 @@ public class PresentationAddNodes extends JFrame {
                 }
             }
         }
-        persistanceController.testdomainAutors();
     }
 
     private void callAddTerm() {

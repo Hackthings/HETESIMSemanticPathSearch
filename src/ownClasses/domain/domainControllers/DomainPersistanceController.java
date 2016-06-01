@@ -155,6 +155,7 @@ public class DomainPersistanceController {
         for (int i = 0; i < papersToRelate.size(); i++) {
             p = papersByName.get(papersToRelate.get(i));
             if (p == null){
+                System.err.println("No troba el paper del add new autor");
                 newPapers.add(papersToRelate.get(i));
             }
             else {
@@ -166,12 +167,21 @@ public class DomainPersistanceController {
 
         System.err.println("Id del autor" + Integer.toString(a.getId()));
 
-        for(int i = 0; i < a.getAuthorRelations().size(); i++){
-            System.err.println(Integer.toString(a.getAuthorRelations().get(i)));
+        authorsById.put(a.getId(), a);
+
+        authorsByName.put(a.getName(), a);
+
+        Author c = authorsById.get(a.getId());
+
+        if(c != null) System.err.print("c" + c.getName());
+        else{
+            for(int i = 0; i < c.getAuthorRelations().size(); i++){
+                Paper k = papersById.get(c.getAuthorRelations().get(i));
+                if( k != null) System.err.println("Relacio"+                 k.getName());
+            }
         }
 
-        authorsById.put(a.getId(), a);
-        authorsByName.put(a.getName(), a);
+
         Author.incrementMaxId();
         return newPapers;
     }
@@ -357,7 +367,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private boolean editAuthor(String authorName, String newName) {
+    public boolean editAuthor(String authorName, String newName) {
         try {
             Author a = authorsByName.get(authorName);
             a.setName(newName);
@@ -370,7 +380,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private boolean editPaper(String paperName, String newName) {
+    public boolean editPaper(String paperName, String newName) {
         try {
             Paper p = papersByName.get(paperName);
             p.setName(newName);
@@ -383,7 +393,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private boolean editTerm(String termName, String newName) {
+    public boolean editTerm(String termName, String newName) {
         try {
             Term t = termsByName.get(termName);
             t.setName(newName);
@@ -396,7 +406,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private boolean editConference(String confName, String newName) {
+    public boolean editConference(String confName, String newName) {
         try {
             Conference c = conferencesByName.get(confName);
             c.setName(newName);
