@@ -1,3 +1,0 @@
-36;AAAI;1988;North America
-597;CIKM;2005;Europe
-755;CVPR;2003;North America
