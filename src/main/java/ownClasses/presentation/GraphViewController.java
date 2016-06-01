@@ -52,12 +52,20 @@ public class GraphViewController{
     }
 
     public GraphViewController(DomainMainController d, String name, String path, ArrayList<String> sAu, ArrayList<String> sPa, ArrayList<String> sCo, ArrayList<String> sTe){
-        this.sAu = sAu;
-        this.sPa = sPa;
-        this.sCo = sCo;
-        this.sTe = sTe;
+        if(sAu == null) this.sAu = new ArrayList<String>();
+        else this.sAu = sAu;
+        if(sPa == null) this.sPa = new ArrayList<String>();
+        else this.sPa = sPa;
+        if(sCo == null) this.sCo = new ArrayList<String>();
+        else this.sCo = sCo;
+        if(sTe == null) this.sTe = new ArrayList<String>();
+        else this.sTe = sTe;
+        System.out.println("Authors: " + this.sAu.toString());
+        System.out.println("Papers: " + this.sPa.toString());
+        System.out.println("Conferences: " + this.sCo.toString());
+        System.out.println("Terms: " + this.sTe.toString());
 
-        System.out.println(sPa.toString());
+
         System.out.println("Generating graph for: " + path + " (with subset)");
 
         graph = new SingleGraph(path+"subset");
