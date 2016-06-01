@@ -44,6 +44,12 @@ public class DomainHetesimController {
         return findMatrix(source, target);
     }
 
+    /**
+     * Returns the relevance matrix of a path
+     *
+     * @param  path the relevance path
+     * @return the relevance matrix
+     */
     Matrix heteSim(String path) {
         String pl, pr;
         //create auxiliary matrices (if needed) and split pl/pr
