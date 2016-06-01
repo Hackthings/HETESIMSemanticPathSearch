@@ -1,12 +1,13 @@
 package ownClasses.presentation;
 
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.SingleGraph;
 import ownClasses.domain.domainControllers.DomainMainController;
 import sharedClasses.domain.nodes.Author;
 import sharedClasses.domain.nodes.Conference;
 import sharedClasses.domain.nodes.Paper;
 import sharedClasses.domain.nodes.Term;
-import org.graphstream.graph.*;
-import org.graphstream.graph.implementations.*;
+import org.graphstream.graph.Graph;
 
 import java.util.ArrayList;
 
