@@ -60,14 +60,22 @@ public class DomainHetesimController {
             pr = path.substring(mid);
         }
         String pri = new StringBuilder(pr).reverse().toString(); //inverted path
+        boolean symmetric = (pl.equals(pri));
         //PMpl
         Matrix pmPl = findMatrix(pl.charAt(0), pl.charAt(1), 'l');
-        for (int i = 2; i < pl.length(); ++i) pmPl = pmPl.multiply(findMatrix(pl.charAt(i - 1), pl.charAt(i), 'l'));
+        for (int i = 2; i < pl.length(); ++i)
+            pmPl = pmPl.multiply(findMatrix(pl.charAt(i - 1), pl.charAt(i), 'l'));
         //PMpri
-        Matrix pmPri = findMatrix(pri.charAt(0), pri.charAt(1), 'r');
+        Matrix pmPri;
+        if(symmetric){
+            pmPri = pmPl;
+        }
+        else {
+            pmPri = findMatrix(pri.charAt(0), pri.charAt(1), 'r');
+            for (int i = 2; i < pri.length(); ++i)
+                pmPri = pmPri.multiply(findMatrix(pri.charAt(i - 1), pri.charAt(i), 'r'));
+        }
 
-        for (int i = 2; i < pri.length(); ++i)
-            pmPri = pmPri.multiply(findMatrix(pri.charAt(i - 1), pri.charAt(i), 'r'));
         Matrix result = pmPl.multiply(pmPri.transpose());
 
         Double rmod = 0.0;
