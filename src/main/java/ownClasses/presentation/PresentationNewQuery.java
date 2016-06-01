@@ -186,7 +186,7 @@ public class PresentationNewQuery extends JFrame {
             if(terms==null) terms = new ArrayList<String>();
             if(conferences==null) conferences = new ArrayList<String>();
             if(papers==null) papers = new ArrayList<String>();
-            PresentationNewQuery2 window = new PresentationNewQuery2(mainController, path,firstlast,authors,papers,conferences,terms);
+            PresentationNewQuery2 window = new PresentationNewQuery2(mainController, path,firstlast,authors,papers,conferences,terms,subset);
             System.out.println("DONE");
         } else {
             callWarning("Path no valid");

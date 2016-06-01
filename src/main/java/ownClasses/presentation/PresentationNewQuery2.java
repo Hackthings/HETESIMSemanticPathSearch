@@ -33,11 +33,14 @@ public class PresentationNewQuery2 extends JFrame {
     ArrayList<String> terms;
     ArrayList<String> conferences;
 
-    public PresentationNewQuery2(DomainMainController mainController, String path, String firstlast, ArrayList<String> Authors, ArrayList<String> Papers, ArrayList<String> Conferences, ArrayList<String> Terms) {
+    boolean subset;
+
+    public PresentationNewQuery2(DomainMainController mainController, String path, String firstlast, ArrayList<String> Authors, ArrayList<String> Papers, ArrayList<String> Conferences, ArrayList<String> Terms,boolean Subset) {
         super("NEW QUERY2");
 
         $$$setupUI$$$();
 
+        subset = Subset;
         authors = Authors;
         papers = Papers;
         terms = Terms;
@@ -159,7 +162,8 @@ public class PresentationNewQuery2 extends JFrame {
 
                 new PresentationResult(resultat, path, name, firstlast);
 
-                new GraphViewController(mainController,name,path,authors,papers,conferences,terms);
+                if(subset) new GraphViewController(mainController,name,path,authors,papers,conferences,terms);
+                else new GraphViewController(mainController,name,path);
             }
         }
         else{
