@@ -67,49 +67,44 @@ public class DomainHetesimController {
         final boolean[] end1 = {false};
         final boolean[] end2 = {false};
 
-        //PMpl
+        // -------PMpl------- //
         final Matrix[] pmPl = {findMatrix(pl.charAt(0), pl.charAt(1), 'l')};
         String finalPl = pl;
-        new Thread(() ->{
+        //new Thread(() ->{  //T1
             for (int i = 2; i < finalPl.length(); ++i)
                 pmPl[0] = pmPl[0].multiply(findMatrix(finalPl.charAt(i - 1), finalPl.charAt(i), 'l'));
             end1[0] = true;
-        }).start();
-        //PMpri
-        final Matrix[] pmPri = {new Matrix()};
+        //}).start();
 
+        // -------PMpri------- //
+        final Matrix[] pmPri = {new Matrix()};
         if(symmetric){
             pmPri[0] = pmPl[0];
             end2[0] = true;
         }
         else {
-            final ArrayList<Matrix> matrices = new ArrayList<Matrix>();
-            matrices.add(findMatrix(pri.charAt(0), pri.charAt(1), 'r'));
-            for (int i = 2; i < pri.length(); ++i)
-                matrices.add(findMatrix(pri.charAt(i - 1), pri.charAt(i), 'r'));
-            new Thread(() -> {
-                Matrix m = matrices.get(0);
-                for (int i = 1; i < matrices.size(); ++i)
-                    m = m.multiply(matrices.get(i));
-                pmPri[0] = m;
+            pmPri[0] = findMatrix(pri.charAt(0), pri.charAt(1), 'r');
+            //new Thread(() -> { //T2
+                for (int i = 2; i < pri.length(); ++i)
+                    pmPri[0] = pmPri[0].multiply(findMatrix(pri.charAt(i-1), pri.charAt(i), 'r'));
                 end1[0] = true;
-            }).start();
+            //}).start();
         }
 
-        //wait for secondary thread
+        //wait for threads
         while(!end1[0] || !end2[0]){
             try {
                 Thread.sleep(100);
             }catch (InterruptedException e){
-                System.out.println("Interrupred Exception");
+                System.out.println("Interrupted Exception");
                 return new Matrix();
             }
         }
 
         Matrix result = pmPl[0].multiply(pmPri[0].transpose());
 
-        Double rmod = 0.0;
-        Double cmod = 0.0;
+        Double rmod;
+        Double cmod;
         Matrix r2 = result;
         result = new Matrix();
         for (Integer row : r2.rows()) {
@@ -119,6 +114,7 @@ public class DomainHetesimController {
                 result.addValue(row, column.getSecond(), r2.getValue(row, column.getSecond()) / (rmod * cmod));
             }
         }
+        System.out.println("size-->" + result.rows().size() + "/" + result.cols().size());
         return result;
     }
 
