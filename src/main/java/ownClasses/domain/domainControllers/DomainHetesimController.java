@@ -70,11 +70,11 @@ public class DomainHetesimController {
         // -------PMpl------- //
         final Matrix[] pmPl = {findMatrix(pl.charAt(0), pl.charAt(1), 'l')};
         String finalPl = pl;
-        //new Thread(() ->{  //T1
+        Thread t1 = new Thread(() ->{  //T1
             for (int i = 2; i < finalPl.length(); ++i)
                 pmPl[0] = pmPl[0].multiply(findMatrix(finalPl.charAt(i - 1), finalPl.charAt(i), 'l'));
             end1[0] = true;
-        //}).start();
+        });
 
         // -------PMpri------- //
         final Matrix[] pmPri = {new Matrix()};
@@ -84,12 +84,16 @@ public class DomainHetesimController {
         }
         else {
             pmPri[0] = findMatrix(pri.charAt(0), pri.charAt(1), 'r');
-            //new Thread(() -> { //T2
-                for (int i = 2; i < pri.length(); ++i)
-                    pmPri[0] = pmPri[0].multiply(findMatrix(pri.charAt(i-1), pri.charAt(i), 'r'));
-                end1[0] = true;
-            //}).start();
         }
+        Thread t2 = new Thread(() -> { //T2
+            for (int i = 2; i < pri.length(); ++i)
+                pmPri[0] = pmPri[0].multiply(findMatrix(pri.charAt(i-1), pri.charAt(i), 'r'));
+            end2[0] = true;
+        });
+
+
+        t1.start();
+        if(!end2[0]) t2.start();
 
         //wait for threads
         while(!end1[0] || !end2[0]){
