@@ -69,6 +69,9 @@ public class BrowseFileOnlyImportController extends JPanel
     public ArrayList<String> getnodes(){
         return nodes;
     }
+    public void clearnodes(){
+        nodes.clear();
+    }
 
     public void actionPerformed(ActionEvent e) {
 

@@ -151,10 +151,25 @@ public class PresentationNewQuery extends JFrame {
     private void callNQ(DomainMainController mainController) {
         if (path.length()>1) {
             if(subset){
-                checkTexts(mainController);
+                authors = Asubset.getnodes();
+                checkArrayList(mainController,authors,'A');
+                papers = Psubset.getnodes();
+                checkArrayList(mainController,papers,'P');
+                terms = Tsubset.getnodes();
+                checkArrayList(mainController,terms,'T');
+                conferences = Csubset.getnodes();
+                checkArrayList(mainController,conferences,'C');
+
+                //checkTexts(mainController);
                 System.out.println();
-                mainController.updateMatrix(author,paper,conf,term);
-                System.out.println(author+" "+paper+" "+conf+" "+term);
+
+                mainController.updateMatrix(authors,papers,conferences,terms);
+
+                Asubset.clearnodes();
+                Psubset.clearnodes();
+                Csubset.clearnodes();
+                Tsubset.clearnodes();
+                //System.out.println(author+" "+paper+" "+conf+" "+term);
                 changed = true;
             }
             else if(changed){
