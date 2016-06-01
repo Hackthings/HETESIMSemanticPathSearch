@@ -1,5 +1,6 @@
 package ownClasses.presentation;
 
+import ownClasses.domain.domainControllers.DomainMainController;
 import ownClasses.domain.domainControllers.DomainPersistanceController;
 
 import javax.swing.*;
@@ -14,12 +15,12 @@ public class PresentationEditGraph extends JFrame {
     private JList editList;
     private JPanel panel;
 
-    public DomainPersistanceController persistanceController;
+    public DomainMainController domainMainController;
 
-    public PresentationEditGraph(DomainPersistanceController persistanceController) {
+    public PresentationEditGraph(DomainMainController domainMainController) {
         super("EDIT GRAPH");
 
-        this.persistanceController = persistanceController;
+        this.domainMainController = domainMainController;
         buttons = new JPanel();
         $$$setupUI$$$();
         setContentPane(panel);
@@ -38,7 +39,7 @@ public class PresentationEditGraph extends JFrame {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("Selecciona l'element a editar");
         }
-        else new PresentationEditNode(persistanceController,editList.getSelectedIndex());
+        else new PresentationEditNode(domainMainController,editList.getSelectedIndex());
     }
 
     private void addNodeAction() {
@@ -47,7 +48,7 @@ public class PresentationEditGraph extends JFrame {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("Selecciona l'element a afegir");
         }
-         else new PresentationAddNodes(persistanceController,editList.getSelectedIndex(),null,null,null,null);
+         else new PresentationAddNodes(domainMainController,editList.getSelectedIndex(),null,null,null,null);
     }
 
     private void deleteNodeAction() {
@@ -56,7 +57,7 @@ public class PresentationEditGraph extends JFrame {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("Selecciona l'element a eliminar");
         }
-        else new PresentationdeleteNode(persistanceController,editList.getSelectedIndex());
+        else new PresentationdeleteNode(domainMainController,editList.getSelectedIndex());
     }
 
     private void $$$setupUI$$$() {

@@ -1,5 +1,6 @@
 package ownClasses.presentation;
 
+import ownClasses.domain.domainControllers.DomainMainController;
 import ownClasses.domain.domainControllers.DomainPersistanceController;
 
 import java.io.*;
@@ -13,12 +14,12 @@ public class BrowseFileController extends JPanel
     JButton importButton, exportButton;
     JTextArea log;
     JFileChooser fc;
-    DomainPersistanceController domainPersistanceController;
+    DomainMainController domainMainController;
 
-    public BrowseFileController(DomainPersistanceController persistanceController) {
+    public BrowseFileController(DomainMainController domainMainController) {
         super(new BorderLayout());
 
-        domainPersistanceController = persistanceController;
+        this.domainMainController = domainMainController;
         //Create the log first, because the action listeners
         //need to refer to it.
         log = new JTextArea(5,20);
@@ -69,7 +70,9 @@ public class BrowseFileController extends JPanel
                 File file = fc.getSelectedFile();
                 //This is where a real application would open the file.
                 log.append("Importing: " + file.getName() + "." + newline);
-                domainPersistanceController.readAllFromFile(file.getAbsolutePath());
+                domainMainController.getPersistanceController().readAllFromFile(file.getAbsolutePath(),domainMainController.getAuthorsById(),domainMainController.getPapersById(),
+                        domainMainController.getConferencesById(),domainMainController.getTermsById(),domainMainController.getAuthorsByName(),domainMainController.getPapersByName(),
+                        domainMainController.getConferencesByName(),domainMainController.getTermsByName());
             } else {
                 log.append("Import command cancelled by user." + newline);
             }
@@ -82,7 +85,8 @@ public class BrowseFileController extends JPanel
                 File file = fc.getSelectedFile();
                 //This is where a real application would save the file.
                 log.append("Exporting: " + file.getName() + "." + newline);
-                domainPersistanceController.writeAllToFile(file.getAbsolutePath());
+                domainMainController.getPersistanceController().writeAllToFile(file.getAbsolutePath(), domainMainController.getAuthorsById(),
+                        domainMainController.getPapersById(),domainMainController.getConferencesById(),domainMainController.getTermsById());
             } else {
                 log.append("Export command by user." + newline);
             }

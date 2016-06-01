@@ -1,5 +1,6 @@
-package main.java.ownClasses.presentation;
+package ownClasses.presentation;
 
+import ownClasses.domain.domainControllers.DomainMainController;
 import ownClasses.domain.domainControllers.DomainPersistanceController;
 
 import javax.swing.*;
@@ -13,16 +14,16 @@ public class PresentationEditNode extends JFrame {
     private JTextField textField2;
     private JButton acceptarButton;
     private JButton cancelarButton;
-    private DomainPersistanceController persistanceController;
+    private DomainMainController domainMainController;
     private JPanel panel1;
 
-    public PresentationEditNode(DomainPersistanceController persistanceController, int selectedIndex) {
+    public PresentationEditNode(DomainMainController domainMainController, int selectedIndex) {
         super("DELETE NODE");
         $$$setupUI$$$();
         setContentPane(panel1);
         pack();
 
-        this.persistanceController = persistanceController;
+        this.domainMainController = domainMainController;
 
         switch (selectedIndex) {
             case (0):
@@ -55,7 +56,7 @@ public class PresentationEditNode extends JFrame {
             return;
 
         } else {
-            boolean edited = persistanceController.editAuthor(authorName, editName);
+            boolean edited = domainMainController.getPersistanceController().editAuthor(authorName, editName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName());
             if (!edited) {
                 VistaWARNING vm = new VistaWARNING();
                 vm.setVisible("L'autor no existeix");
@@ -78,7 +79,7 @@ public class PresentationEditNode extends JFrame {
             return;
 
         } else {
-            boolean edited = persistanceController.editPaper(paperName, editName);
+            boolean edited = domainMainController.getPersistanceController().editPaper(paperName, editName,domainMainController.getPapersById(),domainMainController.getPapersByName());
             if (!edited) {
                 VistaWARNING vm = new VistaWARNING();
                 vm.setVisible("L'Article no existeix");
@@ -101,7 +102,7 @@ public class PresentationEditNode extends JFrame {
             return;
 
         } else {
-            boolean edited = persistanceController.editTerm(termName, editName);
+            boolean edited = domainMainController.getPersistanceController().editTerm(termName, editName,domainMainController.getTermsById(),domainMainController.getTermsByName());
             if (!edited) {
                 VistaWARNING vm = new VistaWARNING();
                 vm.setVisible("El terme no existeix");
@@ -124,7 +125,7 @@ public class PresentationEditNode extends JFrame {
             return;
 
         } else {
-            boolean edited = persistanceController.editConference(conferenceName, editName);
+            boolean edited = domainMainController.getPersistanceController().editConference(conferenceName, editName,domainMainController.getConferencesById(),domainMainController.getConferencesByName());
             if (!edited) {
                 VistaWARNING vm = new VistaWARNING();
                 vm.setVisible("La conferencia no existeix");

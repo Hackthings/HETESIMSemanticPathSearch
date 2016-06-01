@@ -30,7 +30,7 @@ public class PresentationController extends JFrame {
         panel.add(newQueryButton);
         panel.add(editGraphButton);
 
-        BrowseFileController browseFileController = new BrowseFileController(mainController.getPersistanceController());
+        BrowseFileController browseFileController = new BrowseFileController(mainController);
         panel.add(browseFileController);
 
         setContentPane(panel);
@@ -39,7 +39,7 @@ public class PresentationController extends JFrame {
 
         newQueryButton.addActionListener(e -> new PresentationNewQuery(mainController,mainController.getPersistanceController()));
         //newQueryButton.addActionListener(e->mainController.newQuery());
-        editGraphButton.addActionListener(e -> new PresentationEditGraph(mainController.getPersistanceController()));
+        editGraphButton.addActionListener(e -> new PresentationEditGraph(mainController));
         setVisible(true);
     }
 }

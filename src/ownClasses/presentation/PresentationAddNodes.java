@@ -1,5 +1,6 @@
 package ownClasses.presentation;
 
+import ownClasses.domain.domainControllers.DomainMainController;
 import ownClasses.domain.domainControllers.DomainPersistanceController;
 
 import javax.swing.*;
@@ -45,12 +46,12 @@ public class PresentationAddNodes extends JFrame {
     private JLabel addNode;
     private ArrayList<JTextField> firstTextFields;
     private ArrayList<JTextField> secondTextFields;
-    private DomainPersistanceController persistanceController;
+    private DomainMainController domainMainController;
     private String authoraux, termaux, confaux, paperaux;
     private String authorToAdd, termToAdd, confToAdd, paperToAdd;
 
 
-    public PresentationAddNodes(DomainPersistanceController persistanceController, int selecedIndex, String authoraux, String paperaux, String termaux, String confaux) {
+    public PresentationAddNodes(DomainMainController domainMainController, int selecedIndex, String authoraux, String paperaux, String termaux, String confaux) {
         super("ADD NODE");
         $$$setupUI$$$();
         setContentPane(panel1);
@@ -63,7 +64,7 @@ public class PresentationAddNodes extends JFrame {
 
         this.authorToAdd = this.termToAdd = this.confToAdd = this.paperToAdd = null;
 
-        this.persistanceController = persistanceController;
+        this.domainMainController = domainMainController;
         firstTextFields = new ArrayList<>();
         firstTextFields.add(aName1);
         firstTextFields.add(aName2);
@@ -200,7 +201,8 @@ public class PresentationAddNodes extends JFrame {
         } else {
             papersToAdd.add(paperaux);
         }
-        ArrayList<String> newPapers = persistanceController.addNewAuthor(authorName, papersToAdd);
+        ArrayList<String> newPapers = domainMainController.getPersistanceController().addNewAuthor(authorName, papersToAdd,domainMainController.getAuthorsById(),
+                domainMainController.getAuthorsByName(), domainMainController.getPapersById(),domainMainController.getPapersByName());
         if (newPapers != null) {
             if (newPapers.size() == 0) {
                 //SHA CREAT TO BIEN
@@ -214,10 +216,12 @@ public class PresentationAddNodes extends JFrame {
                 int op = JOptionPane.showOptionDialog(panel1, "Hi ha Articles que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
                 if (op == JOptionPane.YES_OPTION) {
                     for (int i = 0; i < newPapers.size(); i++) {
-                        new PresentationAddNodes(persistanceController, 1, authorName, newPapers.get(i), null, null);
+                        new PresentationAddNodes(domainMainController, 1, authorName, newPapers.get(i), null, null);
                     }
                 } else {
-                    persistanceController.deleteAuthor(authorName);
+                    domainMainController.getPersistanceController().deleteAuthor(authorName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
+                            domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
+                            domainMainController.getTermsById(),domainMainController.getTermsByName());
                     return;
                 }
             }
@@ -282,7 +286,9 @@ public class PresentationAddNodes extends JFrame {
             confToAdd = confaux;
         }
 
-        HashMap<String, ArrayList<String>> newNodes = persistanceController.addNewPaper(paperName, authorToAdd, termsToAdd, confToAdd);
+        HashMap<String, ArrayList<String>> newNodes = domainMainController.getPersistanceController().addNewPaper(paperName, authorToAdd, termsToAdd, confToAdd,
+                domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getAuthorsByName(),domainMainController.getConferencesByName(),
+                domainMainController.getTermsByName());
         if (newNodes.get("Fail") != null) {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("L'article ja existeix");
@@ -356,7 +362,8 @@ public class PresentationAddNodes extends JFrame {
         } else {
             papersToAdd.add(paperaux);
         }
-        ArrayList<String> newPapers = persistanceController.addNewTerm(termName, papersToAdd);
+        ArrayList<String> newPapers = domainMainController.getPersistanceController().addNewTerm(termName, papersToAdd,domainMainController.getTermsById(),
+                domainMainController.getTermsByName(),domainMainController.getPapersByName());
         if (newPapers != null) {
             if (newPapers.size() == 0) {
                 //SHA CREAT TO BIEN
@@ -370,10 +377,12 @@ public class PresentationAddNodes extends JFrame {
                 int op = JOptionPane.showOptionDialog(panel1, "Hi ha Articles que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
                 if (op == JOptionPane.YES_OPTION) {
                     for (int i = 0; i < newPapers.size(); i++) {
-                        new PresentationAddNodes(persistanceController, 1, null, newPapers.get(i), termName, null);
+                        new PresentationAddNodes(domainMainController, 1, null, newPapers.get(i), termName, null);
                     }
                 } else {
-                    persistanceController.deleteTerm(termName);
+                    domainMainController.getPersistanceController().deleteTerm(termName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
+                            domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
+                            domainMainController.getTermsById(),domainMainController.getTermsByName());
                     return;
                 }
             }
@@ -409,7 +418,8 @@ public class PresentationAddNodes extends JFrame {
         } else {
             papersToAdd.add(paperaux);
         }
-        ArrayList<String> newPapers = persistanceController.addNewConference(confName, papersToAdd);
+        ArrayList<String> newPapers = domainMainController.getPersistanceController().addNewConference(confName, papersToAdd,domainMainController.getConferencesById(),
+                domainMainController.getConferencesByName(),domainMainController.getPapersByName());
         if (newPapers != null) {
             if (newPapers.size() == 0) {
                 //SHA CREAT TO BIEN
@@ -423,10 +433,12 @@ public class PresentationAddNodes extends JFrame {
                 int op = JOptionPane.showOptionDialog(panel1, "Hi ha Articles que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
                 if (op == JOptionPane.YES_OPTION) {
                     for (int i = 0; i < newPapers.size(); i++) {
-                        new PresentationAddNodes(persistanceController, 1, null, newPapers.get(i), null, confName);
+                        new PresentationAddNodes(domainMainController, 1, null, newPapers.get(i), null, confName);
                     }
                 } else {
-                    persistanceController.deleteConference(confName);
+                    domainMainController.getPersistanceController().deleteConference(confName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
+                            domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
+                            domainMainController.getTermsById(),domainMainController.getTermsByName());
                     return;
                 }
             }

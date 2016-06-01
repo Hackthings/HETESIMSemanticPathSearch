@@ -1,5 +1,6 @@
 package ownClasses.presentation;
 
+import ownClasses.domain.domainControllers.DomainMainController;
 import ownClasses.domain.domainControllers.DomainPersistanceController;
 
 import javax.swing.*;
@@ -15,16 +16,16 @@ public class PresentationdeleteNode extends JFrame {
     private JButton cancelarButton;
     private JLabel Nom;
     private JLabel DeleteNode;
-    private DomainPersistanceController persistanceController;
+    private DomainMainController domainMainController;
 
 
-    public PresentationdeleteNode(DomainPersistanceController persistanceController, int selectedIndex) {
+    public PresentationdeleteNode(DomainMainController domainMainController, int selectedIndex) {
         super("DELETE NODE");
         $$$setupUI$$$();
         setContentPane(panel1);
         pack();
 
-        this.persistanceController = persistanceController;
+        this.domainMainController = domainMainController;
 
         switch (selectedIndex) {
             case (0):
@@ -50,7 +51,9 @@ public class PresentationdeleteNode extends JFrame {
             vm.setVisible("Introdueix un Autor a eliminar");
             return;
         } else {
-            boolean deleted = persistanceController.deleteAuthor(authorName);
+            boolean deleted = domainMainController.getPersistanceController().deleteAuthor(authorName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
+                    domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
+                    domainMainController.getTermsById(),domainMainController.getTermsByName());
             if (!deleted) {
                 VistaWARNING vm = new VistaWARNING();
                 vm.setVisible("L'autor no existeix");
@@ -68,7 +71,9 @@ public class PresentationdeleteNode extends JFrame {
             vm.setVisible("Introdueix un Article a eliminar");
             return;
         } else {
-            boolean deleted = persistanceController.deletePaper(paperName);
+            boolean deleted = domainMainController.getPersistanceController().deletePaper(paperName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
+                    domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
+                    domainMainController.getTermsById(),domainMainController.getTermsByName());
             if (!deleted) {
                 VistaWARNING vm = new VistaWARNING();
                 vm.setVisible("L'Article no existeix");
@@ -86,7 +91,9 @@ public class PresentationdeleteNode extends JFrame {
             vm.setVisible("Introdueix un Terme a eliminar");
             return;
         } else {
-            boolean deleted = persistanceController.deleteTerm(termName);
+            boolean deleted = domainMainController.getPersistanceController().deleteTerm(termName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
+                    domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
+                    domainMainController.getTermsById(),domainMainController.getTermsByName());
             if (!deleted) {
                 VistaWARNING vm = new VistaWARNING();
                 vm.setVisible("El Terme no existeix");
@@ -104,7 +111,9 @@ public class PresentationdeleteNode extends JFrame {
             vm.setVisible("Introdueix un Article a eliminar");
             return;
         } else {
-            boolean deleted = persistanceController.deleteConference(conference);
+            boolean deleted = domainMainController.getPersistanceController().deleteConference(conference,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
+                    domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
+                    domainMainController.getTermsById(),domainMainController.getTermsByName());
             if (!deleted) {
                 VistaWARNING vm = new VistaWARNING();
                 vm.setVisible("La conferencia no existeix");

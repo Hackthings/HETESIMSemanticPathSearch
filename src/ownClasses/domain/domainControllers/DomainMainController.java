@@ -51,8 +51,8 @@ public class DomainMainController {
         papersByName = new HashMap<>();
         conferencesByName = new HashMap<>();
         termsByName = new HashMap<>();
-        persistanceController = new DomainPersistanceController(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
-        persistanceController.readAllFromFile("");
+        persistanceController = new DomainPersistanceController();
+        persistanceController.readAllFromFile("",authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
         BinaryAuthors binaryAuthors = new BinaryAuthors();
         BinaryPapers binaryPapers = new BinaryPapers();
         BinaryConferences binaryConferences = new BinaryConferences();
@@ -120,6 +120,13 @@ public class DomainMainController {
     public HashMap<Integer,Term> getTermsById(){ return termsById; }
 
     /**
+     * Returns the HashMap that contains all the conferences ordered by ID
+     * @return the hashmap conferences By
+     */
+
+    public HashMap<Integer,Conference> getConferencesById(){ return conferencesById; }
+
+    /**
      * Returns the HashMap that contains all the authors ordered by name
      * @return the hashmap authors by name
      */
@@ -171,7 +178,7 @@ public class DomainMainController {
      *
      * @param  name the name of the Node
      * @param node indicates the type of Node
-     * @see         main.java.sharedClasses.domain.nodes.Node
+     *
      */
 
     public boolean checkName(String name, char node){
@@ -601,7 +608,7 @@ public class DomainMainController {
     }
 
     public void editGraph() {
-        DomainPersistanceController domainPersistanceController = new DomainPersistanceController(authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
+        DomainPersistanceController domainPersistanceController = new DomainPersistanceController();
         //domainPersistanceController.newEdit();
         edit = true;
     }
