@@ -48,6 +48,8 @@ public class PresentationAddNodes extends JFrame {
     private ArrayList<JTextField> secondTextFields;
     private DomainPersistanceController persistanceController;
     private String authoraux, termaux, confaux, paperaux;
+    private String authorToAdd, termToAdd, confToAdd, paperToAdd;
+
 
     public PresentationAddNodes(DomainPersistanceController persistanceController, int selecedIndex, String authoraux, String paperaux, String termaux, String confaux) {
         super("ADD NODE");
@@ -59,6 +61,8 @@ public class PresentationAddNodes extends JFrame {
         this.termaux = termaux;
         this.confaux = confaux;
         this.paperaux = paperaux;
+
+        this.authorToAdd = this.termToAdd = this.confToAdd = this.paperToAdd = null;
 
         this.persistanceController = persistanceController;
         firstTextFields = new ArrayList<>();
@@ -87,7 +91,7 @@ public class PresentationAddNodes extends JFrame {
 
         for (int i = 1; i < firstTextFields.size(); i++) firstTextFields.get(i).setEnabled(false);
 
-        for (int i = 0; i < secondTextFields.size(); i++) secondTextFields.get(i).setEnabled(false);
+        for (int i = 1; i < secondTextFields.size(); i++) secondTextFields.get(i).setEnabled(false);
 
 
         comboBox1.addActionListener(e -> enableFields(firstTextFields, comboBox1));
@@ -111,7 +115,6 @@ public class PresentationAddNodes extends JFrame {
                 Num1.setText("Número d'Autors");
                 Num2.setText("Número de Termes");
                 if (authoraux != null) {
-                    System.err.println("MIaU");
                     textField1.setText(paperaux);
                     textField1.setEnabled(false);
                     comboBox1.setEnabled(false);
@@ -169,11 +172,14 @@ public class PresentationAddNodes extends JFrame {
     private void enableFields(ArrayList<JTextField> a, JComboBox b) {
         int numF = Integer.parseInt((String) b.getSelectedItem());
         for (int i = 0; i < numF; i++) a.get(i).setEnabled(true);
+        for(int i = numF; i < a.size(); i++) a.get(i).setEnabled(false);
     }
 
     private void callAddAuthor() {
         ArrayList<String> papersToAdd = new ArrayList<>();
-        String authorName = textField1.getText();
+        String authorName;
+        if(paperaux == null )authorName = textField1.getText();
+        else authorName = authorToAdd;
         if (authorName == null || authorName.equals("")) {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("Introdueix un nom per l'Autor");
@@ -204,7 +210,7 @@ public class PresentationAddNodes extends JFrame {
                 VistaWARNING vw = new VistaWARNING();
                 vw.setVisible("Aquest autor ja existeix");
                 return;
-            } else {
+            } else if(newPapers.size() > 0){
                 Object[] options = {"Acceptar", "Cancelar"};
                 int op = JOptionPane.showOptionDialog(panel1, "Hi ha Articles que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
                 if (op == JOptionPane.YES_OPTION) {
@@ -249,9 +255,9 @@ public class PresentationAddNodes extends JFrame {
         }
 
         if (termaux == null) {
-            for (int i = 0; i < firstTextFields.size(); i++) {
-                if (firstTextFields.get(i).isEnabled()) {
-                    String tName = firstTextFields.get(i).getText();
+            for (int i = 0; i < secondTextFields.size(); i++) {
+                if (secondTextFields.get(i).isEnabled()) {
+                    String tName = secondTextFields.get(i).getText();
                     if (tName == null || tName.equals("")) {
                         VistaWARNING vw = new VistaWARNING();
                         vw.setVisible("Introdueix un nom per el Terme");
@@ -265,11 +271,16 @@ public class PresentationAddNodes extends JFrame {
             termsToAdd.add(termaux);
         }
 
-        confToAdd = cName.getText();
-        if (confToAdd == null || confToAdd.equals("")) {
-            VistaWARNING vw = new VistaWARNING();
-            vw.setVisible("Introdueix un nom per la Conferència");
-            return;
+        if(confaux == null) {
+            confToAdd = cName.getText();
+            if (confToAdd == null || confToAdd.equals("")) {
+                VistaWARNING vw = new VistaWARNING();
+                vw.setVisible("Introdueix un nom per la Conferència");
+                return;
+            }
+        }
+        else{
+            confToAdd = confaux;
         }
 
         HashMap<String, ArrayList<String>> newNodes = persistanceController.addNewPaper(paperName, authorToAdd, termsToAdd, confToAdd);
@@ -286,7 +297,7 @@ public class PresentationAddNodes extends JFrame {
                     int op = JOptionPane.showOptionDialog(panel1, "Hi ha Autors que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
                     if (op == JOptionPane.YES_OPTION) {
                         for (int i = 0; i < newAuthors.size(); i++) {
-
+                            this.authorToAdd = newAuthors.get(i);
                             callAddAuthor();
                         }
                     }
@@ -299,7 +310,7 @@ public class PresentationAddNodes extends JFrame {
                     int op = JOptionPane.showOptionDialog(panel1, "Hi ha Termes que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
                     if (op == JOptionPane.YES_OPTION) {
                         for (int i = 0; i < newTerms.size(); i++) {
-
+                            this.termToAdd = newTerms.get(i);
                             callAddTerm();
                         }
                     }
@@ -312,7 +323,7 @@ public class PresentationAddNodes extends JFrame {
                     int op = JOptionPane.showOptionDialog(panel1, "La conferència no existeix, la vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
                     if (op == JOptionPane.YES_OPTION) {
                         for (int i = 0; i < newConference.size(); i++) {
-
+                            this.confToAdd = newConference.get(i);
                             callAddConference();
                         }
                     }
@@ -323,7 +334,9 @@ public class PresentationAddNodes extends JFrame {
 
     private void callAddTerm() {
         ArrayList<String> papersToAdd = new ArrayList<>();
-        String termName = textField1.getText();
+        String termName;
+        if(paperaux == null) termName = textField1.getText();
+        else termName = this.termToAdd;
         if (termName == null || termName.equals("")) {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("Introdueix un nom per el Terme");
@@ -343,7 +356,7 @@ public class PresentationAddNodes extends JFrame {
                 }
             }
         } else {
-            papersToAdd.add(firstTextFields.get(0).getText());
+            papersToAdd.add(paperaux);
         }
         ArrayList<String> newPapers = persistanceController.addNewTerm(termName, papersToAdd);
         if (newPapers != null) {
@@ -372,7 +385,11 @@ public class PresentationAddNodes extends JFrame {
 
     private void callAddConference() {
         ArrayList<String> papersToAdd = new ArrayList<>();
-        String confName = textField1.getText();
+        String confName;
+        if(paperaux == null) confName = textField1.getText();
+        else {
+            confName = confToAdd;
+        }
         if (confName == null || confName.equals("")) {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("Introdueix un nom per la Conferencia");
@@ -408,7 +425,7 @@ public class PresentationAddNodes extends JFrame {
                 int op = JOptionPane.showOptionDialog(panel1, "Hi ha Articles que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
                 if (op == JOptionPane.YES_OPTION) {
                     for (int i = 0; i < newPapers.size(); i++) {
-                        new PresentationAddNodes(persistanceController, 3, null, newPapers.get(i), null, confName);
+                        new PresentationAddNodes(persistanceController, 1, null, newPapers.get(i), null, confName);
                     }
                 } else {
                     persistanceController.deleteConference(confName);
