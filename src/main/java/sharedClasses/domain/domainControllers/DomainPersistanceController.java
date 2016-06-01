@@ -107,7 +107,7 @@ public class DomainPersistanceController {
 
     public void readAllFromFile(String path) {
         if (path != null && !path.equals("")) {
-            filepath = path;
+            filepath = path+"/";
         }
         readAuthorsFromFile();
         readPapersFromFile();
@@ -176,7 +176,7 @@ public class DomainPersistanceController {
         HashMap<String,ArrayList<String>> ret = new HashMap<>();
         if (papersByName.get(p.getName()) != null) {
             System.err.println("Aquest article ja existeix");
-            ret.put("Fail",null);
+            ret.put("Fail",new ArrayList<String>());
             return ret;
         }
         Author a = null;
