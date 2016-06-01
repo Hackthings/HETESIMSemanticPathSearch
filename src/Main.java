@@ -1,8 +1,7 @@
-package main.java;
 
-import main.java.ownClasses.domain.domainControllers.DomainMainController;
-import main.java.ownClasses.presentation.ConsolePrinter;
-import main.java.ownClasses.presentation.PresentationController;
+import ownClasses.domain.domainControllers.DomainMainController;
+import ownClasses.presentation.ConsolePrinter;
+import ownClasses.presentation.PresentationController;
 
 import java.util.Scanner;
 
