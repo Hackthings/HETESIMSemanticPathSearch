@@ -79,10 +79,9 @@ public class DomainHetesimController {
         // -------PMpri------- //
         final Matrix[] pmPri = {new Matrix()};
         if(symmetric){
-            pmPri[0] = pmPl[0];
             end2[0] = true;
         }
-        else {
+        if(!symmetric) {
             pmPri[0] = findMatrix(pri.charAt(0), pri.charAt(1), 'r');
         }
         Thread t2 = new Thread(() -> { //T2
@@ -92,8 +91,9 @@ public class DomainHetesimController {
         });
 
 
+        // -------RUN------- //
         t1.start();
-        if(!end2[0]) t2.start();
+        if(!symmetric) t2.start();
 
         //wait for threads
         while(!end1[0] || !end2[0]){
@@ -104,9 +104,12 @@ public class DomainHetesimController {
                 return new Matrix();
             }
         }
+        if(symmetric)
+            pmPri[0] = pmPl[0];
 
         Matrix result = pmPl[0].multiply(pmPri[0].transpose());
 
+        // NORMALIZE
         Double rmod;
         Double cmod;
         Matrix r2 = result;
@@ -118,7 +121,6 @@ public class DomainHetesimController {
                 result.addValue(row, column.getSecond(), r2.getValue(row, column.getSecond()) / (rmod * cmod));
             }
         }
-        System.out.println("size-->" + result.rows().size() + "/" + result.cols().size());
         return result;
     }
 
