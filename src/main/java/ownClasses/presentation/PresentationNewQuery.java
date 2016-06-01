@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  * Created by Nicola on 10/05/2016.
@@ -48,12 +49,23 @@ public class PresentationNewQuery extends JFrame {
 
     String firstlast = null;
 
+    ArrayList<String> authors;
+    ArrayList<String> papers;
+    ArrayList<String> terms;
+    ArrayList<String> conferences;
+
+
     public PresentationNewQuery(DomainMainController mainController) {
         super("NEW QUERY");
 
         $$$setupUI$$$();
 
         mainController.updateMatrix(null,null,null,null);
+
+        authors = new ArrayList<>();
+        papers = new ArrayList<>();
+        terms = new ArrayList<>();
+        conferences = new ArrayList<>();
 
         ButtonGroup group1 = new ButtonGroup();
         group1.add(SiFiltres);
@@ -212,6 +224,8 @@ public class PresentationNewQuery extends JFrame {
             }
         }
     }
+
+
 
 
     private void $$$setupUI$$$() {
