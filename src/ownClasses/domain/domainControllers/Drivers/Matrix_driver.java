@@ -67,13 +67,9 @@ public class Matrix_driver {
         escriu_matriu(mult);
 
         //Normalitza la matriu mult.
-        Matrix norm = mult.normalize_bin();
+        Matrix norm = mult.normalize();
         System.out.println("Matriu multiplicació normalitzada: ");
         escriu_matriu(norm);
-
-        System.out.println();
-        System.out.println("Metode print:");
-        m.print();
 
     }
 

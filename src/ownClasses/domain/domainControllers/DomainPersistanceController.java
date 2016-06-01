@@ -37,7 +37,7 @@ public class DomainPersistanceController {
         this.papersByName = papersByName;
         this.conferencesByName = conferencesByName;
         this.termsByName = termsByName;
-        filepath = "/src/main/java/data/";
+        filepath = "/src/data/";
     }
 
     public void testdomainAutors(){
