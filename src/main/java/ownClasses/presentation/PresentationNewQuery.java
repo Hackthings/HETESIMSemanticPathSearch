@@ -225,6 +225,19 @@ public class PresentationNewQuery extends JFrame {
         }
     }
 
+    private void checkArrayList(DomainMainController mainController, ArrayList<String> nodes, char tipus){
+        boolean malament = false;
+        for(int i = 0; i < nodes.size(); ++i){
+            if(!mainController.checkName(nodes.get(i),tipus)){
+                nodes.remove(i);
+                malament = true;
+            }
+        }
+
+        if(malament) callWarning("Error al filtre: nom no trobat al tipus"+tipus);
+
+    }
+
 
 
 
