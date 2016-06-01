@@ -1,10 +1,10 @@
-package main.java.ownClasses.presentation;
+package ownClasses.presentation;
 
-import main.java.ownClasses.domain.domainControllers.DomainMainController;
-import main.java.sharedClasses.domain.nodes.Author;
-import main.java.sharedClasses.domain.nodes.Conference;
-import main.java.sharedClasses.domain.nodes.Paper;
-import main.java.sharedClasses.domain.nodes.Term;
+import ownClasses.domain.domainControllers.DomainMainController;
+import sharedClasses.domain.nodes.Author;
+import sharedClasses.domain.nodes.Conference;
+import sharedClasses.domain.nodes.Paper;
+import sharedClasses.domain.nodes.Term;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
 

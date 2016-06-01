@@ -1,6 +1,6 @@
-package main.java.ownClasses.presentation;
+package ownClasses.presentation;
 
-import main.java.ownClasses.domain.domainControllers.DomainMainController;
+import ownClasses.domain.domainControllers.DomainMainController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

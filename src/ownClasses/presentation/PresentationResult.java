@@ -1,4 +1,4 @@
-package main.java.ownClasses.presentation;
+package ownClasses.presentation;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package main.java.ownClasses.domain.domainControllers.Persistance;
+package ownClasses.domain.domainControllers.Persistance;
 
 import java.io.*;
 

@@ -1,7 +1,7 @@
-package main.java.ownClasses.domain.domainControllers.Drivers;
+package ownClasses.domain.domainControllers.Drivers;
 
 
-import main.java.ownClasses.domain.domainControllers.DomainMainController;
+import ownClasses.domain.domainControllers.DomainMainController;
 
 public class DriverDomainMainController {
 

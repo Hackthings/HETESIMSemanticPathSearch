@@ -1,9 +1,9 @@
-package main.java.ownClasses.domain.domainControllers.Drivers;
+package ownClasses.domain.domainControllers.Drivers;
 
-import main.java.sharedClasses.domain.nodes.Author;
-import main.java.sharedClasses.domain.nodes.Conference;
-import main.java.sharedClasses.domain.nodes.Paper;
-import main.java.sharedClasses.domain.nodes.Term;
+import sharedClasses.domain.nodes.Author;
+import sharedClasses.domain.nodes.Conference;
+import sharedClasses.domain.nodes.Paper;
+import sharedClasses.domain.nodes.Term;
 
 import java.util.Set;
 

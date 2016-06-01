@@ -1,7 +1,4 @@
-package main.java.sharedClasses.utils;
-
-import main.java.sharedClasses.domain.nodes.Author;
-import main.java.sharedClasses.domain.nodes.Paper;
+package sharedClasses.utils;
 
 import java.util.*;
 

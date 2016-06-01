@@ -1,4 +1,4 @@
-package main.java.ownClasses.domain.queries;
+package ownClasses.domain.queries;
 
 public class OrderedQuery extends Query {
     private boolean upward;

@@ -1,9 +1,8 @@
 package ownClasses.domain.domainControllers;
-import main.java.ownClasses.presentation.VistaWARNING;
-import main.java.sharedClasses.domain.nodes.Author;
-import main.java.sharedClasses.domain.nodes.Conference;
-import main.java.sharedClasses.domain.nodes.Paper;
-import main.java.sharedClasses.domain.nodes.Term;
+import sharedClasses.domain.nodes.Author;
+import sharedClasses.domain.nodes.Conference;
+import sharedClasses.domain.nodes.Paper;
+import sharedClasses.domain.nodes.Term;
 import java.io.*;
 import java.util.*;
 

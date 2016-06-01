@@ -1,8 +1,8 @@
-package main.java.ownClasses.domain.domainControllers;
+package ownClasses.domain.domainControllers;
 
 
-import main.java.sharedClasses.utils.Matrix;
-import main.java.sharedClasses.utils.Vertex;
+import sharedClasses.utils.Matrix;
+import sharedClasses.utils.Vertex;
 
 import java.util.ArrayList;
 

@@ -1,8 +1,8 @@
-package main.java.ownClasses.domain.domainControllers.Drivers;
+package ownClasses.domain.domainControllers.Drivers;
 
 
-import main.java.sharedClasses.domain.nodes.Conference;
-import main.java.sharedClasses.domain.nodes.Paper;
+import sharedClasses.domain.nodes.Conference;
+import sharedClasses.domain.nodes.Paper;
 
 import java.util.HashMap;
 import java.util.Set;

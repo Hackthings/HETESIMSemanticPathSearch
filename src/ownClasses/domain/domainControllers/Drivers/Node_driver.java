@@ -1,7 +1,7 @@
-package main.java.ownClasses.domain.domainControllers.Drivers;
+package ownClasses.domain.domainControllers.Drivers;
 
 
-import main.java.sharedClasses.domain.nodes.Node;
+import sharedClasses.domain.nodes.Node;
 
 public class Node_driver {
 

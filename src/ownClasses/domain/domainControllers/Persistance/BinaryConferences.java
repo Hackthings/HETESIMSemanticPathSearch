@@ -1,6 +1,6 @@
-package main.java.ownClasses.domain.domainControllers.Persistance;
+package ownClasses.domain.domainControllers.Persistance;
 
-import main.java.sharedClasses.domain.nodes.Conference;
+import sharedClasses.domain.nodes.Conference;
 
 import java.util.HashMap;
 

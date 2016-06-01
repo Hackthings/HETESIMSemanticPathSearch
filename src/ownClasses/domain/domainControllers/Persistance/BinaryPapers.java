@@ -1,6 +1,6 @@
-package main.java.ownClasses.domain.domainControllers.Persistance;
+package ownClasses.domain.domainControllers.Persistance;
 
-import main.java.sharedClasses.domain.nodes.Paper;
+import sharedClasses.domain.nodes.Paper;
 import java.util.HashMap;
 
 /**

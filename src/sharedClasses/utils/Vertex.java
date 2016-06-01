@@ -1,4 +1,4 @@
-package main.java.sharedClasses.utils;
+package sharedClasses.utils;
 
 import java.util.Comparator;
 

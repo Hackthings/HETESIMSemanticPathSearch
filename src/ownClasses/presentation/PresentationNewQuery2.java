@@ -1,7 +1,7 @@
-package main.java.ownClasses.presentation;
+package ownClasses.presentation;
 
 import a.P;
-import main.java.ownClasses.domain.domainControllers.DomainMainController;
+import ownClasses.domain.domainControllers.DomainMainController;
 
 import javax.swing.*;
 import java.awt.*;

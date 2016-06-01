@@ -1,21 +1,21 @@
-package main.java.ownClasses.domain.domainControllers;
+package ownClasses.domain.domainControllers;
 
-import main.java.ownClasses.domain.domainControllers.Persistance.BinaryAuthors;
-import main.java.ownClasses.domain.domainControllers.Persistance.BinaryConferences;
-import main.java.ownClasses.domain.domainControllers.Persistance.BinaryPapers;
-import main.java.ownClasses.domain.domainControllers.Persistance.BinaryTerms;
-import main.java.ownClasses.domain.queries.IntervaledQuery;
-import main.java.ownClasses.domain.queries.LimitedQuery;
-import main.java.ownClasses.domain.queries.OrderedQuery;
-import main.java.ownClasses.domain.queries.Query;
+import ownClasses.domain.domainControllers.Persistance.BinaryAuthors;
+import ownClasses.domain.domainControllers.Persistance.BinaryConferences;
+import ownClasses.domain.domainControllers.Persistance.BinaryPapers;
+import ownClasses.domain.domainControllers.Persistance.BinaryTerms;
+import ownClasses.domain.queries.IntervaledQuery;
+import ownClasses.domain.queries.LimitedQuery;
+import ownClasses.domain.queries.OrderedQuery;
+import ownClasses.domain.queries.Query;
 import ownClasses.domain.domainControllers.DomainPersistanceController;
-import main.java.sharedClasses.domain.nodes.Author;
-import main.java.sharedClasses.domain.nodes.Conference;
-import main.java.sharedClasses.domain.nodes.Paper;
-import main.java.sharedClasses.domain.nodes.Term;
-import main.java.sharedClasses.utils.Matrix;
-import main.java.ownClasses.domain.utils.Pair;
-import main.java.sharedClasses.utils.Vertex;
+import sharedClasses.domain.nodes.Author;
+import sharedClasses.domain.nodes.Conference;
+import sharedClasses.domain.nodes.Paper;
+import sharedClasses.domain.nodes.Term;
+import sharedClasses.utils.Matrix;
+import ownClasses.domain.utils.Pair;
+import sharedClasses.utils.Vertex;
 
 import java.util.*;
 

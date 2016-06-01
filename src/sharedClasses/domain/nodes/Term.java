@@ -1,4 +1,4 @@
-package main.java.sharedClasses.domain.nodes;
+package sharedClasses.domain.nodes;
 
 import java.util.ArrayList;
 import java.util.Collections;

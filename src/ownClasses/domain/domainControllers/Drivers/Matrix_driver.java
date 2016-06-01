@@ -1,8 +1,8 @@
-package main.java.ownClasses.domain.domainControllers.Drivers;
+package ownClasses.domain.domainControllers.Drivers;
 
 
 
-import main.java.sharedClasses.utils.Matrix;
+import sharedClasses.utils.Matrix;
 
 import java.util.Set;
 
