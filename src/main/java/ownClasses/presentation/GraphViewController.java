@@ -8,6 +8,8 @@ import main.java.sharedClasses.domain.nodes.Term;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
 
+import java.util.ArrayList;
+
 
 public class GraphViewController{
     private Graph graph;
@@ -41,6 +43,10 @@ public class GraphViewController{
         genGraph(d, name, path);
         graph.addAttribute("ui.stylesheet", styleSheet);
         graph.display();
+    }
+
+    public GraphViewController(DomainMainController d, String name, String path, ArrayList<String> sAu, ArrayList<String> sPa, ArrayList<String> sCo, ArrayList<String> sTe){
+
     }
 
     private void genGraph(DomainMainController d,String name, String path){
