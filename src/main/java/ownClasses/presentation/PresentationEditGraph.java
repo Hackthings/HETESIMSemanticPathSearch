@@ -60,7 +60,7 @@ public class PresentationEditGraph extends JFrame {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("Selecciona l'element a eliminar");
         }
-        // TODO: IMPLEMENT DELETE
+        else new PresentationdeleteNode(persistanceController,editList.getSelectedIndex());
     }
 
     private void $$$setupUI$$$() {

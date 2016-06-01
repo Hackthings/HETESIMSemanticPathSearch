@@ -38,6 +38,9 @@ public class Term extends Node {
         return maxId;
     }
 
+    public static void incrementMaxId() {maxId++;}
+
+
     /**
      * Returns all the papers related with the Term with their ids as key
      *

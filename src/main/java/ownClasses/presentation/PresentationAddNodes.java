@@ -284,7 +284,6 @@ public class PresentationAddNodes extends JFrame {
         }
 
         HashMap<String, ArrayList<String>> newNodes = persistanceController.addNewPaper(paperName, authorToAdd, termsToAdd, confToAdd);
-
         if (newNodes.get("Fail") != null) {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("L'article ja existeix");

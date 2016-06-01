@@ -165,6 +165,7 @@ public class DomainPersistanceController {
         }
         authorsById.put(a.getId(), a);
         authorsByName.put(a.getName(), a);
+        Author.incrementMaxId();
         return newPapers;
     }
 
@@ -205,11 +206,8 @@ public class DomainPersistanceController {
             c.addExposedPaper(p);
         }
         papersById.put(p.getId(),p);
-        if(papersById.get(p.getId()) == null){
-            VistaWARNING v = new VistaWARNING();
-            v.setVisible("el paper es putu null");
-        }
         papersByName.put(p.getName(),p);
+        Paper.incrementMaxId();
         ret.put("A", newAuthors);
         ret.put("T", newTerms);
         ret.put("C",newConf);
@@ -237,6 +235,7 @@ public class DomainPersistanceController {
         }
         termsById.put(a.getId(), a);
         termsByName.put(a.getName(), a);
+        Term.incrementMaxId();
         return newPapers;
     }
 
@@ -261,6 +260,7 @@ public class DomainPersistanceController {
         }
         conferencesById.put(a.getId(), a);
         conferencesByName.put(a.getName(), a);
+        Conference.incrementMaxId();
         return newPapers;
     }
 

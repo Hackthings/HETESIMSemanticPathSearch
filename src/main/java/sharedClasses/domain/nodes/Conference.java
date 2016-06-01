@@ -41,6 +41,9 @@ public class Conference extends Node {
         return maxId;
     }
 
+    public static void incrementMaxId() {maxId++;}
+
+
     /**
      * Returns all the papers related with the Conference with their ids as key
      *

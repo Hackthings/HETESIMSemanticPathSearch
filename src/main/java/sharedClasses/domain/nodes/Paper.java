@@ -43,6 +43,9 @@ public class Paper extends Node {
         return maxId;
     }
 
+    public static void incrementMaxId() {maxId++;}
+
+
     /**
      * Set the conference where the Paper was published
      *

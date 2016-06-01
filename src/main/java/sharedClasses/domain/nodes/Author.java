@@ -38,6 +38,8 @@ public class Author extends Node{
         return maxId;
     }
 
+    public static void incrementMaxId() {maxId++;}
+
     /**
      * Returns all the papers related with the Author with their ids as key
      *
