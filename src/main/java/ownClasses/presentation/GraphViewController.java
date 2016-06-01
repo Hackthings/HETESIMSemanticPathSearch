@@ -30,9 +30,9 @@ public class GraphViewController{
         "}";
 
     public GraphViewController(DomainMainController d, String name, String path){
-        System.out.println(path);
+        System.out.println("Generating graph for: " + path);
         graph = new SingleGraph(path);
-        
+
         graph.setAutoCreate(true);
         graph.setStrict(false);
 
@@ -44,8 +44,6 @@ public class GraphViewController{
     }
 
     private void genGraph(DomainMainController d,String name, String path){
-        System.out.println(name);
-        System.out.println(path);
         Node n = graph.getNode(name+path);
         n.addAttribute("ui.class", Character.toString(path.charAt(0)));
         n.addAttribute("ui.label", name);

@@ -4,6 +4,8 @@ package main.java.ownClasses.domain.domainControllers;
 import main.java.sharedClasses.utils.Matrix;
 import main.java.sharedClasses.utils.Vertex;
 
+import java.util.ArrayList;
+
 public class DomainHetesimController {
     private Matrix probAuthorPaper;
     private Matrix probPaperAuthor;
@@ -61,31 +63,59 @@ public class DomainHetesimController {
         }
         String pri = new StringBuilder(pr).reverse().toString(); //inverted path
         boolean symmetric = (pl.equals(pri));
+
+        final boolean[] end1 = {false};
+        final boolean[] end2 = {false};
+
         //PMpl
-        Matrix pmPl = findMatrix(pl.charAt(0), pl.charAt(1), 'l');
-        for (int i = 2; i < pl.length(); ++i)
-            pmPl = pmPl.multiply(findMatrix(pl.charAt(i - 1), pl.charAt(i), 'l'));
+        final Matrix[] pmPl = {findMatrix(pl.charAt(0), pl.charAt(1), 'l')};
+        String finalPl = pl;
+        new Thread(() ->{
+            for (int i = 2; i < finalPl.length(); ++i)
+                pmPl[0] = pmPl[0].multiply(findMatrix(finalPl.charAt(i - 1), finalPl.charAt(i), 'l'));
+            end1[0] = true;
+        }).start();
         //PMpri
-        Matrix pmPri;
+        final Matrix[] pmPri = {new Matrix()};
+
         if(symmetric){
-            pmPri = pmPl;
+            pmPri[0] = pmPl[0];
+            end2[0] = true;
         }
         else {
-            pmPri = findMatrix(pri.charAt(0), pri.charAt(1), 'r');
+            final ArrayList<Matrix> matrices = new ArrayList<Matrix>();
+            matrices.add(findMatrix(pri.charAt(0), pri.charAt(1), 'r'));
             for (int i = 2; i < pri.length(); ++i)
-                pmPri = pmPri.multiply(findMatrix(pri.charAt(i - 1), pri.charAt(i), 'r'));
+                matrices.add(findMatrix(pri.charAt(i - 1), pri.charAt(i), 'r'));
+            new Thread(() -> {
+                Matrix m = matrices.get(0);
+                for (int i = 1; i < matrices.size(); ++i)
+                    m = m.multiply(matrices.get(i));
+                pmPri[0] = m;
+                end1[0] = true;
+            }).start();
         }
 
-        Matrix result = pmPl.multiply(pmPri.transpose());
+        //wait for secondary thread
+        while(!end1[0] || !end2[0]){
+            try {
+                Thread.sleep(100);
+            }catch (InterruptedException e){
+                System.out.println("Interrupred Exception");
+                return new Matrix();
+            }
+        }
+
+        Matrix result = pmPl[0].multiply(pmPri[0].transpose());
 
         Double rmod = 0.0;
         Double cmod = 0.0;
         Matrix r2 = result;
         result = new Matrix();
         for (Integer row : r2.rows()) {
-            rmod = pmPl.rowModulus(row);
+            rmod = pmPl[0].rowModulus(row);
             for (Vertex column : r2.getRow(row)) {
-                cmod = pmPri.rowModulus(column.getSecond());
+                cmod = pmPri[0].rowModulus(column.getSecond());
                 result.addValue(row, column.getSecond(), r2.getValue(row, column.getSecond()) / (rmod * cmod));
             }
         }
