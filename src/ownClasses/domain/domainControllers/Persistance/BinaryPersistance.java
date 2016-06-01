@@ -10,7 +10,7 @@ public class BinaryPersistance<E> {
     protected File tmp;
 
     public BinaryPersistance(){
-        String filepath ="/src/main/java/data/tmp/";
+        String filepath ="/src/data/tmp/";
         String absolutePath= new File("").getAbsolutePath();
         tmp = new File(absolutePath.concat(filepath));
         if(!tmp.mkdirs()){
