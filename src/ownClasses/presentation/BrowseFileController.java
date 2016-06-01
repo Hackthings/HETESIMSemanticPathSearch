@@ -1,13 +1,11 @@
 package main.java.ownClasses.presentation;
 
-import main.java.sharedClasses.domain.domainControllers.DomainPersistanceController;
+import ownClasses.domain.domainControllers.DomainPersistanceController;
 
 import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.SwingUtilities;
-import javax.swing.filechooser.*;
 
 public class BrowseFileController extends JPanel
         implements ActionListener {

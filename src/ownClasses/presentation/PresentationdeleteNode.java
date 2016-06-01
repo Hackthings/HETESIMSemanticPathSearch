@@ -1,6 +1,6 @@
 package main.java.ownClasses.presentation;
 
-import main.java.sharedClasses.domain.domainControllers.DomainPersistanceController;
+import ownClasses.domain.domainControllers.DomainPersistanceController;
 
 import javax.swing.*;
 import java.awt.*;

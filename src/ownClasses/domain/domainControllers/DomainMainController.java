@@ -8,7 +8,7 @@ import main.java.ownClasses.domain.queries.IntervaledQuery;
 import main.java.ownClasses.domain.queries.LimitedQuery;
 import main.java.ownClasses.domain.queries.OrderedQuery;
 import main.java.ownClasses.domain.queries.Query;
-import main.java.sharedClasses.domain.domainControllers.DomainPersistanceController;
+import ownClasses.domain.domainControllers.DomainPersistanceController;
 import main.java.sharedClasses.domain.nodes.Author;
 import main.java.sharedClasses.domain.nodes.Conference;
 import main.java.sharedClasses.domain.nodes.Paper;

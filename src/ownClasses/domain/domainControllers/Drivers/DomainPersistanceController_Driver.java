@@ -1,14 +1,6 @@
 package main.java.ownClasses.domain.domainControllers.Drivers;
 
 
-import main.java.sharedClasses.domain.domainControllers.DomainPersistanceController;
-import main.java.sharedClasses.domain.nodes.Author;
-import main.java.sharedClasses.domain.nodes.Conference;
-import main.java.sharedClasses.domain.nodes.Paper;
-import main.java.sharedClasses.domain.nodes.Term;
-
-import java.util.*;
-
 /**
  * Created by MarcBotet on 21/04/2016.
  */

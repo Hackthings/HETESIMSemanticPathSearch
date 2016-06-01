@@ -1,4 +1,4 @@
-package main.java.sharedClasses.domain.domainControllers;
+package ownClasses.domain.domainControllers;
 import main.java.ownClasses.presentation.VistaWARNING;
 import main.java.sharedClasses.domain.nodes.Author;
 import main.java.sharedClasses.domain.nodes.Conference;

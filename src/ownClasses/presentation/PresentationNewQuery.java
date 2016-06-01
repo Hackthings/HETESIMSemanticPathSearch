@@ -1,12 +1,10 @@
 package main.java.ownClasses.presentation;
 
 import main.java.ownClasses.domain.domainControllers.DomainMainController;
-import main.java.sharedClasses.domain.domainControllers.DomainPersistanceController;
+import ownClasses.domain.domainControllers.DomainPersistanceController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
