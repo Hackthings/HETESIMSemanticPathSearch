@@ -182,7 +182,11 @@ public class PresentationNewQuery extends JFrame {
             mainController.NQ(path);
             long timefinal = System.currentTimeMillis();
             System.out.println("Triga :"+(timefinal-timeini)+" milisegons en fer el path "+path);
-            PresentationNewQuery2 window = new PresentationNewQuery2(mainController, path,firstlast);
+            if(authors==null) authors = new ArrayList<String>();
+            if(terms==null) terms = new ArrayList<String>();
+            if(conferences==null) conferences = new ArrayList<String>();
+            if(papers==null) papers = new ArrayList<String>();
+            PresentationNewQuery2 window = new PresentationNewQuery2(mainController, path,firstlast,authors,papers,conferences,terms);
             System.out.println("DONE");
         } else {
             callWarning("Path no valid");

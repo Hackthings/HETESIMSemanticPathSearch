@@ -1,5 +1,6 @@
 package main.java.ownClasses.presentation;
 
+import a.P;
 import main.java.ownClasses.domain.domainControllers.DomainMainController;
 
 import javax.swing.*;
@@ -27,10 +28,20 @@ public class PresentationNewQuery2 extends JFrame {
 
     int querytype = 1;
 
-    public PresentationNewQuery2(DomainMainController mainController, String path, String firstlast) {
+    ArrayList<String> authors;
+    ArrayList<String> papers;
+    ArrayList<String> terms;
+    ArrayList<String> conferences;
+
+    public PresentationNewQuery2(DomainMainController mainController, String path, String firstlast, ArrayList<String> Authors, ArrayList<String> Papers, ArrayList<String> Conferences, ArrayList<String> Terms) {
         super("NEW QUERY2");
 
         $$$setupUI$$$();
+
+        authors = Authors;
+        papers = Papers;
+        terms = Terms;
+        conferences = Conferences;
 
         ButtonGroup group1 = new ButtonGroup();
         group1.add(ascendentButton);
@@ -148,7 +159,7 @@ public class PresentationNewQuery2 extends JFrame {
 
                 new PresentationResult(resultat, path, name, firstlast);
 
-                new GraphViewController(mainController,name,path);
+                new GraphViewController(mainController,name,path,authors,papers,conferences,terms);
             }
         }
         else{
