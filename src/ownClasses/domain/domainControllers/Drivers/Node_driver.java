@@ -1,10 +1,10 @@
 package ownClasses.domain.domainControllers.Drivers;
 
-
-import sharedClasses.domain.nodes.Node;
+import sharedClasses.domain.nodes.*;
 
 public class Node_driver {
 
+    //AQUEST DRIVER PASSA TOTES LES PROVES CORRECTAMENT
     public static void main(String[] args) {
 
         //Crea un objecte de la classe node.
@@ -13,11 +13,8 @@ public class Node_driver {
         //Escriu el Id: 1.
         System.out.println(n.getId());
 
-
         //Escriu el nom: First.
         System.out.println(n.getName());
-
-
 
         //Modifica el nom del parametre i l'escriu: Second.
         n.setName("Second");

@@ -1,14 +1,13 @@
 package ownClasses.domain.domainControllers.Drivers;
 
+import sharedClasses.domain.nodes.*;
 
-
-import sharedClasses.domain.nodes.Author;
-import sharedClasses.domain.nodes.Paper;
-
-import java.util.Set;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 public class Author_driver {
-/*
+
+    //AQUEST DRIVER PASSA TOTES LES PROVES CORRECTAMENT
     public static void main(String[] args) {
 
         //Crea un objecte de la classe Author.
@@ -21,30 +20,39 @@ public class Author_driver {
         //Escriu el nom: "Muhamed Lee".
         System.out.println(a.getName());
 
-        //Afegeix un article i el mostra per pantalla, tant per nom com per id
+        //Afegeix 3 articles
         Paper p1 = new Paper("The NP Problem", 1);
         a.addPaper(p1);
 
-        System.out.println(a.getPaperByName("The NP Problem").getName());
-        System.out.println(a.getPaperById(1).getName());
-
-        //Tot seguit mostra tots els articles associats al autor,tant per nom com per id
         Paper p2 = new Paper("P equals NP", 2);
         a.addPaper(p2);
+
+        Paper p3 = new Paper("NP contains P", 3);
+        a.addPaper(p3);
+
+
         System.out.println("Articles de l'autor");
-        Set<Integer> keyMap = a.getPapersById().keySet();
-        for (Integer i : keyMap) {
-            System.out.println(a.getPapersById().get(i).getName());
-        }
-        Set<String> keyMap2 = a.getPapersByName().keySet();
-        for (String s : keyMap2) {
-            System.out.println(a.getPaperByName(s).getName());
+        System.out.println("Mostrem el llistat d'articles per id");
+        HashMap<Integer, Paper> keyMap = new HashMap<>();
+        keyMap = a.getPapersById(keyMap);
+        for (Paper p : keyMap.values()) {
+            System.out.println(p.getId() + " " + p.getName());
         }
 
-        //Borra un dels articles
+        System.out.println("Mostrem el llistat d'articles per nom");
+        HashMap<String,Paper> keyMap2 = new HashMap<>();
+        keyMap2 = a.getPapersByName(keyMap);
+        for (Paper p : keyMap2.values()) {
+            System.out.println(p.getId()+" "+p.getName());
+        }
+
+        //Esborrem un dels articles i imprimim per pantalla els que queden
         a.removePaper(p1);
         System.out.println("Esborrem l'article 1 amb nom The NP Problem i comprovem que no hi es");
-        if (a.getPaperByName("The NP Problem") == null) System.out.println("Aquest autor no es d'aquest article");
-        if (a.getPaperById(1) == null) System.out.println("Aquest autor no es d'aquest article");
-    }*/
+        HashMap<Integer, Paper> keyMap4 = new HashMap<>();
+        keyMap4 = a.getPapersById(keyMap4);
+        for (Paper p : keyMap4.values()) {
+            System.out.println(p.getId() + " " + p.getName());
+        }
+    }
 }
