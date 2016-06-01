@@ -74,9 +74,9 @@ public class DomainMainController {
         timefinal = System.currentTimeMillis();
         System.out.println(timefinal-timeini);
 //persistanceController.testDomain();
-        authorpaper = getAuthorPaperMatrix(null,null);
-        confpaper =getConferencePaperMatrix(null,null);
-        termpaper = getTermPaperMatrix(null,null);
+        authorpaper = getAuthorpaperMatrixFilter(null,null);
+        confpaper =getConfpaperMatrixFilter(null,null);
+        termpaper = getTermpaperMatrixFilter(null,null);
         hetesimController = new DomainHetesimController(authorpaper,authorpaper.transpose(),termpaper,termpaper.transpose(),confpaper,confpaper.transpose());
         scanner = new Scanner(System.in);
         edit=false;
@@ -101,10 +101,6 @@ public class DomainMainController {
 
     public HashMap<Integer,Paper> getPapersById(){
         return papersById;
-    }
-
-    public HashMap<Integer,Conference> getConferencesById(){
-        return conferencesById;
     }
 
     public HashMap<Integer,Term> getTermsById(){ return termsById; }
@@ -820,10 +816,10 @@ public class DomainMainController {
         return conferencepaper;
     }
 
-    public void updateMatrix(String authorname, String papername, String confname, String termname){
-        authorpaper = getAuthorPaperMatrix(authorname,papername);
-        confpaper = getConferencePaperMatrix(confname,papername);
-        termpaper = getTermPaperMatrix(termname,papername);
+    public void updateMatrix(ArrayList<String> authors, ArrayList<String> papers, ArrayList<String> confs, ArrayList<String> terms){
+        authorpaper = getAuthorpaperMatrixFilter(authors,papers);
+        confpaper = getConfpaperMatrixFilter(confs,papers);
+        termpaper = getTermpaperMatrixFilter(terms,papers);
         hetesimController = new DomainHetesimController(authorpaper,authorpaper.transpose(),termpaper,termpaper.transpose(),confpaper,confpaper.transpose());
         edit = false;
     }

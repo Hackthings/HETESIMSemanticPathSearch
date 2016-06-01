@@ -1,6 +1,7 @@
 package main.java.ownClasses.presentation;
 
 import main.java.ownClasses.domain.domainControllers.DomainMainController;
+import main.java.sharedClasses.domain.domainControllers.DomainPersistanceController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,15 +24,19 @@ public class PresentationNewQuery extends JFrame {
     private JRadioButton SiFiltres;
     private JRadioButton NoFiltres;
 
-    private JTextArea Asubset;
+    /*private JTextArea Asubset;
     private JScrollPane scrollPaneA;
     private JTextArea Csubset;
     private JScrollPane scrollPaneC;
     private JTextArea Psubset;
     private JScrollPane scrollPaneP;
     private JTextArea Tsubset;
-    private JScrollPane scrollPaneT;
+    private JScrollPane scrollPaneT;*/
 
+    private BrowseFileOnlyImportController Asubset;
+    private BrowseFileOnlyImportController Csubset;
+    private BrowseFileOnlyImportController Psubset;
+    private BrowseFileOnlyImportController Tsubset;
 
     private JLabel A;
     private JLabel P;
@@ -54,11 +59,16 @@ public class PresentationNewQuery extends JFrame {
     ArrayList<String> terms;
     ArrayList<String> conferences;
 
+    DomainPersistanceController persistanceController;
 
-    public PresentationNewQuery(DomainMainController mainController) {
+
+    public PresentationNewQuery(DomainMainController mainController,DomainPersistanceController persistanceControllerpar) {
         super("NEW QUERY");
 
+        persistanceController = persistanceControllerpar;
+
         $$$setupUI$$$();
+
 
         mainController.updateMatrix(null,null,null,null);
 
@@ -124,10 +134,10 @@ public class PresentationNewQuery extends JFrame {
         C.setVisible(act);
         T.setVisible(act);
 
-        scrollPaneA.setVisible(act);
-        scrollPaneP.setVisible(act);
-        scrollPaneC.setVisible(act);
-        scrollPaneT.setVisible(act);
+        Asubset.setVisible(act);
+        Psubset.setVisible(act);
+        Tsubset.setVisible(act);
+        Csubset.setVisible(act);
 
         subset = act;
         if(act) setSize(300,340);
@@ -141,10 +151,25 @@ public class PresentationNewQuery extends JFrame {
     private void callNQ(DomainMainController mainController) {
         if (path.length()>1) {
             if(subset){
-                checkTexts(mainController);
+                authors = Asubset.getnodes();
+                checkArrayList(mainController,authors,'A');
+                papers = Psubset.getnodes();
+                checkArrayList(mainController,papers,'P');
+                terms = Tsubset.getnodes();
+                checkArrayList(mainController,terms,'T');
+                conferences = Csubset.getnodes();
+                checkArrayList(mainController,conferences,'C');
+
+                //checkTexts(mainController);
                 System.out.println();
-                mainController.updateMatrix(author,paper,conf,term);
-                System.out.println(author+" "+paper+" "+conf+" "+term);
+
+                mainController.updateMatrix(authors,papers,conferences,terms);
+
+                Asubset.clearnodes();
+                Psubset.clearnodes();
+                Csubset.clearnodes();
+                Tsubset.clearnodes();
+                //System.out.println(author+" "+paper+" "+conf+" "+term);
                 changed = true;
             }
             else if(changed){
@@ -168,7 +193,7 @@ public class PresentationNewQuery extends JFrame {
     }
 
     private void checkTexts(DomainMainController mainController){
-        int count = 0;
+       /*int count = 0;
         for(int i =1; i<path.length() && count<3;++i){
             if(path.charAt(0)!=path.charAt(i)) {
                 switch (path.charAt(i)) {
@@ -222,7 +247,20 @@ public class PresentationNewQuery extends JFrame {
                     }
                     break;
             }
+        }*/
+    }
+
+    private void checkArrayList(DomainMainController mainController, ArrayList<String> nodes, char tipus){
+        boolean malament = false;
+        for(int i = 0; i < nodes.size(); ++i){
+            if(!mainController.checkName(nodes.get(i),tipus)){
+                nodes.remove(i);
+                malament = true;
+            }
         }
+
+        if(malament) callWarning("Error al filtre: nom no trobat al tipus"+tipus);
+
     }
 
 
@@ -375,11 +413,10 @@ public class PresentationNewQuery extends JFrame {
         gbc.anchor = GridBagConstraints.EAST;
         panel.add(T, gbc);
 
-        /////////////////////////////////// ScrollPanes & TextAreas
+        /////////////////////////////////// Imports
 
 
-        scrollPaneA = new JScrollPane();
-        scrollPaneA.setVisible(false);
+        Asubset = new BrowseFileOnlyImportController(persistanceController);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 6;
@@ -387,12 +424,11 @@ public class PresentationNewQuery extends JFrame {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        panel.add(scrollPaneA, gbc);
-        Asubset = new JTextArea();
-        scrollPaneA.setViewportView(Asubset);
+        Asubset.setVisible(false);
+        panel.add(Asubset, gbc);
 
-        scrollPaneP = new JScrollPane();
-        scrollPaneP.setVisible(false);
+
+        Psubset = new BrowseFileOnlyImportController(persistanceController);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 7;
@@ -400,12 +436,10 @@ public class PresentationNewQuery extends JFrame {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        panel.add(scrollPaneP, gbc);
-        Psubset = new JTextArea();
-        scrollPaneP.setViewportView(Psubset);
+        Psubset.setVisible(false);
+        panel.add(Psubset, gbc);
 
-        scrollPaneC = new JScrollPane();
-        scrollPaneC.setVisible(false);
+        Csubset = new BrowseFileOnlyImportController(persistanceController);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 8;
@@ -413,12 +447,10 @@ public class PresentationNewQuery extends JFrame {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        panel.add(scrollPaneC, gbc);
-        Csubset = new JTextArea();
-        scrollPaneC.setViewportView(Csubset);
+        Csubset.setVisible(false);
+        panel.add(Csubset, gbc);
 
-        scrollPaneT = new JScrollPane();
-        scrollPaneT.setVisible(false);
+        Tsubset = new BrowseFileOnlyImportController(persistanceController);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 9;
@@ -426,9 +458,8 @@ public class PresentationNewQuery extends JFrame {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        panel.add(scrollPaneT, gbc);
-        Tsubset = new JTextArea();
-        scrollPaneT.setViewportView(Tsubset);
+        Tsubset.setVisible(false);
+        panel.add(Tsubset, gbc);
 
 
 
