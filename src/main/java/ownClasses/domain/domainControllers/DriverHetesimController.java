@@ -2,7 +2,9 @@ package main.java.ownClasses.domain.domainControllers;
 
 
 import main.java.sharedClasses.utils.Matrix;
+import main.java.sharedClasses.utils.Vertex;
 
+import java.util.ArrayList;
 
 public class DriverHetesimController {
 
@@ -47,5 +49,4 @@ public class DriverHetesimController {
         escriu_matriu(resultat);
 
     }
-
 }
