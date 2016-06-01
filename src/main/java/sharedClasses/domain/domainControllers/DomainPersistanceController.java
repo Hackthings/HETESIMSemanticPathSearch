@@ -41,6 +41,16 @@ public class DomainPersistanceController {
         filepath = "/src/main/java/data/";
     }
 
+    public void testdomainAutors(){
+        for (Author a : authorsById.values()) {
+            System.out.println("Autor: " + a.getId() + " " + a.getName());
+            System.out.println("Papers Relacionats ");
+            for (Paper p : a.getPapersById(papersById).values()) {
+                System.out.println(p.getId() + " " + p.getName());
+            }
+        }
+    }
+
     public void testDomain() {
 
         System.out.println("TEST DOMAIN!");
@@ -142,7 +152,6 @@ public class DomainPersistanceController {
             p = papersByName.get(papersToRelate.get(i));
             if (p == null){
                 newPapers.add(papersToRelate.get(i));
-                System.err.print("EL PAPER ES NUUUUL");
             }
             else {
                 a.addPaper(p);
