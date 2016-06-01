@@ -13,7 +13,7 @@ all:
 	javac -d classes/ -classpath classes/ src/ownClasses/domain/domainControllers/Drivers/*.java
 
 run:
-	java -cp classes/ main.java.Main
+	java -cp classes/ Main
 
 clean:
 	rm -rf classes/*
