@@ -14,6 +14,12 @@ import java.util.ArrayList;
 public class GraphViewController{
     private Graph graph;
 
+    //variables for subset graphs
+    private ArrayList<String> sAu;
+    private ArrayList<String> sPa;
+    private ArrayList<String> sCo;
+    private ArrayList<String> sTe;
+
     private final String styleSheet =
         "node {" +
         "	fill-color: black;" +
@@ -40,19 +46,92 @@ public class GraphViewController{
 
         graph.addNode(name+path);
 
-        genGraph(d, name, path);
+        genGraph(d, name, path, false);
         graph.addAttribute("ui.stylesheet", styleSheet);
         graph.display();
     }
 
     public GraphViewController(DomainMainController d, String name, String path, ArrayList<String> sAu, ArrayList<String> sPa, ArrayList<String> sCo, ArrayList<String> sTe){
+        this.sAu = sAu;
+        this.sPa = sPa;
+        this.sCo = sCo;
+        this.sTe = sTe;
 
+        System.out.println(sPa.toString());
+        System.out.println("Generating graph for: " + path + " (with subset)");
+
+        graph = new SingleGraph(path+"subset");
+
+        graph.setAutoCreate(true);
+        graph.setStrict(false);
+
+        graph.addNode(name+path);
+
+        genGraph(d, name, path, true);
+        graph.addAttribute("ui.stylesheet", styleSheet);
+        graph.display();
     }
 
-    private void genGraph(DomainMainController d,String name, String path){
+    private void genGraph(DomainMainController d, String name, String path, boolean subset){
         Node n = graph.getNode(name+path);
         n.addAttribute("ui.class", Character.toString(path.charAt(0)));
         n.addAttribute("ui.label", name);
+
+        if(subset){
+            boolean found = false;
+            switch (path.charAt(0)) {
+                case 'A':
+                    if (sAu.size() > 0) {
+                        for (String nm : sAu) {
+                            if (nm.equals(name)) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                    else found = true;
+                    break;
+                case 'P':
+                    if (sPa.size() > 0) {
+                        for (String nm : sPa) {
+                            if (nm.equals(name)) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                    else found = true;
+                    break;
+                case 'C':
+                    if (sCo.size() > 0) {
+                        for (String nm : sCo) {
+                            if (nm.equals(name)) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                    else found = true;
+                    break;
+                case 'T':
+                    if (sTe.size() > 0) {
+                        for (String nm : sTe) {
+                            if (nm.equals(name)) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                    else found = true;
+                    break;
+            }
+            if(!found){
+                graph.removeNode(n);
+                System.out.println(n.toString());
+                return;
+            }
+        }
+
         if(path.length() > 1){
             switch (path.charAt(0)) {
                 case 'A':
@@ -60,7 +139,7 @@ public class GraphViewController{
                     for(Integer i : a.getAuthorRelations()){
                         Paper paper = d.getPapersById().get(i);
                         graph.addEdge(name+paper.getName()+path, name+path, paper.getName()+path.substring(1));
-                        genGraph(d, paper.getName(), path.substring(1));
+                        genGraph(d, paper.getName(), path.substring(1), subset);
                     }
                     break;
                 case 'P':
@@ -70,19 +149,19 @@ public class GraphViewController{
                             for(Integer i : p.getRelatedAuthors()){
                                 Author auth = d.getAuthorsById().get(i);
                                 graph.addEdge(name+auth.getName()+path, name+path, auth.getName()+path.substring(1));
-                                genGraph(d, auth.getName(), path.substring(1));
+                                genGraph(d, auth.getName(), path.substring(1), subset);
                             }
                             break;
                         case 'C':
                             Conference c = p.getConference();
                             graph.addEdge(name+c.getName()+path, name+path, c.getName()+path.substring(1));
-                            genGraph(d, c.getName(), path.substring(1));
+                            genGraph(d, c.getName(), path.substring(1), subset);
                             break;
                         case 'T':
                             for(Integer i : p.getRelatedTerms()){
                                 Term t = d.getTermsById().get(i);
                                 graph.addEdge(name+t.getName()+path, name+path, t.getName()+path.substring(1));
-                                genGraph(d, t.getName(), path.substring(1));
+                                genGraph(d, t.getName(), path.substring(1), subset);
                             }
                             break;
                     }
@@ -92,7 +171,7 @@ public class GraphViewController{
                     for(Integer i : c.getExposedPapers()){
                         Paper paper = d.getPapersById().get(i);
                         graph.addEdge(name+paper.getName()+path, name+path, paper.getName()+path.substring(1));
-                        genGraph(d, paper.getName(), path.substring(1));
+                        genGraph(d, paper.getName(), path.substring(1), subset);
                     }
                     break;
                 case 'T':
@@ -100,7 +179,7 @@ public class GraphViewController{
                     for(Integer i : t.getPapersWhichTalkAboutThis()){
                         Paper paper = d.getPapersById().get(i);
                         graph.addEdge(name+paper.getName()+path, name+path, paper.getName()+path.substring(1));
-                        genGraph(d, paper.getName(), path.substring(1));
+                        genGraph(d, paper.getName(), path.substring(1), subset);
                     }
                     break;
             }
