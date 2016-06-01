@@ -59,6 +59,11 @@ public class PresentationNewQuery extends JFrame {
     ArrayList<String> terms;
     ArrayList<String> conferences;
 
+    ArrayList<String> authorsclone;
+    ArrayList<String> papersclone;
+    ArrayList<String> termsclone;
+    ArrayList<String> conferencesclone;
+
     DomainPersistanceController persistanceController;
 
 
@@ -76,6 +81,10 @@ public class PresentationNewQuery extends JFrame {
         papers = new ArrayList<>();
         terms = new ArrayList<>();
         conferences = new ArrayList<>();
+        authorsclone = new ArrayList<>();
+        papersclone = new ArrayList<>();
+        termsclone = new ArrayList<>();
+        conferencesclone = new ArrayList<>();
 
         ButtonGroup group1 = new ButtonGroup();
         group1.add(SiFiltres);
@@ -152,16 +161,24 @@ public class PresentationNewQuery extends JFrame {
         if (path.length()>1) {
             if(subset){
                 authors = Asubset.getnodes();
-                if(authors != null && !authors.isEmpty()) checkArrayList(mainController,authors,'A');
-                else author = null;
+                if(authors != null && !authors.isEmpty())
+                {checkArrayList(mainController,authors,'A');authorsclone = (ArrayList<String>) authors.clone();}
+                else authors = null;
                 papers = Psubset.getnodes();
-                if(paper!=null && !papers.isEmpty()) checkArrayList(mainController,papers,'P');
+                if(paper!=null && !papers.isEmpty())
+                { checkArrayList(mainController,papers,'P');papersclone = (ArrayList<String>) papers.clone();}
                 else papers = null;
                 terms = Tsubset.getnodes();
-                if(terms !=null && !terms.isEmpty()) checkArrayList(mainController,terms,'T');
+                if(terms !=null && !terms.isEmpty()){
+                    checkArrayList(mainController,terms,'T');
+                    termsclone = (ArrayList<String>) terms.clone();
+                }
                 else  terms = null;
                 conferences = Csubset.getnodes();
-                if(conferences != null && !conferences.isEmpty()) checkArrayList(mainController,conferences,'C');
+                if(conferences != null && !conferences.isEmpty()) {
+                    checkArrayList(mainController, conferences, 'C');
+                    conferencesclone = (ArrayList<String>) conferences.clone();
+                }
                 else conferences = null;
                 //checkTexts(mainController);
 
@@ -177,12 +194,12 @@ public class PresentationNewQuery extends JFrame {
             mainController.NQ(path);
             long timefinal = System.currentTimeMillis();
             System.out.println("Triga :"+(timefinal-timeini)+" milisegons en fer el path "+path);
-            /*if(authors==null) authors = new ArrayList<String>();
-            if(terms==null) terms = new ArrayList<String>();
-            if(conferences==null) conferences = new ArrayList<String>();
-            if(papers==null) papers = new ArrayList<String>();*/
-            PresentationNewQuery2 window = new PresentationNewQuery2(mainController, path,firstlast,authors,papers,conferences,terms,subset);
+
+            System.out.println(authorsclone.size()+" "+papersclone.size()+" "+conferencesclone.size()+" "+termsclone.size());
+
+            PresentationNewQuery2 window = new PresentationNewQuery2(mainController, path,firstlast,authorsclone,papersclone,conferencesclone,termsclone,subset);
             System.out.println("DONE");
+
             if(authors != null && !authors.isEmpty()) Asubset.clearnodes();
             if(paper!=null && !papers.isEmpty()) Psubset.clearnodes();
             if(conferences != null && !conferences.isEmpty()) Csubset.clearnodes();

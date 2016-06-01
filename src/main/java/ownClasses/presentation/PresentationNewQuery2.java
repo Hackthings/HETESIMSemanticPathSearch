@@ -162,7 +162,9 @@ public class PresentationNewQuery2 extends JFrame {
 
                 new PresentationResult(resultat, path, name, firstlast);
 
-                if(subset) new GraphViewController(mainController,name,path,authors,papers,conferences,terms);
+                if(subset){
+                    new GraphViewController(mainController,name,path,authors,papers,conferences,terms);
+                }
                 else new GraphViewController(mainController,name,path);
             }
         }

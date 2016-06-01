@@ -550,7 +550,7 @@ public class DomainMainController {
 
     /**
      *Returns an ArrayList of Pair<Integer,Double> ordered with the size of the attribute Limit of the parameter query
-     * @param resultquery
+     * @param resultquery the linkedlist with the result values of the requested node
      * @param query
      * @return
      */
