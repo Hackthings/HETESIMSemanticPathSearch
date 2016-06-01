@@ -49,7 +49,7 @@ public class PresentationAddNodes extends JFrame {
     private DomainPersistanceController persistanceController;
     private String authoraux, termaux, confaux, paperaux;
 
-    public PresentationAddNodes(DomainPersistanceController persistanceController, int selecedIndex, String authoraux,String paperaux, String termaux, String confaux) {
+    public PresentationAddNodes(DomainPersistanceController persistanceController, int selecedIndex, String authoraux, String paperaux, String termaux, String confaux) {
         super("ADD NODE");
         $$$setupUI$$$();
         setContentPane(panel1);
@@ -58,7 +58,7 @@ public class PresentationAddNodes extends JFrame {
         this.authoraux = authoraux;
         this.termaux = termaux;
         this.confaux = confaux;
-        this.paperaux=paperaux;
+        this.paperaux = paperaux;
 
         this.persistanceController = persistanceController;
         firstTextFields = new ArrayList<>();
@@ -85,13 +85,13 @@ public class PresentationAddNodes extends JFrame {
         secondTextFields.add(tName9);
         secondTextFields.add(tName10);
 
-        for(int i = 1; i < firstTextFields.size(); i++) firstTextFields.get(i).setEnabled(false);
+        for (int i = 1; i < firstTextFields.size(); i++) firstTextFields.get(i).setEnabled(false);
 
-        for(int i = 0; i < secondTextFields.size(); i++) secondTextFields.get(i).setEnabled(false);
+        for (int i = 0; i < secondTextFields.size(); i++) secondTextFields.get(i).setEnabled(false);
 
 
-        comboBox1.addActionListener(e-> enableFields(firstTextFields,comboBox1));
-        comboBox2.addActionListener(e-> enableFields(secondTextFields,comboBox2));
+        comboBox1.addActionListener(e -> enableFields(firstTextFields, comboBox1));
+        comboBox2.addActionListener(e -> enableFields(secondTextFields, comboBox2));
 
         switch (selecedIndex) {
             case (0): { //AUTHOR
@@ -99,10 +99,10 @@ public class PresentationAddNodes extends JFrame {
                 Num1.setText("Número d'Articles:");
                 Num2.setVisible(false);
                 comboBox2.setVisible(false);
-                for(int i = 0; i < secondTextFields.size(); i++) secondTextFields.get(i).setVisible(false);
+                for (int i = 0; i < secondTextFields.size(); i++) secondTextFields.get(i).setVisible(false);
                 Conferencia.setVisible(false);
                 cName.setVisible(false);
-                acceptarButton.addActionListener(e1-> callAddAuthor());
+                acceptarButton.addActionListener(e1 -> callAddAuthor());
 
                 break;
             }
@@ -110,25 +110,55 @@ public class PresentationAddNodes extends JFrame {
                 addNode.setText("Afegir Article");
                 Num1.setText("Número d'Autors");
                 Num2.setText("Número de Termes");
-                if(authoraux != null){
+                if (authoraux != null) {
+                    System.err.println("MIaU");
                     textField1.setText(paperaux);
                     textField1.setEnabled(false);
                     comboBox1.setEnabled(false);
                     firstTextFields.get(0).setText(authoraux);
                     firstTextFields.get(0).setEnabled(false);
-                    for(int i = 1; i < firstTextFields.size();i++){
+                    for (int i = 1; i < firstTextFields.size(); i++) {
                         firstTextFields.get(i).setVisible(false);
                     }
+                } else if (termaux != null) {
+                    textField1.setText(paperaux);
+                    textField1.setEnabled(false);
+                    comboBox2.setEnabled(false);
+                    secondTextFields.get(0).setText(termaux);
+                    secondTextFields.get(0).setEnabled(false);
+                    for (int i = 1; i < firstTextFields.size(); i++) {
+                        secondTextFields.get(i).setVisible(false);
+                    }
+                } else if (confaux != null) {
+                    textField1.setText(paperaux);
+                    textField1.setEnabled(false);
+                    comboBox1.setEnabled(false);
+                    cName.setText(confaux);
+                    cName.setEnabled(false);
                 }
-                acceptarButton.addActionListener(e2-> callAddPaper());
+                acceptarButton.addActionListener(e2 -> callAddPaper());
                 break;
             }
             case (2): { //TERM
                 addNode.setText("Afegir Terme");
+                Num1.setText("Número d'Articles:");
+                Num2.setVisible(false);
+                comboBox2.setVisible(false);
+                for (int i = 0; i < secondTextFields.size(); i++) secondTextFields.get(i).setVisible(false);
+                Conferencia.setVisible(false);
+                cName.setVisible(false);
+                acceptarButton.addActionListener(e1 -> callAddTerm());
                 break;
             }
             case (3): { //CONFERENCES
                 addNode.setText("Afegir Conferència");
+                Num1.setText("Número d'Articles:");
+                Num2.setVisible(false);
+                comboBox2.setVisible(false);
+                for (int i = 0; i < secondTextFields.size(); i++) secondTextFields.get(i).setVisible(false);
+                Conferencia.setVisible(false);
+                cName.setVisible(false);
+                acceptarButton.addActionListener(e1 -> callAddConference());
                 break;
             }
         }
@@ -136,20 +166,20 @@ public class PresentationAddNodes extends JFrame {
         setVisible(true);
     }
 
-    private void enableFields(ArrayList<JTextField> a, JComboBox b){
-        int numF = Integer.parseInt((String)b.getSelectedItem());
-        for(int i = 0; i < numF; i++) a.get(i).setEnabled(true);
+    private void enableFields(ArrayList<JTextField> a, JComboBox b) {
+        int numF = Integer.parseInt((String) b.getSelectedItem());
+        for (int i = 0; i < numF; i++) a.get(i).setEnabled(true);
     }
 
-    private void callAddAuthor(){
+    private void callAddAuthor() {
         ArrayList<String> papersToAdd = new ArrayList<>();
         String authorName = textField1.getText();
-        if(authorName == null || authorName.equals("")){
+        if (authorName == null || authorName.equals("")) {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("Introdueix un nom per l'Autor");
             return;
         }
-        if(paperaux != null) {
+        if (paperaux == null) {
             for (int i = 0; i < firstTextFields.size(); i++) {
                 if (firstTextFields.get(i).isEnabled()) {
                     String pName = firstTextFields.get(i).getText();
@@ -162,121 +192,233 @@ public class PresentationAddNodes extends JFrame {
                     }
                 }
             }
+        } else {
+            papersToAdd.add(paperaux);
         }
-        else {
-            papersToAdd.add(firstTextFields.get(0).getText());
-        }
-        ArrayList<String> newPapers = persistanceController.addNewAuthor(authorName,papersToAdd);
-        if(newPapers.size() == 0){
-            //SHA CREAT TO BIEN
-            return;
-        }
-        else if(newPapers.get(0).equals("Ja Existeix")){
-            VistaWARNING vw = new VistaWARNING();
-            vw.setVisible("Aquest autor ja existeix");
-            return;
-        }
-        else {
-            Object[] options = {"Acceptar", "Cancelar"};
-            int op = JOptionPane.showOptionDialog(panel1, "Hi ha Articles que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-            if(op == JOptionPane.YES_OPTION){
-                for(int i = 0; i < newPapers.size(); i++){
-                    new PresentationAddNodes(persistanceController,1,authorName,newPapers.get(i),null,null);
-                }
-            }
-            else{
-                persistanceController.deleteAuthor(authorName);
+        ArrayList<String> newPapers = persistanceController.addNewAuthor(authorName, papersToAdd);
+        if (newPapers != null) {
+            if (newPapers.size() == 0) {
+                //SHA CREAT TO BIEN
                 return;
+            } else if (newPapers.get(0).equals("Ja Existeix")) {
+                VistaWARNING vw = new VistaWARNING();
+                vw.setVisible("Aquest autor ja existeix");
+                return;
+            } else {
+                Object[] options = {"Acceptar", "Cancelar"};
+                int op = JOptionPane.showOptionDialog(panel1, "Hi ha Articles que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                if (op == JOptionPane.YES_OPTION) {
+                    for (int i = 0; i < newPapers.size(); i++) {
+                        new PresentationAddNodes(persistanceController, 1, authorName, newPapers.get(i), null, null);
+                    }
+                } else {
+                    persistanceController.deleteAuthor(authorName);
+                    return;
+                }
             }
         }
         super.dispose();
     }
 
 
-    private void callAddPaper(){
+    private void callAddPaper() {
         ArrayList<String> authorToAdd = new ArrayList<>();
         ArrayList<String> termsToAdd = new ArrayList<>();
         String confToAdd;
         String paperName = textField1.getText();
-        if(paperName == null || paperName.equals("")){
+        if (paperName == null || paperName.equals("")) {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("Introdueix un nom per l'Article");
             return;
         }
-        if(authoraux != null ){
-            for(int i = 0; i < firstTextFields.size(); i++){
-                if(firstTextFields.get(i).isEnabled()){
+        if (authoraux == null) {
+            for (int i = 0; i < firstTextFields.size(); i++) {
+                if (firstTextFields.get(i).isEnabled()) {
                     String aName = firstTextFields.get(i).getText();
-                    if(aName == null || aName.equals("")) {
+                    if (aName == null || aName.equals("")) {
                         VistaWARNING vw = new VistaWARNING();
                         vw.setVisible("Introdueix un nom per l'Autor");
                         return;
-                    }
-                    else {
+                    } else {
                         authorToAdd.add(aName);
                     }
                 }
             }
-        }
-        else{
-            authorToAdd.add(firstTextFields.get(0).getText());
+        } else {
+            authorToAdd.add(authoraux);
         }
 
-        if(termaux != null){
-            for(int i = 0; i < firstTextFields.size(); i++){
-                if(firstTextFields.get(i).isEnabled()){
+        if (termaux == null) {
+            for (int i = 0; i < firstTextFields.size(); i++) {
+                if (firstTextFields.get(i).isEnabled()) {
                     String tName = firstTextFields.get(i).getText();
-                    if(tName == null || tName.equals("")) {
+                    if (tName == null || tName.equals("")) {
                         VistaWARNING vw = new VistaWARNING();
                         vw.setVisible("Introdueix un nom per el Terme");
                         return;
-                    }
-                    else {
+                    } else {
                         termsToAdd.add(tName);
                     }
                 }
             }
-        }
-        else{
-            termsToAdd.add(secondTextFields.get(0).getText());
+        } else {
+            termsToAdd.add(termaux);
         }
 
         confToAdd = cName.getText();
-        if (confToAdd == null || confToAdd.equals("")){
+        if (confToAdd == null || confToAdd.equals("")) {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("Introdueix un nom per la Conferència");
             return;
         }
 
-        HashMap<String,ArrayList<String>> newNodes = persistanceController.addNewPaper(paperName,authorToAdd,termsToAdd,confToAdd);
+        HashMap<String, ArrayList<String>> newNodes = persistanceController.addNewPaper(paperName, authorToAdd, termsToAdd, confToAdd);
 
-        if(newNodes.get("Fail") != null){
+        if (newNodes.get("Fail") != null) {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("L'article ja existeix");
-        }
-        else {
+        } else {
+            paperaux = paperName;
             Object[] options = {"Acceptar", "Cancelar"};
-            int op = JOptionPane.showOptionDialog(panel1, "Hi ha Autors que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-            if(op == JOptionPane.YES_OPTION) {
-                ArrayList<String> newAuthors = newNodes.get("A");
-                for (int i = 0; i < newAuthors.size(); i++) {
-                    paperaux = paperName;
-                    callAddAuthor();
+            ArrayList<String> newAuthors = newNodes.get("A");
+            if (newAuthors != null) {
+                if (newAuthors.size() > 0) {
+                    int op = JOptionPane.showOptionDialog(panel1, "Hi ha Autors que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                    if (op == JOptionPane.YES_OPTION) {
+                        for (int i = 0; i < newAuthors.size(); i++) {
+
+                            callAddAuthor();
+                        }
+                    }
                 }
             }
 
             ArrayList<String> newTerms = newNodes.get("T");
-            for(int i = 0; i < newTerms.size(); i++){
-               // new PresentationAddNodes(persistanceController,2,null,paperName,null,null);
+            if (newTerms != null) {
+                if (newTerms.size() > 0) {
+                    int op = JOptionPane.showOptionDialog(panel1, "Hi ha Termes que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                    if (op == JOptionPane.YES_OPTION) {
+                        for (int i = 0; i < newTerms.size(); i++) {
+
+                            callAddTerm();
+                        }
+                    }
+                }
             }
 
             ArrayList<String> newConference = newNodes.get("C");
-            for(int i = 0; i < newConference.size(); i++){
-               // new PresentationAddNodes(persistanceController,3,null,paperName,null,null);
-            }
+            if (newConference != null) {
+                if (newConference.size() > 0) {
+                    int op = JOptionPane.showOptionDialog(panel1, "La conferència no existeix, la vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                    if (op == JOptionPane.YES_OPTION) {
+                        for (int i = 0; i < newConference.size(); i++) {
 
+                            callAddConference();
+                        }
+                    }
+                }
+            }
         }
     }
+
+    private void callAddTerm() {
+        ArrayList<String> papersToAdd = new ArrayList<>();
+        String termName = textField1.getText();
+        if (termName == null || termName.equals("")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Introdueix un nom per el Terme");
+            return;
+        }
+        if (paperaux == null) {
+            for (int i = 0; i < firstTextFields.size(); i++) {
+                if (firstTextFields.get(i).isEnabled()) {
+                    String pName = firstTextFields.get(i).getText();
+                    if (pName == null || pName.equals("")) {
+                        VistaWARNING vw = new VistaWARNING();
+                        vw.setVisible("Introdueix un nom per l'Article");
+                        return;
+                    } else {
+                        papersToAdd.add(pName);
+                    }
+                }
+            }
+        } else {
+            papersToAdd.add(firstTextFields.get(0).getText());
+        }
+        ArrayList<String> newPapers = persistanceController.addNewTerm(termName, papersToAdd);
+        if (newPapers != null) {
+            if (newPapers.size() == 0) {
+                //SHA CREAT TO BIEN
+                return;
+            } else if (newPapers.get(0).equals("Ja Existeix")) {
+                VistaWARNING vw = new VistaWARNING();
+                vw.setVisible("Aquest terme ja existeix");
+                return;
+            } else {
+                Object[] options = {"Acceptar", "Cancelar"};
+                int op = JOptionPane.showOptionDialog(panel1, "Hi ha Articles que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                if (op == JOptionPane.YES_OPTION) {
+                    for (int i = 0; i < newPapers.size(); i++) {
+                        new PresentationAddNodes(persistanceController, 1, null, newPapers.get(i), termName, null);
+                    }
+                } else {
+                    persistanceController.deleteTerm(termName);
+                    return;
+                }
+            }
+        }
+        super.dispose();
+    }
+
+    private void callAddConference() {
+        ArrayList<String> papersToAdd = new ArrayList<>();
+        String confName = textField1.getText();
+        if (confName == null || confName.equals("")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Introdueix un nom per la Conferencia");
+            return;
+        }
+        if (paperaux == null) {
+            for (int i = 0; i < firstTextFields.size(); i++) {
+                if (firstTextFields.get(i).isEnabled()) {
+                    String pName = firstTextFields.get(i).getText();
+                    if (pName == null || pName.equals("")) {
+                        VistaWARNING vw = new VistaWARNING();
+                        vw.setVisible("Introdueix un nom per l'Article");
+                        return;
+                    } else {
+                        papersToAdd.add(pName);
+                    }
+                }
+            }
+        } else {
+            papersToAdd.add(paperaux);
+        }
+        ArrayList<String> newPapers = persistanceController.addNewConference(confName, papersToAdd);
+        if (newPapers != null) {
+            if (newPapers.size() == 0) {
+                //SHA CREAT TO BIEN
+                return;
+            } else if (newPapers.get(0).equals("Ja Existeix")) {
+                VistaWARNING vw = new VistaWARNING();
+                vw.setVisible("Aquesta conferència ja existeix");
+                return;
+            } else {
+                Object[] options = {"Acceptar", "Cancelar"};
+                int op = JOptionPane.showOptionDialog(panel1, "Hi ha Articles que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                if (op == JOptionPane.YES_OPTION) {
+                    for (int i = 0; i < newPapers.size(); i++) {
+                        new PresentationAddNodes(persistanceController, 3, null, newPapers.get(i), null, confName);
+                    }
+                } else {
+                    persistanceController.deleteConference(confName);
+                    return;
+                }
+            }
+        }
+        super.dispose();
+    }
+
     /**
      * Method generated by IntelliJ IDEA GUI Designer
      * >>> IMPORTANT!! <<<
@@ -332,10 +474,10 @@ public class PresentationAddNodes extends JFrame {
         gbc.ipady = 20;
         gbc.insets = new Insets(0, 20, 0, 0);
         panel1.add(Num2, gbc);
-        String[] numbers = {"1","2","3","4","5","6","7","8","9","10"};
+        String[] numbers = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
         comboBox2 = new JComboBox(numbers);
-       // final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
-       // comboBox2.setModel(defaultComboBoxModel1);
+        // final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
+        // comboBox2.setModel(defaultComboBoxModel1);
         comboBox2.setVisible(true);
         gbc = new GridBagConstraints();
         gbc.gridx = 2;

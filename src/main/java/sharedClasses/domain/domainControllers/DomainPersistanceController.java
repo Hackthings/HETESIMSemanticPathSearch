@@ -1,4 +1,5 @@
 package main.java.sharedClasses.domain.domainControllers;
+import main.java.ownClasses.presentation.VistaWARNING;
 import main.java.sharedClasses.domain.nodes.Author;
 import main.java.sharedClasses.domain.nodes.Conference;
 import main.java.sharedClasses.domain.nodes.Paper;
@@ -38,6 +39,16 @@ public class DomainPersistanceController {
         this.conferencesByName = conferencesByName;
         this.termsByName = termsByName;
         filepath = "/src/main/java/data/";
+    }
+
+    public void testdomainAutors(){
+        for (Author a : authorsById.values()) {
+            System.out.println("Autor: " + a.getId() + " " + a.getName());
+            System.out.println("Papers Relacionats ");
+            for (Paper p : a.getPapersById(papersById).values()) {
+                System.out.println(p.getId() + " " + p.getName());
+            }
+        }
     }
 
     public void testDomain() {
@@ -139,7 +150,9 @@ public class DomainPersistanceController {
         Paper p = null;
         for (int i = 0; i < papersToRelate.size(); i++) {
             p = papersByName.get(papersToRelate.get(i));
-            if (p == null) newPapers.add(papersToRelate.get(i));
+            if (p == null){
+                newPapers.add(papersToRelate.get(i));
+            }
             else {
                 a.addPaper(p);
                 p.addAuthor(a);
@@ -187,6 +200,10 @@ public class DomainPersistanceController {
             c.addExposedPaper(p);
         }
         papersById.put(p.getId(),p);
+        if(papersById.get(p.getId()) == null){
+            VistaWARNING v = new VistaWARNING();
+            v.setVisible("el paper es putu null");
+        }
         papersByName.put(p.getName(),p);
         ret.put("A", newAuthors);
         ret.put("T", newTerms);
@@ -194,30 +211,52 @@ public class DomainPersistanceController {
         return ret;
     }
 
-    public boolean addNewTerm(String termName, ArrayList<Paper> papersToRelate) {
-        Term t = new Term(termName, Term.getMaxId() + 1);
-        if (termsByName.get(t.getName()) != null) {
+    public ArrayList<String> addNewTerm(String termName, ArrayList<String> papersToRelate) {
+        Term a = new Term(termName, Term.getMaxId() + 1);
+        Term b = termsByName.get(a.getName());
+        ArrayList<String> newPapers = new ArrayList<>();
+        if (b != null) {
             System.err.println("Aquest terme ja existeix");
-            return false;
+            newPapers.add("Ja Existeix");
+            return newPapers;
         }
+
+        Paper p = null;
         for (int i = 0; i < papersToRelate.size(); i++) {
-            t.addPaperWhichTalkAboutIt(papersToRelate.get(i));
-            papersToRelate.get(i).addTerm(t);
+            p = papersByName.get(papersToRelate.get(i));
+            if (p == null) newPapers.add(papersToRelate.get(i));
+            else {
+                a.addPaperWhichTalkAboutIt(p);
+                p.addTerm(a);
+            }
         }
-        return true;
+        termsById.put(a.getId(), a);
+        termsByName.put(a.getName(), a);
+        return newPapers;
     }
 
-    public boolean addNewConference(String confName, ArrayList<Paper> papersToRelate) {
-        Conference c = new Conference(confName, Conference.getMaxId() + 1);
-        if (conferencesByName.get(c.getName()) != null) {
-            System.err.println("Aquesta conferencia ja existeix");
-            return false;
+    public ArrayList<String> addNewConference(String confName, ArrayList<String> papersToRelate) {
+        Conference a = new Conference(confName, Conference.getMaxId() + 1);
+        Conference b = conferencesByName.get(a.getName());
+        ArrayList<String> newPapers = new ArrayList<>();
+        if (b != null) {
+            System.err.println("Aquesta conferència ja existeix");
+            newPapers.add("Ja Existeix");
+            return newPapers;
         }
+
+        Paper p = null;
         for (int i = 0; i < papersToRelate.size(); i++) {
-            c.addExposedPaper(papersToRelate.get(i));
-            papersToRelate.get(i).setConference(c);
+            p = papersByName.get(papersToRelate.get(i));
+            if (p == null) newPapers.add(papersToRelate.get(i));
+            else {
+                a.addExposedPaper(p);
+                p.setConference(a);
+            }
         }
-        return true;
+        conferencesById.put(a.getId(), a);
+        conferencesByName.put(a.getName(), a);
+        return newPapers;
     }
 
     public boolean deleteAuthor(String authorName) {

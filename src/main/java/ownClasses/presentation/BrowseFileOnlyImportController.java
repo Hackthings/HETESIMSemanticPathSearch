@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 
 public class BrowseFileOnlyImportController extends JPanel
         implements ActionListener {
@@ -15,6 +16,7 @@ public class BrowseFileOnlyImportController extends JPanel
     JTextArea log;
     JFileChooser fc;
     DomainPersistanceController domainPersistanceController;
+    ArrayList<String> nodes;
 
     public BrowseFileOnlyImportController(DomainPersistanceController persistanceController) {
         super(new BorderLayout());
@@ -64,6 +66,13 @@ public class BrowseFileOnlyImportController extends JPanel
         // add(logScrollPane, BorderLayout.CENTER);
     }
 
+    public ArrayList<String> getnodes(){
+        return nodes;
+    }
+    public void clearnodes(){
+        nodes.clear();
+    }
+
     public void actionPerformed(ActionEvent e) {
 
         //Handle open button action.
@@ -73,12 +82,10 @@ public class BrowseFileOnlyImportController extends JPanel
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
                 //This is where a real application would open the file.
-                log.append("Importing: " + file.getName() + "." + newline);
-                domainPersistanceController.readNames(file.getAbsolutePath());
-            } else {
-                log.append("Import command cancelled by user." + newline);
+                //log.append("Importing: " + file.getName() + "." + newline);
+                nodes = domainPersistanceController.readNames(file.getAbsolutePath());
             }
-            log.setCaretPosition(log.getDocument().getLength());
+            //log.setCaretPosition(log.getDocument().getLength());
 
             //Handle save button action.
         } /*else if (e.getSource() == exportButton) {
