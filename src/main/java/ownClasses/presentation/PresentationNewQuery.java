@@ -217,63 +217,6 @@ public class PresentationNewQuery extends JFrame {
         vw.setVisible(cause);
     }
 
-    private void checkTexts(DomainMainController mainController){
-       /*int count = 0;
-        for(int i =1; i<path.length() && count<3;++i){
-            if(path.charAt(0)!=path.charAt(i)) {
-                switch (path.charAt(i)) {
-                    case ('A'):
-                        if(mainController.checkName(Asubset.getText(),'A')){
-                            author = Asubset.getText(); firstlast = null;
-                        }
-                        count++;
-                        break;
-                    case ('P'):
-                        if(mainController.checkName(Psubset.getText(),'P')){
-                            paper = Psubset.getText(); firstlast = null;
-                        }
-                        count++;
-                        break;
-                    case ('C'):
-                        if(mainController.checkName(Csubset.getText(),'C')){
-                            conf = Csubset.getText(); firstlast = null;
-                        }
-                        count++;
-                        break;
-                    case ('T'):
-                        if(mainController.checkName(Tsubset.getText(),'T')){
-                            term = Tsubset.getText(); firstlast = null;
-                        }
-                        count++;
-                        break;
-                }
-            }
-        }
-        if(path.charAt(0)==path.charAt(path.length()-1)){
-            switch (path.charAt(0)) {
-                case ('A'):
-                    if(mainController.checkName(Asubset.getText(),'A')){
-                        firstlast = Asubset.getText();
-                    }
-                    break;
-                case ('P'):
-                    if(mainController.checkName(Psubset.getText(),'P')){
-                        firstlast = Psubset.getText();
-                    }
-                    break;
-                case ('C'):
-                    if(mainController.checkName(Csubset.getText(),'C')){
-                        firstlast = Csubset.getText();
-                    }
-                    break;
-                case ('T'):
-                    if(mainController.checkName(Tsubset.getText(),'T')){
-                        firstlast = Tsubset.getText();
-                    }
-                    break;
-            }
-        }*/
-    }
 
     private void checkArrayList(DomainMainController mainController, ArrayList<String> nodes, char tipus){
         boolean malament = false;
@@ -285,7 +228,7 @@ public class PresentationNewQuery extends JFrame {
             }
         }
 
-        if(malament) callWarning("Error al filtre: nom no trobat al tipus"+tipus);
+        if(malament) callWarning("Error al filtre: nom no trobat al tipus "+tipus+"\n"+"Això es pot afectar el resultat");
 
     }
 
