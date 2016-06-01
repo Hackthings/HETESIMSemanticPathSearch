@@ -22,6 +22,8 @@ public class BrowseFileOnlyImportController extends JPanel
         super(new BorderLayout());
 
         domainPersistanceController = persistanceController;
+
+        nodes = null;
         /*
         //Create the log first, because the action listeners
         //need to refer to it.

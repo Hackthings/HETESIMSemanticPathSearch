@@ -152,23 +152,25 @@ public class PresentationNewQuery extends JFrame {
         if (path.length()>1) {
             if(subset){
                 authors = Asubset.getnodes();
-                checkArrayList(mainController,authors,'A');
+                if(authors != null && !authors.isEmpty()) checkArrayList(mainController,authors,'A');
+                else author = null;
                 papers = Psubset.getnodes();
-                checkArrayList(mainController,papers,'P');
+                if(paper!=null && !papers.isEmpty()) checkArrayList(mainController,papers,'P');
+                else papers = null;
                 terms = Tsubset.getnodes();
-                checkArrayList(mainController,terms,'T');
+                if(terms !=null && !terms.isEmpty()) checkArrayList(mainController,terms,'T');
+                else  terms = null;
                 conferences = Csubset.getnodes();
-                checkArrayList(mainController,conferences,'C');
-
+                if(conferences != null && !conferences.isEmpty()) checkArrayList(mainController,conferences,'C');
+                else conferences = null;
                 //checkTexts(mainController);
-                System.out.println();
 
                 mainController.updateMatrix(authors,papers,conferences,terms);
 
-                Asubset.clearnodes();
-                Psubset.clearnodes();
-                Csubset.clearnodes();
-                Tsubset.clearnodes();
+                if(authors != null && !authors.isEmpty()) Asubset.clearnodes();
+                if(paper!=null && !papers.isEmpty()) Psubset.clearnodes();
+                if(conferences != null && !conferences.isEmpty()) Csubset.clearnodes();
+                if(terms !=null && !terms.isEmpty()) Tsubset.clearnodes();
                 //System.out.println(author+" "+paper+" "+conf+" "+term);
                 changed = true;
             }
@@ -255,6 +257,7 @@ public class PresentationNewQuery extends JFrame {
         for(int i = 0; i < nodes.size(); ++i){
             if(!mainController.checkName(nodes.get(i),tipus)){
                 nodes.remove(i);
+                i = i-1;
                 malament = true;
             }
         }

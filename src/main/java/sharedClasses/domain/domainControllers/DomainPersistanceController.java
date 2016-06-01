@@ -123,7 +123,12 @@ public class DomainPersistanceController {
 
     public ArrayList<String> readNames(String path) {   //NOMÉS PEL SUBSETQUERY
         String p = new File("").getAbsolutePath();
-        File inputFile = new File(p.concat(path));
+        System.out.println(p);
+        System.out.println(p.concat(path));
+        System.out.println(path);
+        //File inputFile = new File(p.concat(path));
+        File inputFile = new File(path);
+
         ArrayList<String> names = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
             String line;
