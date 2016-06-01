@@ -95,27 +95,62 @@ public class DomainMainController {
         return persistanceController;
     }
 
+    /**
+     * Returns the HashMap that contains all the authors ordered by ID
+     * @return the hashmap authors by Id
+     */
+
     public HashMap<Integer,Author> getAuthorsById(){
         return authorsById;
     }
 
+    /**
+     * Returns the HashMap that contains all the papers ordered by ID
+     * @return the hashmap papers by Id
+     */
     public HashMap<Integer,Paper> getPapersById(){
         return papersById;
     }
 
+    /**
+     * Returns the HashMap that contains all the terms ordered by ID
+     * @return the hashmap terms by Id
+     */
+
     public HashMap<Integer,Term> getTermsById(){ return termsById; }
+
+    /**
+     * Returns the HashMap that contains all the authors ordered by name
+     * @return the hashmap authors by name
+     */
 
     public HashMap<String,Author> getAuthorsByName(){ return authorsByName; }
 
+    /**
+     * Returns the HashMap that contains all the papers ordered by name
+     * @return the hashmap papers by name
+     */
+
     public HashMap<String,Paper> getPapersByName(){ return papersByName;}
 
+    /**
+     * Returns the HashMap that contains all the conferences ordered by name
+     * @return the hashmap conferences by name
+     */
+
     public HashMap<String,Conference> getConferencesByName(){return conferencesByName;}
+
+    /**
+     * Returns the HashMap that contains all the terms ordered by name
+     * @return the hashmap terms by name
+     */
 
     public HashMap<String,Term> getTermsByName(){return termsByName;}
 
 
     /**
-     * If it has been edited, update Matrix and calculate the new result Matrix calling
+     * If it has been edited, update Matrix and then calculate
+     *  the new result Matrix calling
      * the hetesimController
      *
      * @param  path the path which Hetesim will calculate the new Matrix result.
@@ -488,12 +523,11 @@ public class DomainMainController {
 
     /**
      *
-     * Returns an ArrayList of Pair<Integer,Double> ordered by the second paramenter in function of the paramenter of
-     * the ordered query
+     * Returns an ArrayList of Pair<Integer,Double> ordered with the size of the attribute Limit of the parameter query
      *
      * @param resultquery the linkedlist with the result values of the requested node
-     * @param query the Ordered query that contains the path and the boolean that indicates the type of order of the ArrayList
-     * @return ArrayList of Pair<Integer,Double> ordered by the second paramenter in function of the parameter of the ordered query
+     * @param query the Limited query that contains the path and the integer which indicates the maximum number or results
+     * @return ArrayList of Pair<Integer,Double> ordered with the size of the attribute Limit of the parameter query
      */
 
     private ArrayList<String> resultWithMax(ArrayList<Pair<Integer,Double>> resultquery, LimitedQuery query) {
@@ -515,7 +549,7 @@ public class DomainMainController {
     }
 
     /**
-     *
+     *Returns an ArrayList of Pair<Integer,Double> ordered with the size of the attribute Limit of the parameter query
      * @param resultquery
      * @param query
      * @return

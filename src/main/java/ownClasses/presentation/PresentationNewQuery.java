@@ -167,11 +167,6 @@ public class PresentationNewQuery extends JFrame {
 
                 mainController.updateMatrix(authors,papers,conferences,terms);
 
-                if(authors != null && !authors.isEmpty()) Asubset.clearnodes();
-                if(paper!=null && !papers.isEmpty()) Psubset.clearnodes();
-                if(conferences != null && !conferences.isEmpty()) Csubset.clearnodes();
-                if(terms !=null && !terms.isEmpty()) Tsubset.clearnodes();
-                //System.out.println(author+" "+paper+" "+conf+" "+term);
                 changed = true;
             }
             else if(changed){
@@ -188,6 +183,11 @@ public class PresentationNewQuery extends JFrame {
             if(papers==null) papers = new ArrayList<String>();
             PresentationNewQuery2 window = new PresentationNewQuery2(mainController, path,firstlast,authors,papers,conferences,terms,subset);
             System.out.println("DONE");
+            if(authors != null && !authors.isEmpty()) Asubset.clearnodes();
+            if(paper!=null && !papers.isEmpty()) Psubset.clearnodes();
+            if(conferences != null && !conferences.isEmpty()) Csubset.clearnodes();
+            if(terms !=null && !terms.isEmpty()) Tsubset.clearnodes();
+
         } else {
             callWarning("Path no valid");
         }
