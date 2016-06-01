@@ -159,10 +159,18 @@ public class DomainPersistanceController {
                 newPapers.add(papersToRelate.get(i));
             }
             else {
+                System.err.println("Id del paper" + Integer.toString(p.getId()));
                 a.addPaper(p);
                 p.addAuthor(a);
             }
         }
+
+        System.err.println("Id del autor" + Integer.toString(a.getId()));
+
+        for(int i = 0; i < a.getAuthorRelations().size(); i++){
+            System.err.println(Integer.toString(a.getAuthorRelations().get(i)));
+        }
+
         authorsById.put(a.getId(), a);
         authorsByName.put(a.getName(), a);
         Author.incrementMaxId();
@@ -205,6 +213,7 @@ public class DomainPersistanceController {
             p.setConference(c);
             c.addExposedPaper(p);
         }
+        System.err.println(p.getId());
         papersById.put(p.getId(),p);
         papersByName.put(p.getName(),p);
         Paper.incrementMaxId();
