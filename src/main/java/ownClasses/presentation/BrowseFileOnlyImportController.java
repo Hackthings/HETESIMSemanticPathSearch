@@ -74,7 +74,7 @@ public class BrowseFileOnlyImportController extends JPanel
                 File file = fc.getSelectedFile();
                 //This is where a real application would open the file.
                 log.append("Importing: " + file.getName() + "." + newline);
-                domainPersistanceController.readAllFromFile(file.getAbsolutePath());
+                domainPersistanceController.readNames(file.getAbsolutePath());
             } else {
                 log.append("Import command cancelled by user." + newline);
             }
