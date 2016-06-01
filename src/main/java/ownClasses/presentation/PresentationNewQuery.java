@@ -47,11 +47,6 @@ public class PresentationNewQuery extends JFrame {
     boolean subset = false;
     boolean changed = false;
 
-    String author = null;
-    String paper = null;
-    String term = null;
-    String conf = null;
-
     String firstlast = null;
 
     ArrayList<String> authors;
@@ -162,12 +157,19 @@ public class PresentationNewQuery extends JFrame {
             if(subset){
                 authors = Asubset.getnodes();
                 if(authors != null && !authors.isEmpty())
-                {checkArrayList(mainController,authors,'A');authorsclone = (ArrayList<String>) authors.clone();}
+                {
+                    checkArrayList(mainController,authors,'A');
+                    authorsclone = (ArrayList<String>) authors.clone();
+                }
                 else authors = null;
                 papers = Psubset.getnodes();
-                if(paper!=null && !papers.isEmpty())
-                { checkArrayList(mainController,papers,'P');papersclone = (ArrayList<String>) papers.clone();}
-                else papers = null;
+                if(papers!=null && !papers.isEmpty())
+                { checkArrayList(mainController,papers,'P');
+                    papersclone = (ArrayList<String>) papers.clone();
+                }
+                else{
+                    papers = null;
+                }
                 terms = Tsubset.getnodes();
                 if(terms !=null && !terms.isEmpty()){
                     checkArrayList(mainController,terms,'T');
@@ -201,7 +203,7 @@ public class PresentationNewQuery extends JFrame {
             System.out.println("DONE");
 
             if(authors != null && !authors.isEmpty()) Asubset.clearnodes();
-            if(paper!=null && !papers.isEmpty()) Psubset.clearnodes();
+            if(papers!=null && !papers.isEmpty()) Psubset.clearnodes();
             if(conferences != null && !conferences.isEmpty()) Csubset.clearnodes();
             if(terms !=null && !terms.isEmpty()) Tsubset.clearnodes();
 
