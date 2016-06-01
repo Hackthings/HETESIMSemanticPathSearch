@@ -32,8 +32,7 @@ public class GraphViewController{
     public GraphViewController(DomainMainController d, String name, String path){
         System.out.println(path);
         graph = new SingleGraph(path);
-
-
+        
         graph.setAutoCreate(true);
         graph.setStrict(false);
 
