@@ -1,8 +1,9 @@
-main.java
-main.java.ownClasses.domain.domainControllers
-main.java.ownClasses.domain.domainControllers.Drivers
-main.java.ownClasses.domain.queries
-main.java.ownClasses.presentation
-main.java.sharedClasses.domain.domainControllers
-main.java.sharedClasses.domain.nodes
-main.java.sharedClasses.utils
+
+ownClasses.domain.domainControllers
+ownClasses.domain.domainControllers.Drivers
+ownClasses.domain.domainControllers.Persistance
+ownClasses.domain.queries
+ownClasses.domain.utils
+ownClasses.presentation
+sharedClasses.domain.nodes
+sharedClasses.utils
