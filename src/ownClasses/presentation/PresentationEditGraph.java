@@ -39,7 +39,7 @@ public class PresentationEditGraph extends JFrame {
             VistaWARNING vw = new VistaWARNING();
             vw.setVisible("Selecciona l'element a editar");
         }
-        else new PresentationEditNode(domainMainController,editList.getSelectedIndex());
+        else new PresentationEditNodes(domainMainController,editList.getSelectedIndex());
     }
 
     private void addNodeAction() {

@@ -19,12 +19,13 @@ public class PresentationEditNodes extends JFrame {
     private JLabel nom1;
     private JLabel nom2;
     private JLabel nom3;
+    private JPanel panel1;
     private DomainMainController domainMainController;
 
     public PresentationEditNodes(DomainMainController domainMainController, int selectedIndex) {
         super("EDIT NODE");
         $$$setupUI$$$();
-        //setContentPane(panel1);
+        setContentPane(panel1);
         pack();
 
         this.domainMainController = domainMainController;
@@ -32,19 +33,228 @@ public class PresentationEditNodes extends JFrame {
 
         switch (selectedIndex) {
             case (0):
-
+                nom1.setText("Nom Article:");
+                textField3.setVisible(false);
+                nom2.setVisible(false);
+                nom3.setVisible(false);
+                textField4.setVisible(false);
+                afegeixRelacioButton.addActionListener(e -> addAuthorRelation());
+                eliminaRelacioButton.addActionListener(e -> deleteAuthorRelation());
                 break;
             case (1):
 
                 break;
             case (2):
-
+                nom1.setText("Nom Article:");
+                textField3.setVisible(false);
+                nom2.setVisible(false);
+                nom3.setVisible(false);
+                textField4.setVisible(false);
+                afegeixRelacioButton.addActionListener(e -> addTermTelation());
+                break;
             case (3):
-
+                nom1.setText("Nom Article:");
+                textField3.setVisible(false);
+                nom2.setVisible(false);
+                nom3.setVisible(false);
+                textField4.setVisible(false);
+                afegeixRelacioButton.addActionListener(e -> changePaperConference());
                 break;
         }
 
         setVisible(true);
+    }
+
+    public void addAuthorRelation() {
+        String AuthorName = nomField.getText();
+        if (AuthorName == null || AuthorName.equals("")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Introdueix un Autor");
+            return;
+        }
+        String paperName = textField2.getText();
+        if (paperName == null || paperName.equals("")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Introdueix un Article");
+            return;
+        }
+
+        String res = domainMainController.getPersistanceController().newRelationPaperAuthor(paperName, AuthorName, domainMainController.getPapersByName(),
+                domainMainController.getAuthorsByName());
+        if (res.equals("NA")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Aquest Autor no existex");
+            return;
+        }
+        if (res.equals("NP")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Aquest Article no existex");
+            return;
+        } else {
+            JOptionPane.showMessageDialog(panel1, "S'ha afegit la relació");
+            super.dispose();
+        }
+    }
+
+    public void addTermTelation() {
+        String termName = nomField.getText();
+        if (termName == null || termName.equals("")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Introdueix un Terme");
+            return;
+        }
+        String paperName = textField2.getText();
+        if (paperName == null || paperName.equals("")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Introdueix un Article");
+            return;
+        }
+        String res = domainMainController.getPersistanceController().newRelationPaperTerm(paperName, termName, domainMainController.getPapersByName(),
+                domainMainController.getTermsByName());
+        if (res.equals("TA")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Aquest Terme no existex");
+            return;
+        }
+        if (res.equals("NP")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Aquest Article no existex");
+            return;
+        } else {
+            JOptionPane.showMessageDialog(panel1, "S'ha afegit la relació");
+            super.dispose();
+        }
+    }
+
+    public void changePaperConference() {
+        Object[] options = {"Acceptar", "Cancelar"};
+        int op = JOptionPane.showOptionDialog(panel1, "Si afageixes aquesta relació eliminaras la relacio amb l'anterior conferècia", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        if (op == JOptionPane.YES_OPTION) {
+            String confName = nomField.getText();
+            if (confName == null || confName.equals("")) {
+                VistaWARNING vw = new VistaWARNING();
+                vw.setVisible("Introdueix una Conferencia");
+                return;
+            }
+            String paperName = textField2.getText();
+            if (paperName == null || paperName.equals("")) {
+                VistaWARNING vw = new VistaWARNING();
+                vw.setVisible("Introdueix un Article");
+                return;
+            }
+            String res = domainMainController.getPersistanceController().newRelationPaperConference(paperName, confName, domainMainController.getPapersByName(),
+                    domainMainController.getConferencesByName());
+            if (res.equals("NC")) {
+                VistaWARNING vw = new VistaWARNING();
+                vw.setVisible("Aquest Autor no existex");
+                return;
+            }
+            if (res.equals("NP")) {
+                VistaWARNING vw = new VistaWARNING();
+                vw.setVisible("Aquest Article no existex");
+                return;
+            } else {
+                JOptionPane.showMessageDialog(panel1, "S'ha canviar la conferència");
+            }
+        }
+        super.dispose();
+
+    }
+
+    public void deleteAuthorRelation(){
+        String AuthorName = nomField.getText();
+        if (AuthorName == null || AuthorName.equals("")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Introdueix un Autor");
+            return;
+        }
+        String paperName = textField2.getText();
+        if (paperName == null || paperName.equals("")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Introdueix un Article");
+            return;
+        }
+
+        String res = domainMainController.getPersistanceController().deleteAuthorRelation(paperName,AuthorName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
+                domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
+                domainMainController.getTermsById(),domainMainController.getTermsByName());
+
+        validate(res);
+    }
+
+    public void deleteTermRelation(){
+        String termName = nomField.getText();
+        if (termName == null || termName.equals("")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Introdueix un Terme");
+            return;
+        }
+        String paperName = textField2.getText();
+        if (paperName == null || paperName.equals("")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Introdueix un Article");
+            return;
+        }
+
+        String res = domainMainController.getPersistanceController().deleteTermRelation(paperName,termName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
+                domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
+                domainMainController.getTermsById(),domainMainController.getTermsByName());
+
+        validate(res);
+    }
+
+
+    public void deleteConfereceRelation(){
+        String confName = nomField.getText();
+        if (confName == null || confName.equals("")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Introdueix una Conferència");
+            return;
+        }
+        String paperName = textField2.getText();
+        if (paperName == null || paperName.equals("")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Introdueix un Article");
+            return;
+        }
+
+        String res = domainMainController.getPersistanceController().deleteConferenceRelation(paperName,confName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
+                domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
+                domainMainController.getTermsById(),domainMainController.getTermsByName());
+
+        validate(res);
+    }
+
+    private void validate(String res) {
+        if(res == null){
+            JOptionPane.showMessageDialog(panel1, "S'ha eliminat la relació");
+            super.dispose();
+            return;
+        }
+        else if (res.equals("NP")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Aquest Article no existex");
+            return;
+        }else if(res.equals("NR")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("No existeix la Relació");
+            return;
+        }
+        else if (res.equals("NA")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Aquest Autor no existex");
+            return;
+        }
+        else if (res.equals("NT")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Aquest Terme no existex");
+            return;
+        }
+        else if (res.equals("NC")) {
+            VistaWARNING vw = new VistaWARNING();
+            vw.setVisible("Aquesta Conferència no existex");
+            return;
+        }
     }
 
     /**
@@ -55,7 +265,7 @@ public class PresentationEditNodes extends JFrame {
      * @noinspection ALL
      */
     private void $$$setupUI$$$() {
-        final JPanel panel1 = new JPanel();
+        panel1 = new JPanel();
         panel1.setLayout(new GridBagLayout());
         final JPanel spacer1 = new JPanel();
         GridBagConstraints gbc;
@@ -172,79 +382,5 @@ public class PresentationEditNodes extends JFrame {
         gbc.insets = new Insets(20, 0, 20, 20);
         panel1.add(cancelaButton, gbc);
     }
-
-    /*public void addAuthorRelation() {
-        String res = domainMainController.getPersistanceController().newRelationPaperAuthor(paperName, AuthorName, domainMainController.getPapersByName(),
-                domainMainController.getAuthorsByName());
-        if (res.equals("NA")) {
-            VistaWARNING vw = new VistaWARNING();
-            vw.setVisible("Aquest Autor no existex");
-            return;
-        }
-        if (res.equals("NP")) {
-            VistaWARNING vw = new VistaWARNING();
-            vw.setVisible("Aquest Article no existex");
-            return;
-        } else {
-            JOptionPane.showMessageDialog(panel1, "S'ha afegit la relació");
-            super.dispose();
-        }
-    }
-
-    public void addTermTelation() {
-        String res = domainMainController.getPersistanceController().newRelationPaperTerm(paperName, termName, domainMainController.getPapersByName(),
-                domainMainController.getTermsByName());
-        if (res.equals("TA")) {
-            VistaWARNING vw = new VistaWARNING();
-            vw.setVisible("Aquest Terme no existex");
-            return;
-        }
-        if (res.equals("NP")) {
-            VistaWARNING vw = new VistaWARNING();
-            vw.setVisible("Aquest Article no existex");
-            return;
-        } else {
-            JOptionPane.showMessageDialog(panel1, "S'ha afegit la relació");
-            super.dispose();
-        }
-    }
-
-    public void changePaperConference() {
-        Object[] options = {"Acceptar","Cancelar"};
-        int op = JOptionPane.showOptionDialog(panel1, "Si afageixes aquesta relació eliminaras la relacio amb l'anterior conferècia", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-        if (op == JOptionPane.YES_OPTION) {
-            String res = domainMainController.getPersistanceController().newRelationPaperConference(paperName, confName, domainMainController.getPapersByName(),
-                    domainMainController.getConferencesByName());
-            if (res.equals("NC")) {
-                VistaWARNING vw = new VistaWARNING();
-                vw.setVisible("Aquest Autor no existex");
-                return;
-            }
-            if (res.equals("NP")) {
-                VistaWARNING vw = new VistaWARNING();
-                vw.setVisible("Aquest Article no existex");
-                return;
-            } else {
-                JOptionPane.showMessageDialog(panel1, "S'ha canviar la conferència");
-            }
-        }
-        super.dispose();
-
-    }*/
-
-        /*{
-// GUI initializer generated by IntelliJ IDEA GUI Designer
-// >>> IMPORTANT!! <<<
-// DO NOT EDIT OR ADD ANY CODE HERE!
-            $$$setupUI$$$();
-        }*/
-
-    /**
-     * Method generated by IntelliJ IDEA GUI Designer
-     * >>> IMPORTANT!! <<<
-     * DO NOT edit this method OR call it in your code!
-     *
-     * @noinspection ALL
-     */
 
 }

@@ -1,8 +1,10 @@
 package ownClasses.domain.domainControllers;
+
 import sharedClasses.domain.nodes.Author;
 import sharedClasses.domain.nodes.Conference;
 import sharedClasses.domain.nodes.Paper;
 import sharedClasses.domain.nodes.Term;
+
 import java.io.*;
 import java.util.*;
 
@@ -16,7 +18,7 @@ public class DomainPersistanceController {
     }
 
 
-    public void readAllFromFile(String path,HashMap<Integer, Author> authorsById,
+    public void readAllFromFile(String path, HashMap<Integer, Author> authorsById,
                                 HashMap<Integer, Paper> papersById,
                                 HashMap<Integer, Conference> conferencesById,
                                 HashMap<Integer, Term> termsById,
@@ -26,15 +28,15 @@ public class DomainPersistanceController {
                                 HashMap<String, Term> termsByName) {
 
         if (path != null && !path.equals("")) {
-            filepath = path+"/";
+            filepath = path + "/";
         }
-        readAuthorsFromFile(authorsById,authorsByName);
-        readPapersFromFile(papersById,papersByName);
-        readConferencesFromFile(conferencesById,conferencesByName );
-        readTermsFromFile(termsById,termsByName);
-        readPaperAuthorRelations(authorsById,papersById);
-        readTermRelations(papersById,termsById);
-        readConferenceRelations(papersById,conferencesById);
+        readAuthorsFromFile(authorsById, authorsByName);
+        readPapersFromFile(papersById, papersByName);
+        readConferencesFromFile(conferencesById, conferencesByName);
+        readTermsFromFile(termsById, termsByName);
+        readPaperAuthorRelations(authorsById, papersById);
+        readTermRelations(papersById, termsById);
+        readConferenceRelations(papersById, conferencesById);
 
         //IMPRIMIR HASHMAPS
         //testDomain();
@@ -61,9 +63,9 @@ public class DomainPersistanceController {
         }
     }
 
-    public ArrayList<String> addNewAuthor(String authorName, ArrayList<String> papersToRelate,HashMap<Integer, Author> authorsById,
-                                          HashMap<String, Author> authorsByName,HashMap<Integer, Paper> papersById,
-                                          HashMap<String, Paper> papersByName ) {
+    public ArrayList<String> addNewAuthor(String authorName, ArrayList<String> papersToRelate, HashMap<Integer, Author> authorsById,
+                                          HashMap<String, Author> authorsByName, HashMap<Integer, Paper> papersById,
+                                          HashMap<String, Paper> papersByName) {
         Author a = new Author(authorName, Author.getMaxId() + 1);
         Author b = authorsByName.get(a.getName());
         ArrayList<String> newPapers = new ArrayList<>();
@@ -76,11 +78,10 @@ public class DomainPersistanceController {
         Paper p = null;
         for (int i = 0; i < papersToRelate.size(); i++) {
             p = papersByName.get(papersToRelate.get(i));
-            if (p == null){
+            if (p == null) {
                 System.err.println("No troba el paper del add new autor");
                 newPapers.add(papersToRelate.get(i));
-            }
-            else {
+            } else {
                 System.err.println("Id del paper" + Integer.toString(p.getId()));
                 a.addPaper(p);
                 p.addAuthor(a);
@@ -95,11 +96,11 @@ public class DomainPersistanceController {
 
         Author c = authorsById.get(a.getId());
 
-        if(c != null) System.err.print("c" + c.getName());
-        else{
-            for(int i = 0; i < c.getAuthorRelations().size(); i++){
+        if (c != null) System.err.print("c" + c.getName());
+        else {
+            for (int i = 0; i < c.getAuthorRelations().size(); i++) {
                 Paper k = papersById.get(c.getAuthorRelations().get(i));
-                if( k != null) System.err.println("Relacio"+                 k.getName());
+                if (k != null) System.err.println("Relacio" + k.getName());
             }
         }
 
@@ -108,18 +109,18 @@ public class DomainPersistanceController {
         return newPapers;
     }
 
-    public HashMap<String,ArrayList<String>> addNewPaper(String paperName, ArrayList<String> authorsToRelate, ArrayList<String> termsToRelate, String confToRelate,
-                                                         HashMap<Integer, Paper> papersById,HashMap<String, Paper> papersByName,
-                                                         HashMap<String, Author> authorsByName,HashMap<String, Conference> conferencesByName,
-                                                         HashMap<String, Term> termsByName ) {
+    public HashMap<String, ArrayList<String>> addNewPaper(String paperName, ArrayList<String> authorsToRelate, ArrayList<String> termsToRelate, String confToRelate,
+                                                          HashMap<Integer, Paper> papersById, HashMap<String, Paper> papersByName,
+                                                          HashMap<String, Author> authorsByName, HashMap<String, Conference> conferencesByName,
+                                                          HashMap<String, Term> termsByName) {
         Paper p = new Paper(paperName, Paper.getMaxId() + 1);
         ArrayList<String> newAuthors = new ArrayList<>();
         ArrayList<String> newTerms = new ArrayList<>();
         ArrayList<String> newConf = new ArrayList<>();
-        HashMap<String,ArrayList<String>> ret = new HashMap<>();
+        HashMap<String, ArrayList<String>> ret = new HashMap<>();
         if (papersByName.get(p.getName()) != null) {
             System.err.println("Aquest article ja existeix");
-            ret.put("Fail",new ArrayList<String>());
+            ret.put("Fail", new ArrayList<String>());
             return ret;
         }
         Author a = null;
@@ -127,7 +128,7 @@ public class DomainPersistanceController {
         Conference c = null;
         for (int i = 0; i < authorsToRelate.size(); i++) {
             a = authorsByName.get(authorsToRelate.get(i));
-            if(a == null) newAuthors.add(authorsToRelate.get(i));
+            if (a == null) newAuthors.add(authorsToRelate.get(i));
             else {
                 p.addAuthor(a);
                 a.addPaper(p);
@@ -135,7 +136,7 @@ public class DomainPersistanceController {
         }
         for (int i = 0; i < termsToRelate.size(); i++) {
             t = termsByName.get(termsToRelate.get(i));
-            if(t == null) newTerms.add(termsToRelate.get(i));
+            if (t == null) newTerms.add(termsToRelate.get(i));
             else {
                 p.addTerm(t);
                 t.addPaperWhichTalkAboutIt(p);
@@ -148,17 +149,17 @@ public class DomainPersistanceController {
             c.addExposedPaper(p);
         }
         System.err.println(p.getId());
-        papersById.put(p.getId(),p);
-        papersByName.put(p.getName(),p);
+        papersById.put(p.getId(), p);
+        papersByName.put(p.getName(), p);
         Paper.incrementMaxId();
         ret.put("A", newAuthors);
         ret.put("T", newTerms);
-        ret.put("C",newConf);
+        ret.put("C", newConf);
         return ret;
     }
 
     public ArrayList<String> addNewTerm(String termName, ArrayList<String> papersToRelate,
-                                        HashMap<Integer, Term> termsById,HashMap<String, Term> termsByName,
+                                        HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName,
                                         HashMap<String, Paper> papersByName) {
         Term a = new Term(termName, Term.getMaxId() + 1);
         Term b = termsByName.get(a.getName());
@@ -185,7 +186,7 @@ public class DomainPersistanceController {
     }
 
     public ArrayList<String> addNewConference(String confName, ArrayList<String> papersToRelate,
-                                              HashMap<Integer, Conference> conferencesById,HashMap<String, Conference> conferencesByName,
+                                              HashMap<Integer, Conference> conferencesById, HashMap<String, Conference> conferencesByName,
                                               HashMap<String, Paper> papersByName) {
         Conference a = new Conference(confName, Conference.getMaxId() + 1);
         Conference b = conferencesByName.get(a.getName());
@@ -211,18 +212,18 @@ public class DomainPersistanceController {
         return newPapers;
     }
 
-    public boolean deleteAuthor(String authorName,HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName ,
-                                HashMap<Integer, Paper> papersById,HashMap<String, Paper> papersByName,
-                                HashMap<Integer, Conference> conferencesById,HashMap<String, Conference> conferencesByName ,
-                                HashMap<Integer, Term> termsById,HashMap<String, Term> termsByName) {
+    public boolean deleteAuthor(String authorName, HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName,
+                                HashMap<Integer, Paper> papersById, HashMap<String, Paper> papersByName,
+                                HashMap<Integer, Conference> conferencesById, HashMap<String, Conference> conferencesByName,
+                                HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName) {
         try {
             Author a = authorsByName.get(authorName);
             HashMap<Integer, Paper> aux = a.getPapersById(papersById);
             for (Paper p : aux.values()) {
                 p.removeAuthor(a);
                 if (p.getAuthorsById(authorsById).size() < 1) {
-                    deletePaperRelationsOnConferences(p,papersById,conferencesById,conferencesByName);
-                    deletePaperRelationsOnTerms(p,papersById,termsById,termsByName);
+                    deletePaperRelationsOnConferences(p, papersById, conferencesById, conferencesByName);
+                    deletePaperRelationsOnTerms(p, papersById, termsById, termsByName);
                     papersById.remove(p.getId());
                     papersByName.remove(p.getName());
                 }
@@ -238,15 +239,15 @@ public class DomainPersistanceController {
         }
     }
 
-    public boolean deletePaper(String paperName,HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName ,
-                               HashMap<Integer, Paper> papersById,HashMap<String, Paper> papersByName,
-                               HashMap<Integer, Conference> conferencesById,HashMap<String, Conference> conferencesByName ,
-                               HashMap<Integer, Term> termsById,HashMap<String, Term> termsByName) {
+    public boolean deletePaper(String paperName, HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName,
+                               HashMap<Integer, Paper> papersById, HashMap<String, Paper> papersByName,
+                               HashMap<Integer, Conference> conferencesById, HashMap<String, Conference> conferencesByName,
+                               HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName) {
         try {
             Paper p = papersByName.get(paperName);
-            deletePaperRelationsOnConferences(p,papersById,conferencesById,conferencesByName);
-            deletePaperRelationsOnTerms(p,papersById,termsById,termsByName);
-            deletePaperRelationsOnAuthors(p,authorsById,authorsByName,papersById);
+            deletePaperRelationsOnConferences(p, papersById, conferencesById, conferencesByName);
+            deletePaperRelationsOnTerms(p, papersById, termsById, termsByName);
+            deletePaperRelationsOnAuthors(p, authorsById, authorsByName, papersById);
             int id = p.getId();
             papersByName.remove(paperName);
             papersById.remove(id);
@@ -257,10 +258,10 @@ public class DomainPersistanceController {
         }
     }
 
-    public boolean deleteTerm(String termName,HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName ,
-                              HashMap<Integer, Paper> papersById,HashMap<String, Paper> papersByName,
-                              HashMap<Integer, Conference> conferencesById,HashMap<String, Conference> conferencesByName ,
-                              HashMap<Integer, Term> termsById,HashMap<String, Term> termsByName) {
+    public boolean deleteTerm(String termName, HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName,
+                              HashMap<Integer, Paper> papersById, HashMap<String, Paper> papersByName,
+                              HashMap<Integer, Conference> conferencesById, HashMap<String, Conference> conferencesByName,
+                              HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName) {
         try {
             Term t = termsByName.get(termName);
             Collection<Paper> auxiliar = t.getPapersWhichTalkAboutThisById(papersById).values();
@@ -268,8 +269,8 @@ public class DomainPersistanceController {
                 Paper p = (Paper) it.next();
                 p.removeTerm(t);
                 if (p.getTermsById(termsById).size() < 1) { //Eliminar paper i relacions
-                    deletePaperRelationsOnAuthors(p,authorsById,authorsByName,papersById);
-                    deletePaperRelationsOnConferences(p,papersById,conferencesById,conferencesByName);
+                    deletePaperRelationsOnAuthors(p, authorsById, authorsByName, papersById);
+                    deletePaperRelationsOnConferences(p, papersById, conferencesById, conferencesByName);
                     papersByName.remove(p.getName());
                     papersById.remove(p.getId());
                 }
@@ -284,17 +285,17 @@ public class DomainPersistanceController {
         }
     }
 
-    public boolean deleteConference(String confName,HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName ,
-                                    HashMap<Integer, Paper> papersById,HashMap<String, Paper> papersByName,
-                                    HashMap<Integer, Conference> conferencesById,HashMap<String, Conference> conferencesByName ,
-                                    HashMap<Integer, Term> termsById,HashMap<String, Term> termsByName) {
+    public boolean deleteConference(String confName, HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName,
+                                    HashMap<Integer, Paper> papersById, HashMap<String, Paper> papersByName,
+                                    HashMap<Integer, Conference> conferencesById, HashMap<String, Conference> conferencesByName,
+                                    HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName) {
         try {
             Conference c = conferencesByName.get(confName);
             Collection<Paper> auxiliarp = c.getExposedPapersById(papersById).values();
             for (Iterator it = auxiliarp.iterator(); it.hasNext(); ) {
                 Paper p = (Paper) it.next();
-                deletePaperRelationsOnAuthors(p,authorsById,authorsByName,papersById);
-                deletePaperRelationsOnTerms(p,papersById,termsById,termsByName);
+                deletePaperRelationsOnAuthors(p, authorsById, authorsByName, papersById);
+                deletePaperRelationsOnTerms(p, papersById, termsById, termsByName);
                 papersById.remove(p.getId());
                 papersByName.remove(p.getName());
             }
@@ -308,73 +309,8 @@ public class DomainPersistanceController {
         }
     }
 
-    public boolean editAuthor(String authorName, String newName,
-                              HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName) {
-        try {
-            Author a = authorsByName.get(authorName);
-            a.setName(newName);
-            authorsByName.remove(authorName);
-            authorsByName.put(newName, a);
-            authorsById.remove(a.getId());
-            authorsById.put(a.getId(),a);
-            return true;
-        } catch (NullPointerException ex) {
-            System.err.println("Aquest autor no existeix");
-            return false;
-        }
-    }
 
-    public boolean editPaper(String paperName, String newName,
-                             HashMap<Integer, Paper> papersById,HashMap<String, Paper> papersByName) {
-        try {
-            Paper p = papersByName.get(paperName);
-            p.setName(newName);
-            papersByName.remove(paperName);
-            papersByName.put(newName, p);
-            papersById.remove(p.getId());
-            papersById.put(p.getId(),p);
-            return true;
-        } catch (NullPointerException ex) {
-            System.err.println("Aquest article no existeix");
-            return false;
-        }
-    }
-
-    public boolean editTerm(String termName, String newName,
-                            HashMap<Integer, Term> termsById,HashMap<String, Term> termsByName) {
-        try {
-            Term t = termsByName.get(termName);
-            t.setName(newName);
-            termsByName.remove(termName);
-            termsByName.put(newName, t);
-            termsById.remove(t.getId());
-            termsById.put(t.getId(),t);
-            return true;
-        } catch (NullPointerException ex) {
-            System.err.println("Aquest terme no existeix");
-            return false;
-        }
-    }
-
-    public boolean editConference(String confName, String newName,
-                                  HashMap<Integer, Conference> conferencesById,HashMap<String, Conference> conferencesByName) {
-        try {
-            Conference c = conferencesByName.get(confName);
-            c.setName(newName);
-            conferencesByName.remove(confName);
-            conferencesByName.put(newName, c);
-            conferencesById.remove(c.getId());
-            conferencesById.put(c.getId(),c);
-            return true;
-        } catch (NullPointerException ex) {
-            System.err.println("Aquesta conferencia no existeix");
-            return false;
-        }
-    }
-
-
-
-    private void readAuthorsFromFile(HashMap<Integer,Author> authorsById,HashMap<String,Author> authorsByName ) {
+    private void readAuthorsFromFile(HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName) {
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(filepath + "author.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -391,7 +327,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private void readPapersFromFile(HashMap<Integer, Paper> papersById,HashMap<String, Paper> papersByName ) {
+    private void readPapersFromFile(HashMap<Integer, Paper> papersById, HashMap<String, Paper> papersByName) {
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(filepath + "paper.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -408,7 +344,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private void readConferencesFromFile(HashMap<Integer, Conference> conferencesById,HashMap<String, Conference> conferencesByName) {
+    private void readConferencesFromFile(HashMap<Integer, Conference> conferencesById, HashMap<String, Conference> conferencesByName) {
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(filepath + "conf.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -428,7 +364,7 @@ public class DomainPersistanceController {
     }
 
 
-    private void readTermsFromFile( HashMap<Integer, Term> termsById,HashMap<String, Term> termsByName) {
+    private void readTermsFromFile(HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName) {
         String p = new File("").getAbsolutePath();
         File inputFile = new File(p.concat(filepath + "term.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -466,7 +402,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private void readConferenceRelations(HashMap<Integer, Paper> papersById ,HashMap<Integer, Conference> conferencesById) {
+    private void readConferenceRelations(HashMap<Integer, Paper> papersById, HashMap<Integer, Conference> conferencesById) {
         String p1 = new File("").getAbsolutePath();
         File inputFile = new File(p1.concat(filepath + "paper_conf.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -486,7 +422,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private void readTermRelations(HashMap<Integer, Paper> papersById,HashMap<Integer, Term> termsById) {
+    private void readTermRelations(HashMap<Integer, Paper> papersById, HashMap<Integer, Term> termsById) {
         String p1 = new File("").getAbsolutePath();
         File inputFile = new File(p1.concat(filepath + "paper_term.txt"));
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -507,9 +443,8 @@ public class DomainPersistanceController {
     }
 
 
-
-    private void deletePaperRelationsOnConferences(Paper p,HashMap<Integer, Paper> papersById,
-                                                   HashMap<Integer, Conference> conferencesById,HashMap<String, Conference> conferencesByName) {
+    private void deletePaperRelationsOnConferences(Paper p, HashMap<Integer, Paper> papersById,
+                                                   HashMap<Integer, Conference> conferencesById, HashMap<String, Conference> conferencesByName) {
         Conference auxiliarc = p.getConference();
         auxiliarc.removeExposedPaperBy(p);
         if (auxiliarc.getExposedPapersById(papersById).size() < 1) {
@@ -518,7 +453,7 @@ public class DomainPersistanceController {
         }
     }
 
-    private void deletePaperRelationsOnAuthors(Paper p,HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName ,
+    private void deletePaperRelationsOnAuthors(Paper p, HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName,
                                                HashMap<Integer, Paper> papersById) {
         Collection<Author> auxiliara = p.getAuthorsById(authorsById).values();
         for (Iterator ita = auxiliara.iterator(); ita.hasNext(); ) {
@@ -531,8 +466,8 @@ public class DomainPersistanceController {
         }
     }
 
-    private void deletePaperRelationsOnTerms(Paper p,HashMap<Integer, Paper> papersById,
-                                             HashMap<Integer, Term> termsById,HashMap<String, Term> termsByName) {
+    private void deletePaperRelationsOnTerms(Paper p, HashMap<Integer, Paper> papersById,
+                                             HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName) {
         Collection<Term> auxiliart = p.getTermsById(termsById).values();
         for (Iterator itt = auxiliart.iterator(); itt.hasNext(); ) {
             Term t = (Term) itt.next();
@@ -568,7 +503,7 @@ public class DomainPersistanceController {
         File inputFile = new File(s.concat(filepath + "paper.txt"));
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile, false));
-            for(Paper p : papersById.values()) {
+            for (Paper p : papersById.values()) {
                 String line = Integer.toString(p.getId()) + "\t" + p.getName();
                 writer.write(line);
                 writer.newLine();
@@ -622,11 +557,11 @@ public class DomainPersistanceController {
     private void writePaperAuthorRelations(HashMap<Integer, Paper> papersById) {
         String p1 = new File("").getAbsolutePath();
         File inputFile = new File(p1.concat(filepath + "paper_author.txt"));
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,false))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile, false))) {
             String line;
-            for(Paper p:papersById.values()){
-                ArrayList<Integer> authors = p .getRelatedAuthors();
-                for(int i = 0; i < authors.size(); i++) {
+            for (Paper p : papersById.values()) {
+                ArrayList<Integer> authors = p.getRelatedAuthors();
+                for (int i = 0; i < authors.size(); i++) {
                     line = Integer.toString(p.getId()) + "\t" + Integer.toString(authors.get(i));
                     writer.write(line);
                     writer.newLine();
@@ -639,12 +574,12 @@ public class DomainPersistanceController {
         }
     }
 
-    private void writePaperConferenceRelations( HashMap<Integer, Paper> papersById) {
+    private void writePaperConferenceRelations(HashMap<Integer, Paper> papersById) {
         String p1 = new File("").getAbsolutePath();
         File inputFile = new File(p1.concat(filepath + "paper_conf.txt"));
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,false))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile, false))) {
             String line;
-            for(Paper p:papersById.values()){
+            for (Paper p : papersById.values()) {
                 line = Integer.toString(p.getId()) + "\t" + Integer.toString(p.getConference().getId());
                 writer.write(line);
                 writer.newLine();
@@ -656,30 +591,30 @@ public class DomainPersistanceController {
         }
     }
 
-   private void writePaperTermRelations( HashMap<Integer, Paper> papersById) {
-       String p1 = new File("").getAbsolutePath();
-       File inputFile = new File(p1.concat(filepath + "paper_term.txt"));
-       try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile,false))) {
-           String line;
-           for(Paper p:papersById.values()){
-               ArrayList<Integer> terms = p .getRelatedTerms();
-               for(int i = 0; i < terms.size(); i++) {
-                   line = Integer.toString(p.getId()) + "\t" + Integer.toString(terms.get(i));
-                   writer.write(line);
-                   writer.newLine();
-               }
-           }
-           writer.flush();
-           writer.close();
-       } catch (IOException x) {
-           System.err.format("IOException: %s%n", x);
-       }
-   }
+    private void writePaperTermRelations(HashMap<Integer, Paper> papersById) {
+        String p1 = new File("").getAbsolutePath();
+        File inputFile = new File(p1.concat(filepath + "paper_term.txt"));
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile, false))) {
+            String line;
+            for (Paper p : papersById.values()) {
+                ArrayList<Integer> terms = p.getRelatedTerms();
+                for (int i = 0; i < terms.size(); i++) {
+                    line = Integer.toString(p.getId()) + "\t" + Integer.toString(terms.get(i));
+                    writer.write(line);
+                    writer.newLine();
+                }
+            }
+            writer.flush();
+            writer.close();
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+    }
 
-    public void writeAllToFile(String path,HashMap<Integer, Author> authorsById,
+    public void writeAllToFile(String path, HashMap<Integer, Author> authorsById,
                                HashMap<Integer, Paper> papersById,
                                HashMap<Integer, Conference> conferencesById,
-                               HashMap<Integer, Term> termsById){
+                               HashMap<Integer, Term> termsById) {
         if (path != null) {
             filepath = path;
         }
@@ -692,34 +627,114 @@ public class DomainPersistanceController {
         writePaperConferenceRelations(papersById);
     }
 
-    public String newRelationPaperAuthor(String paperName, String authorName, HashMap<String,Paper> papersByName, HashMap<String,Author> authorsByName){
+    public String newRelationPaperAuthor(String paperName, String authorName, HashMap<String, Paper> papersByName, HashMap<String, Author> authorsByName) {
         Paper p = papersByName.get(paperName);
-        if(p == null) return "NP";
+        if (p == null) return "NP";
         Author a = authorsByName.get(authorName);
-        if(a == null) return "NA";
+        if (a == null) return "NA";
         p.addAuthor(a);
         a.addPaper(p);
         return null;
     }
 
-    public String newRelationPaperTerm(String paperName, String termName, HashMap<String,Paper> papersByName, HashMap<String,Term> termsByName){
+    public String newRelationPaperTerm(String paperName, String termName, HashMap<String, Paper> papersByName, HashMap<String, Term> termsByName) {
         Paper p = papersByName.get(paperName);
-        if(p == null) return "NP";
+        if (p == null) return "NP";
         Term t = termsByName.get(termName);
-        if(t == null) return "NT";
+        if (t == null) return "NT";
         p.addTerm(t);
         t.addPaperWhichTalkAboutIt(p);
         return null;
     }
 
-    public String newRelationPaperConference(String paperName, String confName, HashMap<String,Paper> papersByName, HashMap<String,Conference> conferencesByName){
+    public String newRelationPaperConference(String paperName, String confName, HashMap<String, Paper> papersByName, HashMap<String, Conference> conferencesByName) {
         Paper p = papersByName.get(paperName);
-        if(p == null) return "NP";
+        if (p == null) return "NP";
         Conference c = conferencesByName.get(confName);
-        if(c == null) return "NC";
+        if (c == null) return "NC";
         p.getConference().removeExposedPaperBy(p);
         p.setConference(c);
         c.addExposedPaper(p);
+        return null;
+    }
+
+    public String deleteAuthorRelation(String paperName, String authorName, HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName,
+                                       HashMap<Integer, Paper> papersById, HashMap<String, Paper> papersByName,
+                                       HashMap<Integer, Conference> conferencesById, HashMap<String, Conference> conferencesByName,
+                                       HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName) {
+        Paper p = papersByName.get(paperName);
+        if (p == null) return "NP";
+        Author a = authorsByName.get(authorName);
+        if (a == null) return "NA";
+
+        boolean related = false;
+        for(int i = 0; i < a.getAuthorRelations().size(); i++){
+            if(a.getAuthorRelations().get(i) == p.getId()) {
+                related = true;
+                break;
+            }
+        }
+        if(!related) return "NR";
+
+        p.removeAuthor(a);
+        a.removePaper(p);
+        if (p.getRelatedAuthors().size() < 1) {
+            deletePaper(p.getName(), authorsById, authorsByName, papersById, papersByName, conferencesById, conferencesByName, termsById, termsByName);
+        }
+        if (a.getAuthorRelations().size() < 1) {
+            authorsById.remove(a.getId());
+            authorsByName.remove(a.getName());
+        }
+        return null;
+    }
+
+    public String deleteTermRelation(String paperName, String termName, HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName,
+                                     HashMap<Integer, Paper> papersById, HashMap<String, Paper> papersByName,
+                                     HashMap<Integer, Conference> conferencesById, HashMap<String, Conference> conferencesByName,
+                                     HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName) {
+        Paper p = papersByName.get(paperName);
+        if (p == null) return "NP";
+        Term t = termsByName.get(termName);
+        if (t == null) return "NT";
+
+        boolean related = false;
+        for(int i = 0; i < t.getPapersWhichTalkAboutThis().size(); i++){
+            if(t.getPapersWhichTalkAboutThis().get(i) == p.getId()) {
+                related = true;
+                break;
+            }
+        }
+        if(!related) return "NR";
+
+        p.removeTerm(t);
+        t.removePaperWhichTalkAboutIt(p);
+        if (p.getRelatedTerms().size() < 1) {
+            deletePaper(p.getName(), authorsById, authorsByName, papersById, papersByName, conferencesById, conferencesByName, termsById, termsByName);
+        }
+        if (t.getPapersWhichTalkAboutThis().size() < 1) {
+            termsById.remove(t.getId());
+            termsById.remove(t.getName());
+        }
+        return null;
+    }
+
+    public String deleteConferenceRelation(String paperName, String confName, HashMap<Integer, Author> authorsById, HashMap<String, Author> authorsByName,
+                                           HashMap<Integer, Paper> papersById, HashMap<String, Paper> papersByName,
+                                           HashMap<Integer, Conference> conferencesById, HashMap<String, Conference> conferencesByName,
+                                           HashMap<Integer, Term> termsById, HashMap<String, Term> termsByName ){
+        Paper p = papersByName.get(paperName);
+        if (p == null) return "NP";
+        Conference c = conferencesByName.get(confName);
+        if (c == null) return "NC";
+
+        if(p.getConference() != c) return "NR";
+        else{
+            deletePaper(p.getName(), authorsById, authorsByName, papersById, papersByName, conferencesById, conferencesByName, termsById, termsByName);
+            if(c.getExposedPapers().size()<1){
+                conferencesById.remove(c.getId());
+                conferencesByName.remove(c.getName());
+            }
+        }
         return null;
     }
 

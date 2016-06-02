@@ -78,7 +78,7 @@ public class PresentationAddNodes extends JFrame {
 
         comboBox1.addActionListener(e -> enableFields(firstTextFields, comboBox1));
         comboBox2.addActionListener(e -> enableFields(secondTextFields, comboBox2));
-        cancelarButton.addActionListener(e->super.dispose());
+        cancelarButton.addActionListener(e -> super.dispose());
 
         switch (selecedIndex) {
             case (0): { //AUTHOR
@@ -155,13 +155,13 @@ public class PresentationAddNodes extends JFrame {
     private void enableFields(ArrayList<JTextField> a, JComboBox b) {
         int numF = Integer.parseInt((String) b.getSelectedItem());
         for (int i = 0; i < numF; i++) a.get(i).setEnabled(true);
-        for(int i = numF; i < a.size(); i++) a.get(i).setEnabled(false);
+        for (int i = numF; i < a.size(); i++) a.get(i).setEnabled(false);
     }
 
     private void callAddAuthor() {
         ArrayList<String> papersToAdd = new ArrayList<>();
         String authorName;
-        if(paperaux == null )authorName = textField1.getText();
+        if (paperaux == null) authorName = textField1.getText();
         else authorName = authorToAdd;
         if (authorName == null || authorName.equals("")) {
             VistaWARNING vw = new VistaWARNING();
@@ -184,8 +184,8 @@ public class PresentationAddNodes extends JFrame {
         } else {
             papersToAdd.add(paperaux);
         }
-        ArrayList<String> newPapers = domainMainController.getPersistanceController().addNewAuthor(authorName, papersToAdd,domainMainController.getAuthorsById(),
-                domainMainController.getAuthorsByName(), domainMainController.getPapersById(),domainMainController.getPapersByName());
+        ArrayList<String> newPapers = domainMainController.getPersistanceController().addNewAuthor(authorName, papersToAdd, domainMainController.getAuthorsById(),
+                domainMainController.getAuthorsByName(), domainMainController.getPapersById(), domainMainController.getPapersByName());
         if (newPapers != null) {
             if (newPapers.size() == 0) {
                 //SHA CREAT TO BIEN
@@ -194,7 +194,7 @@ public class PresentationAddNodes extends JFrame {
                 VistaWARNING vw = new VistaWARNING();
                 vw.setVisible("Aquest autor ja existeix");
                 return;
-            } else if(newPapers.size() > 0){
+            } else if (newPapers.size() > 0) {
                 Object[] options = {"Acceptar", "Cancelar"};
                 int op = JOptionPane.showOptionDialog(panel1, "Hi ha Articles que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
                 if (op == JOptionPane.YES_OPTION) {
@@ -202,16 +202,15 @@ public class PresentationAddNodes extends JFrame {
                         new PresentationAddNodes(domainMainController, 1, authorName, newPapers.get(i), null, null);
                     }
                 } else {
-                    domainMainController.getPersistanceController().deleteAuthor(authorName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
-                            domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
-                            domainMainController.getTermsById(),domainMainController.getTermsByName());
-                   JOptionPane.showMessageDialog(panel1, "No s'ha pogut afegir l'Autor");
+                    domainMainController.getPersistanceController().deleteAuthor(authorName, domainMainController.getAuthorsById(), domainMainController.getAuthorsByName(),
+                            domainMainController.getPapersById(), domainMainController.getPapersByName(), domainMainController.getConferencesById(), domainMainController.getConferencesByName(),
+                            domainMainController.getTermsById(), domainMainController.getTermsByName());
+                    JOptionPane.showMessageDialog(panel1, "No s'ha pogut afegir l'Autor");
                     super.dispose();
                     return;
                 }
             }
         }
-        JOptionPane.showMessageDialog(panel1, "S'ha afegit el nou Autor");
         super.dispose();
     }
 
@@ -260,20 +259,19 @@ public class PresentationAddNodes extends JFrame {
             termsToAdd.add(termaux);
         }
 
-        if(confaux == null) {
+        if (confaux == null) {
             confToAdd = cName.getText();
             if (confToAdd == null || confToAdd.equals("")) {
                 VistaWARNING vw = new VistaWARNING();
                 vw.setVisible("Introdueix un nom per la Conferència");
                 return;
             }
-        }
-        else{
+        } else {
             confToAdd = confaux;
         }
 
         HashMap<String, ArrayList<String>> newNodes = domainMainController.getPersistanceController().addNewPaper(paperName, authorToAdd, termsToAdd, confToAdd,
-                domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getAuthorsByName(),domainMainController.getConferencesByName(),
+                domainMainController.getPapersById(), domainMainController.getPapersByName(), domainMainController.getAuthorsByName(), domainMainController.getConferencesByName(),
                 domainMainController.getTermsByName());
         if (newNodes.get("Fail") != null) {
             VistaWARNING vw = new VistaWARNING();
@@ -290,68 +288,84 @@ public class PresentationAddNodes extends JFrame {
                             this.authorToAdd = newAuthors.get(i);
                             callAddAuthor();
                         }
-                    }
-                    else{
-                        domainMainController.getPersistanceController().deletePaper(paperName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
-                                domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
-                                domainMainController.getTermsById(),domainMainController.getTermsByName());
-                        JOptionPane.showMessageDialog(panel1, "No s'ha pogut afegir l'Article");
+                    } else {
+                        reverse(paperName);
                         super.dispose();
-                        return;
-                    }
-                }
-            }
-
-            ArrayList<String> newTerms = newNodes.get("T");
-            if (newTerms != null) {
-                if (newTerms.size() > 0) {
-                    int op = JOptionPane.showOptionDialog(panel1, "Hi ha Termes que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-                    if (op == JOptionPane.YES_OPTION) {
-                        for (int i = 0; i < newTerms.size(); i++) {
-                            this.termToAdd = newTerms.get(i);
-                            callAddTerm();
+                        {
+                            return;
                         }
                     }
-                    else{
-                        domainMainController.getPersistanceController().deletePaper(paperName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
-                                domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
-                                domainMainController.getTermsById(),domainMainController.getTermsByName());
-                        JOptionPane.showMessageDialog(panel1, "No s'ha pogut afegir l'Article");
-                        super.dispose();
-                        return;
-                    }
                 }
-            }
 
-            ArrayList<String> newConference = newNodes.get("C");
-            if (newConference != null) {
-                if (newConference.size() > 0) {
-                    int op = JOptionPane.showOptionDialog(panel1, "La conferència no existeix, la vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-                    if (op == JOptionPane.YES_OPTION) {
-                        for (int i = 0; i < newConference.size(); i++) {
-                            this.confToAdd = newConference.get(i);
-                            callAddConference();
+                ArrayList<String> newTerms = newNodes.get("T");
+                if (newTerms != null) {
+                    if (newTerms.size() > 0) {
+                        int op = JOptionPane.showOptionDialog(panel1, "Hi ha Termes que no existeixen, els vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                        if (op == JOptionPane.YES_OPTION) {
+                            for (int i = 0; i < newTerms.size(); i++) {
+                                this.termToAdd = newTerms.get(i);
+                                callAddTerm();
+                            }
+                        } else {
+                            reverse(paperName);
+                            super.dispose();
+                            return;
                         }
                     }
-                    else{
-                        domainMainController.getPersistanceController().deletePaper(paperName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
-                                domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
-                                domainMainController.getTermsById(),domainMainController.getTermsByName());
-                        JOptionPane.showMessageDialog(panel1, "No s'ha pogut afegir l'Article");
-                        super.dispose();
-                        return;
+                }
+
+                ArrayList<String> newConference = newNodes.get("C");
+                if (newConference != null) {
+                    if (newConference.size() > 0) {
+                        int op = JOptionPane.showOptionDialog(panel1, "La conferència no existeix, la vols crear?", "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                        if (op == JOptionPane.YES_OPTION) {
+                            for (int i = 0; i < newConference.size(); i++) {
+                                this.confToAdd = newConference.get(i);
+                                callAddConference();
+                            }
+                        } else {
+                            reverse(paperName);
+                            super.dispose();
+                            return;
+                        }
                     }
                 }
             }
+            JOptionPane.showMessageDialog(panel1, "S'ha afegit el nou Article");
+            if (authoraux != null) JOptionPane.showMessageDialog(panel1, "S'ha afegit el nou Autor");
+            else if (termaux != null) JOptionPane.showMessageDialog(panel1, "S'ha afegit el nou Terme");
+            else if (confaux != null) JOptionPane.showMessageDialog(panel1, "S'ha afegit la nova Conferència");
+            super.dispose();
         }
-        JOptionPane.showMessageDialog(panel1, "S'ha afegit el nou Article");
-        super.dispose();
+    }
+
+    private void reverse(String paperName) {
+        domainMainController.getPersistanceController().deletePaper(paperName, domainMainController.getAuthorsById(), domainMainController.getAuthorsByName(),
+                domainMainController.getPapersById(), domainMainController.getPapersByName(), domainMainController.getConferencesById(), domainMainController.getConferencesByName(),
+                domainMainController.getTermsById(), domainMainController.getTermsByName());
+        JOptionPane.showMessageDialog(panel1, "No s'ha pogut afegir l'Article");
+        if (authoraux != null) {
+            JOptionPane.showMessageDialog(panel1, "No s'ha pogut afegir l'Autor");
+            domainMainController.getPersistanceController().deleteAuthor(authoraux, domainMainController.getAuthorsById(), domainMainController.getAuthorsByName(),
+                    domainMainController.getPapersById(), domainMainController.getPapersByName(), domainMainController.getConferencesById(), domainMainController.getConferencesByName(),
+                    domainMainController.getTermsById(), domainMainController.getTermsByName());
+        } else if (termaux != null) {
+            JOptionPane.showMessageDialog(panel1, "No s'ha pogut afegir el Terme");
+            domainMainController.getPersistanceController().deleteTerm(termaux, domainMainController.getAuthorsById(), domainMainController.getAuthorsByName(),
+                    domainMainController.getPapersById(), domainMainController.getPapersByName(), domainMainController.getConferencesById(), domainMainController.getConferencesByName(),
+                    domainMainController.getTermsById(), domainMainController.getTermsByName());
+        } else if (confaux != null) {
+            JOptionPane.showMessageDialog(panel1, "No s'ha pogut afegir la conferencia");
+            domainMainController.getPersistanceController().deleteConference(confaux, domainMainController.getAuthorsById(), domainMainController.getAuthorsByName(),
+                    domainMainController.getPapersById(), domainMainController.getPapersByName(), domainMainController.getConferencesById(), domainMainController.getConferencesByName(),
+                    domainMainController.getTermsById(), domainMainController.getTermsByName());
+        }
     }
 
     private void callAddTerm() {
         ArrayList<String> papersToAdd = new ArrayList<>();
         String termName;
-        if(paperaux == null) termName = textField1.getText();
+        if (paperaux == null) termName = textField1.getText();
         else termName = this.termToAdd;
         if (termName == null || termName.equals("")) {
             VistaWARNING vw = new VistaWARNING();
@@ -374,8 +388,8 @@ public class PresentationAddNodes extends JFrame {
         } else {
             papersToAdd.add(paperaux);
         }
-        ArrayList<String> newPapers = domainMainController.getPersistanceController().addNewTerm(termName, papersToAdd,domainMainController.getTermsById(),
-                domainMainController.getTermsByName(),domainMainController.getPapersByName());
+        ArrayList<String> newPapers = domainMainController.getPersistanceController().addNewTerm(termName, papersToAdd, domainMainController.getTermsById(),
+                domainMainController.getTermsByName(), domainMainController.getPapersByName());
         if (newPapers != null) {
             if (newPapers.size() == 0) {
                 //SHA CREAT TO BIEN
@@ -392,23 +406,22 @@ public class PresentationAddNodes extends JFrame {
                         new PresentationAddNodes(domainMainController, 1, null, newPapers.get(i), termName, null);
                     }
                 } else {
-                    domainMainController.getPersistanceController().deleteTerm(termName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
-                            domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
-                            domainMainController.getTermsById(),domainMainController.getTermsByName());
+                    domainMainController.getPersistanceController().deleteTerm(termName, domainMainController.getAuthorsById(), domainMainController.getAuthorsByName(),
+                            domainMainController.getPapersById(), domainMainController.getPapersByName(), domainMainController.getConferencesById(), domainMainController.getConferencesByName(),
+                            domainMainController.getTermsById(), domainMainController.getTermsByName());
                     JOptionPane.showMessageDialog(panel1, "No s'ha pogut afegir el Terme");
                     super.dispose();
                     return;
                 }
             }
         }
-        JOptionPane.showMessageDialog(panel1, "S'ha afegit el nou Terme");
         super.dispose();
     }
 
     private void callAddConference() {
         ArrayList<String> papersToAdd = new ArrayList<>();
         String confName;
-        if(paperaux == null) confName = textField1.getText();
+        if (paperaux == null) confName = textField1.getText();
         else {
             confName = confToAdd;
         }
@@ -433,8 +446,8 @@ public class PresentationAddNodes extends JFrame {
         } else {
             papersToAdd.add(paperaux);
         }
-        ArrayList<String> newPapers = domainMainController.getPersistanceController().addNewConference(confName, papersToAdd,domainMainController.getConferencesById(),
-                domainMainController.getConferencesByName(),domainMainController.getPapersByName());
+        ArrayList<String> newPapers = domainMainController.getPersistanceController().addNewConference(confName, papersToAdd, domainMainController.getConferencesById(),
+                domainMainController.getConferencesByName(), domainMainController.getPapersByName());
         if (newPapers != null) {
             if (newPapers.size() == 0) {
                 //SHA CREAT TO BIEN
@@ -451,16 +464,15 @@ public class PresentationAddNodes extends JFrame {
                         new PresentationAddNodes(domainMainController, 1, null, newPapers.get(i), null, confName);
                     }
                 } else {
-                    domainMainController.getPersistanceController().deleteConference(confName,domainMainController.getAuthorsById(),domainMainController.getAuthorsByName(),
-                            domainMainController.getPapersById(),domainMainController.getPapersByName(),domainMainController.getConferencesById(),domainMainController.getConferencesByName(),
-                            domainMainController.getTermsById(),domainMainController.getTermsByName());
+                    domainMainController.getPersistanceController().deleteConference(confName, domainMainController.getAuthorsById(), domainMainController.getAuthorsByName(),
+                            domainMainController.getPapersById(), domainMainController.getPapersByName(), domainMainController.getConferencesById(), domainMainController.getConferencesByName(),
+                            domainMainController.getTermsById(), domainMainController.getTermsByName());
                     JOptionPane.showMessageDialog(panel1, "No s'ha pogut afegir la conferencia");
                     super.dispose();
                     return;
                 }
             }
         }
-        JOptionPane.showMessageDialog(panel1, "S'ha afegit la nova conferència");
         super.dispose();
     }
 
