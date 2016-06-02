@@ -34,6 +34,7 @@ public class BinaryPersistance<E> {
             e.printStackTrace();
             return false;
         }
+        finally{return false;}
     }
 
     public E read(String fileName){
@@ -46,12 +47,12 @@ public class BinaryPersistance<E> {
             element = (E) ois.readObject();
             return element;
         }
-        catch(IOException e){
+        catch(Exception e){
             e.printStackTrace();
             return null;
         }
-        catch(ClassNotFoundException c){
-            c.printStackTrace();
+
+        finally{
             return null;
         }
     }

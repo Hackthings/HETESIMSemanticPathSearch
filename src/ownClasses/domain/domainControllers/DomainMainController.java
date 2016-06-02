@@ -17,6 +17,8 @@ import sharedClasses.utils.Matrix;
 import ownClasses.domain.utils.Pair;
 import sharedClasses.utils.Vertex;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 public class DomainMainController {
@@ -42,38 +44,48 @@ public class DomainMainController {
 
 
     public DomainMainController() {
-        authorsById = new HashMap<>();
-        papersById = new HashMap<>();
-        conferencesById = new HashMap<>();
-        termsById = new HashMap<>();
-        authorsByName = new HashMap<>();
-        papersByName = new HashMap<>();
-        papersByName = new HashMap<>();
-        conferencesByName = new HashMap<>();
-        termsByName = new HashMap<>();
+
         persistanceController = new DomainPersistanceController();
-        persistanceController.readAllFromFile("",authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
         BinaryAuthors binaryAuthors = new BinaryAuthors();
         BinaryPapers binaryPapers = new BinaryPapers();
         BinaryConferences binaryConferences = new BinaryConferences();
         BinaryTerms binaryTerms = new BinaryTerms();
-        long timeini = System.currentTimeMillis();
-        binaryAuthors.write(authorsById);
-        binaryPapers.write(papersById);
-        binaryTerms.write(termsById);
-        binaryConferences.write(conferencesById);
-        long timefinal = System.currentTimeMillis();
-        System.out.println(timefinal-timeini);
-        System.out.println("Importa");
 
-        timeini = System.currentTimeMillis();
-        authorsById = (HashMap<Integer,Author>) binaryAuthors.read();
-        papersById = (HashMap<Integer,Paper>) binaryPapers.read();
-        conferencesById = (HashMap<Integer,Conference>) binaryConferences.read();
-        termsById = (HashMap<Integer,Term>) binaryTerms.read();
-        timefinal = System.currentTimeMillis();
-        System.out.println(timefinal-timeini);
-//persistanceController.testDomain();
+        try {
+            authorsById = (HashMap<Integer, Author>) binaryAuthors.read();
+            for(Author a:authorsById.values() ){
+                authorsByName.put(a.getName(),a);
+            }
+            papersById = (HashMap<Integer, Paper>) binaryPapers.read();
+            for(Paper p:papersById.values() ){
+                papersByName.put(p.getName(),p);
+            }
+            conferencesById = (HashMap<Integer, Conference>) binaryConferences.read();
+            for(Conference c: conferencesById.values()){
+                conferencesByName.put(c.getName(),c);
+            }
+
+            termsById = (HashMap<Integer, Term>) binaryTerms.read();
+            for(Term t: termsById.values()){
+                termsByName.put(t.getName(),t);
+            }
+
+        } catch(Exception x){
+            authorsById = new HashMap<>();
+            papersById = new HashMap<>();
+            conferencesById = new HashMap<>();
+            termsById = new HashMap<>();
+            authorsByName = new HashMap<>();
+            papersByName = new HashMap<>();
+            papersByName = new HashMap<>();
+            conferencesByName = new HashMap<>();
+            termsByName = new HashMap<>();
+            persistanceController.readAllFromFile("",authorsById, papersById, conferencesById, termsById, authorsByName, papersByName, conferencesByName, termsByName);
+
+        }
+
+
+
         authorpaper = getAuthorPaperMatrixD(null,null,null,null);
         confpaper =getConfPaperMatrixD(null,null,null,null);
         termpaper = getTermPaperMatrixD(null,null,null,null);
