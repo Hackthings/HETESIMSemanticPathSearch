@@ -21,15 +21,8 @@ public class PresentationNewQuery extends JFrame {
     private JButton DeleteButton;
     private JRadioButton SiFiltres;
     private JRadioButton NoFiltres;
-
-    /*private JTextArea Asubset;
-    private JScrollPane scrollPaneA;
-    private JTextArea Csubset;
-    private JScrollPane scrollPaneC;
-    private JTextArea Psubset;
-    private JScrollPane scrollPaneP;
-    private JTextArea Tsubset;
-    private JScrollPane scrollPaneT;*/
+    private JRadioButton SiGraph;
+    private JRadioButton NoGraph;
 
     private BrowseFileOnlyImportController Asubset;
     private BrowseFileOnlyImportController Csubset;
@@ -44,6 +37,7 @@ public class PresentationNewQuery extends JFrame {
     String path = "";
     boolean subset = false;
     boolean changed = false;
+    boolean graph = false;
 
     String firstlast = null;
 
@@ -83,6 +77,10 @@ public class PresentationNewQuery extends JFrame {
         group1.add(SiFiltres);
         group1.add(NoFiltres);
 
+        ButtonGroup group2 = new ButtonGroup();
+        group2.add(SiGraph);
+        group2.add(NoGraph);
+
         setContentPane(panel);
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -97,6 +95,9 @@ public class PresentationNewQuery extends JFrame {
 
         SiFiltres.addActionListener(e1 -> ActivaFiltres(true));
         NoFiltres.addActionListener(e1 -> ActivaFiltres(false));
+
+        SiGraph.addActionListener(e1 -> SetGraph(true));
+        NoGraph.addActionListener(e1 -> SetGraph(false));
 
 
         NEXTButton.addActionListener(e -> callNQ(mainController));
@@ -142,11 +143,15 @@ public class PresentationNewQuery extends JFrame {
         Csubset.setVisible(act);
 
         subset = act;
-        if(act) setSize(300,340);
+        if(act) setSize(281,340);
         else{
-            setSize(274,185);
+            setSize(280,210);
             firstlast = null;
         }
+    }
+
+    private void SetGraph(boolean set){
+        graph = set;
     }
 
 
@@ -180,7 +185,6 @@ public class PresentationNewQuery extends JFrame {
                     conferencesclone = (ArrayList<String>) conferences.clone();
                 }
                 else conferences = null;
-                //checkTexts(mainController);
 
                 mainController.updateMatrix(authors,papers,conferences,terms);
 
@@ -197,7 +201,7 @@ public class PresentationNewQuery extends JFrame {
 
             System.out.println(authorsclone.size()+" "+papersclone.size()+" "+conferencesclone.size()+" "+termsclone.size());
 
-            PresentationNewQuery2 window = new PresentationNewQuery2(mainController, path,firstlast,authorsclone,papersclone,conferencesclone,termsclone,subset);
+            PresentationNewQuery2 window = new PresentationNewQuery2(mainController, path,firstlast,authorsclone,papersclone,conferencesclone,termsclone,subset,graph);
             System.out.println("DONE");
 
             if(authors != null && !authors.isEmpty()) Asubset.clearnodes();
@@ -282,21 +286,6 @@ public class PresentationNewQuery extends JFrame {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(NEXTButton, gbc);
-        /*simpleRadioButton.setLabel("Simple");
-        simpleRadioButton.setText("Simple");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.WEST;
-        panel.add(simpleRadioButton, gbc);
-        ambFiltresRadioButton.setText("Amb Filtres");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 3;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.WEST;
-        panel.add(ambFiltresRadioButton, gbc);*/
         final JScrollPane scrollPane1 = new JScrollPane();
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
@@ -322,25 +311,46 @@ public class PresentationNewQuery extends JFrame {
         gbc.gridy = 3;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(DeleteButton, gbc);
+        NoGraph = new JRadioButton();
+        NoGraph.setText("NO");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(NoGraph,gbc);
+        SiGraph = new JRadioButton();
+        SiGraph.setText("SI");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 5;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(SiGraph,gbc);
+        final JLabel label5 = new JLabel();
+        label5.setText("Graph?");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(label5, gbc);
         NoFiltres = new JRadioButton();
         NoFiltres.setText("NO");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(NoFiltres, gbc);
         SiFiltres = new JRadioButton();
         SiFiltres.setText("SI");
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(SiFiltres, gbc);
         final JLabel label3 = new JLabel();
         label3.setText("Filtre SubSetQuery?");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.anchor = GridBagConstraints.WEST;
         panel.add(label3, gbc);
 
@@ -352,7 +362,7 @@ public class PresentationNewQuery extends JFrame {
         A.setVisible(false);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.anchor = GridBagConstraints.EAST;
         panel.add(A, gbc);
         P = new JLabel();
@@ -360,7 +370,7 @@ public class PresentationNewQuery extends JFrame {
         P.setVisible(false);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         gbc.anchor = GridBagConstraints.EAST;
         panel.add(P, gbc);
         C = new JLabel();
@@ -368,7 +378,7 @@ public class PresentationNewQuery extends JFrame {
         C.setVisible(false);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         gbc.anchor = GridBagConstraints.EAST;
         panel.add(C, gbc);
         T = new JLabel();
@@ -376,7 +386,7 @@ public class PresentationNewQuery extends JFrame {
         T.setVisible(false);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 10;
         gbc.anchor = GridBagConstraints.EAST;
         panel.add(T, gbc);
 
@@ -386,7 +396,7 @@ public class PresentationNewQuery extends JFrame {
         Asubset = new BrowseFileOnlyImportController(persistanceController);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.gridwidth = 3;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
@@ -398,7 +408,7 @@ public class PresentationNewQuery extends JFrame {
         Psubset = new BrowseFileOnlyImportController(persistanceController);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         gbc.gridwidth = 3;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
@@ -409,7 +419,7 @@ public class PresentationNewQuery extends JFrame {
         Csubset = new BrowseFileOnlyImportController(persistanceController);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         gbc.gridwidth = 3;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
@@ -420,7 +430,7 @@ public class PresentationNewQuery extends JFrame {
         Tsubset = new BrowseFileOnlyImportController(persistanceController);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
-        gbc.gridy = 9;
+        gbc.gridy = 10;
         gbc.gridwidth = 3;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
