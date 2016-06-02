@@ -74,9 +74,9 @@ public class DomainMainController {
         timefinal = System.currentTimeMillis();
         System.out.println(timefinal-timeini);
 //persistanceController.testDomain();
-        authorpaper = getAuthorpaperMatrixFilter(null,null);
-        confpaper =getConfpaperMatrixFilter(null,null);
-        termpaper = getTermpaperMatrixFilter(null,null);
+        authorpaper = getAuthorPaperMatrixD(null,null,null,null);
+        confpaper =getConfPaperMatrixD(null,null,null,null);
+        termpaper = getTermPaperMatrixD(null,null,null,null);
         hetesimController = new DomainHetesimController(authorpaper,authorpaper.transpose(),termpaper,termpaper.transpose(),confpaper,confpaper.transpose());
         scanner = new Scanner(System.in);
         edit=false;
@@ -613,10 +613,10 @@ public class DomainMainController {
         edit = true;
     }
 
-    private Matrix getAuthorpaperMatrixFilter(ArrayList<String> authors, ArrayList<String> papers){
+    private Matrix getAuthorPaperMatrixD(ArrayList<String> authors, ArrayList<String> papers, ArrayList<String> terms, ArrayList<String> conferences){
         Matrix authorpaper = new Matrix();
 
-        if(authors == null && papers == null){
+        if(authors == null && papers == null && terms==null && conferences==null){
             for (Author author : authorsById.values()) {
                 HashMap<Integer, Paper> papersOfAuthor = author.getPapersById(papersById);
                 for (Paper paper : papersOfAuthor.values()) {
@@ -624,176 +624,60 @@ public class DomainMainController {
                 }
             }
         }
-
-        if(authors != null && papers == null){
+        if(authors!=null){
             for(String authorname : authors){
                 Author author = authorsByName.get(authorname);
-                HashMap<Integer, Paper> papersOfAuthor = author.getPapersById(papersById);
-                for (Paper paper : papersOfAuthor.values()) {
-                    authorpaper.addValue(author.getId(), paper.getId(), 1.0);
-                }
-            }
-        }
-
-        if(authors == null && papers !=null) {
-            for(String papername : papers) {
-                Paper paper = papersByName.get(papername);
-                HashMap<Integer, Author> authorsOfPaper = paper.getAuthorsById(authorsById);
-                for (Author author : authorsOfPaper.values()) {
-                    authorpaper.addValue(author.getId(), paper.getId(), 1.0);
-                }
-            }
-        }
-        if(authors != null && papers !=null) {
-            for(String authorname : authors) {
-                Author author = authorsByName.get(authorname);
-                HashMap<String, Paper> papersOfAuthor = author.getPapersByName(papersById);
-                for(String papername : papers){
-                    if(papersOfAuthor.containsKey(papername)){
-                        Paper paper = papersByName.get(papername);
-                        authorpaper.addValue(author.getId(),paper.getId(),1.0);
+                HashMap<Integer,Paper> papersOfAuthor = author.getPapersById(papersById);
+                for(Paper paper : papersOfAuthor.values()){
+                    HashMap<Integer,Author> authorsOfPaper = paper.getAuthorsById(authorsById);
+                    for(Author authorOfPaper : authorsOfPaper.values()){
+                        authorpaper.addValue(authorOfPaper.getId(),paper.getId(),1.0);
                     }
                 }
-
             }
-
         }
-        return authorpaper;
-    }
-
-    private Matrix getTermpaperMatrixFilter(ArrayList<String> terms, ArrayList<String> papers){
-        Matrix termpaper = new Matrix();
-
-        if(terms == null && papers ==null) {
-            for(Term term : termsById.values()){
-                HashMap<Integer,Paper> papersOfTerm = term.getPapersWhichTalkAboutThisById(papersById);
-                for(Paper paper : papersOfTerm.values()){
-                    termpaper.addValue(term.getId(),paper.getId(),1.0);
+        if(papers!=null){
+            for(String papername:papers){
+                Paper paper = papersByName.get(papername);
+                HashMap<Integer,Author> authorsOfPaper = paper.getAuthorsById(authorsById);
+                for(Author authorOfPaper : authorsOfPaper.values()){
+                    authorpaper.addValue(authorOfPaper.getId(),paper.getId(),1.0);
                 }
             }
         }
-
-        if(terms != null && papers == null){
+        if(terms!=null){
             for(String termname : terms){
                 Term term = termsByName.get(termname);
                 HashMap<Integer, Paper> papersOfTerm = term.getPapersWhichTalkAboutThisById(papersById);
-                for (Paper paper : papersOfTerm.values()) {
-                    termpaper.addValue(term.getId(), paper.getId(), 1.0);
-                }
-            }
-        }
-
-        if(terms == null && papers !=null) {
-            for(String papername : papers) {
-                Paper paper = papersByName.get(papername);
-                HashMap<Integer, Term> termsOfPaper = paper.getTermsById(termsById);
-                for (Term term : termsOfPaper.values()) {
-                    termpaper.addValue(term.getId(), paper.getId(), 1.0);
-                }
-            }
-        }
-        if(terms != null && papers !=null) {
-            for(String termname : terms) {
-                Term term = termsByName.get(termname);
-                HashMap<String, Paper> papersOfTerm = term.getPapersWhichTalkAboutThisByName(papersById);
-                for(String papername : papers){
-                    if(papersOfTerm.containsKey(papername)){
-                        Paper paper = papersByName.get(papername);
-                        termpaper.addValue(term.getId(),paper.getId(),1.0);
+                for(Paper paper:papersOfTerm.values()){
+                    HashMap<Integer,Author> authorsOfPaper = paper.getAuthorsById(authorsById);
+                    for(Author authorOfPaper : authorsOfPaper.values()){
+                        authorpaper.addValue(authorOfPaper.getId(),paper.getId(),1.0);
                     }
                 }
-
-            }
-
-        }
-        return termpaper;
-    }
-
-    private Matrix getConfpaperMatrixFilter(ArrayList<String> confs, ArrayList<String> papers){
-        Matrix confpaper = new Matrix();
-
-        if(confs == null && papers == null){
-            for (Conference conf : conferencesById.values()) {
-                HashMap<Integer, Paper> papersOfConf = conf.getExposedPapersById(papersById);
-                for (Paper paper : papersOfConf.values()) {
-                    confpaper.addValue(conf.getId(), paper.getId(), 1.0);
-                }
             }
         }
-
-        if(confs != null && papers == null){
-            for(String confname : confs){
+        if(conferences!=null){
+            for(String confname:conferences){
                 Conference conf = conferencesByName.get(confname);
-                HashMap<Integer, Paper> papersOfAuthor = conf.getExposedPapersById(papersById);
-                for (Paper paper : papersOfAuthor.values()) {
-                    confpaper.addValue(conf.getId(), paper.getId(), 1.0);
-                }
-            }
-        }
-
-        if(confs == null && papers !=null) {
-            for(String papername : papers) {
-                Paper paper = papersByName.get(papername);
-                Conference conf = paper.getConference();
-                confpaper.addValue(conf.getId(), paper.getId(), 1.0);
-            }
-        }
-        if(confs != null && papers !=null) {
-            for(String confname : confs) {
-                Conference conf = conferencesByName.get(confname);
-                HashMap<String, Paper> papersOfConf = conf.getExposedPapersByName(papersByName);
-                for(String papername : papers){
-                    if(papersOfConf.containsKey(papername)){
-                        Paper paper = papersByName.get(papername);
-                        confpaper.addValue(conf.getId(),paper.getId(),1.0);
+                HashMap<Integer,Paper> papersOfConf = conf.getExposedPapersById(papersById);
+                for(Paper paper:papersOfConf.values()){
+                    HashMap<Integer,Author> authorsOfPaper = paper.getAuthorsById(authorsById);
+                    for(Author authorOfPaper : authorsOfPaper.values()){
+                        authorpaper.addValue(authorOfPaper.getId(),paper.getId(),1.0);
                     }
                 }
-
-            }
-
-        }
-        return confpaper;
-    }
-
-    private Matrix getAuthorPaperMatrix(String authorname, String papername){
-        Matrix authorpaper = new Matrix();
-
-        if(authorname == null && papername ==null) {
-            for (Author author : authorsById.values()) {
-                HashMap<Integer, Paper> papersOfAuthor = author.getPapersById(papersById);
-                for (Paper paper : papersOfAuthor.values()) {
-                    authorpaper.addValue(author.getId(), paper.getId(), 1.0);
-                }
             }
         }
-        if(authorname != null && papername ==null) {
-            Author author = authorsByName.get(authorname);
-            HashMap<Integer, Paper> papersOfAuthor = author.getPapersById(papersById);
-            for (Paper paper : papersOfAuthor.values()) {
-                authorpaper.addValue(author.getId(), paper.getId(), 1.0);
-            }
-        }
-        if(authorname == null && papername !=null) {
-            Paper paper = papersByName.get(papername);
-            HashMap<Integer,Author> authorsOfPaper = paper.getAuthorsById(authorsById);
-            for(Author author : authorsOfPaper.values()){
-                authorpaper.addValue(author.getId(),paper.getId(),1.0);
-            }
-        }
-        if(authorname != null && papername !=null) {
-            Paper paper = papersByName.get(papername);
-            Author author = authorsByName.get(authorname);
-            authorpaper.addValue(author.getId(),paper.getId(),1.0);
 
-        }
 
         return authorpaper;
     }
 
-    private Matrix getTermPaperMatrix(String termname, String papername){
+    private Matrix getTermPaperMatrixD(ArrayList<String> authors, ArrayList<String> papers, ArrayList<String> terms, ArrayList<String> conferences){
         Matrix termpaper = new Matrix();
 
-        if(termname == null && papername ==null) {
+        if(authors == null && papers == null && terms==null && conferences==null){
             for(Term term : termsById.values()){
                 HashMap<Integer,Paper> papersOfTerm = term.getPapersWhichTalkAboutThisById(papersById);
                 for(Paper paper : papersOfTerm.values()){
@@ -801,33 +685,58 @@ public class DomainMainController {
                 }
             }
         }
-        if(termname != null && papername ==null) {
-            Term term = termsByName.get(termname);
-            HashMap<Integer, Paper> papersOfTerm = term.getPapersWhichTalkAboutThisById(papersById);
-            for (Paper paper : papersOfTerm.values()) {
-                authorpaper.addValue(term.getId(), paper.getId(), 1.0);
+        if(authors!=null){
+            for(String authorname : authors){
+                Author author = authorsByName.get(authorname);
+                HashMap<Integer,Paper> papersOfAuthor = author.getPapersById(papersById);
+                for(Paper paper : papersOfAuthor.values()){
+                    HashMap<Integer,Term> termsOfPaper = paper.getTermsById(termsById);
+                    for(Term term : termsOfPaper.values()){
+                        termpaper.addValue(term.getId(),paper.getId(),1.0);
+                    }
+                }
             }
         }
-        if(termname == null && papername !=null) {
-            Paper paper = papersByName.get(papername);
-            HashMap<Integer, Term> termsOfPaper = paper.getTermsById(termsById);
-            for (Term term : termsOfPaper.values()) {
-                termpaper.addValue(term.getId(),paper.getId(), 1.0);
+        if(papers!=null){
+            for(String papername:papers){
+                Paper paper = papersByName.get(papername);
+                HashMap<Integer,Term> termsOfPaper = paper.getTermsById(termsById);
+                for(Term term : termsOfPaper.values()){
+                    termpaper.addValue(term.getId(),paper.getId(),1.0);
+                }
             }
         }
-        if(termname != null && papername !=null) {
-            Paper paper = papersByName.get(papername);
-            Term term = termsByName.get(termname);
-            authorpaper.addValue(term.getId(),paper.getId(),1.0);
+        if(terms!=null){
+            for(String termname : terms){
+                Term term = termsByName.get(termname);
+                HashMap<Integer, Paper> papersOfTerm = term.getPapersWhichTalkAboutThisById(papersById);
+                for(Paper paper:papersOfTerm.values()){
+                    HashMap<Integer,Term> termsOfPaper = paper.getTermsById(termsById);
+                    for(Term termofpaper : termsOfPaper.values()){
+                        termpaper.addValue(termofpaper.getId(),paper.getId(),1.0);
+                    }
+                }
+            }
         }
-
+        if(conferences!=null){
+            for(String confname:conferences){
+                Conference conf = conferencesByName.get(confname);
+                HashMap<Integer,Paper> papersOfConf = conf.getExposedPapersById(papersById);
+                for(Paper paper:papersOfConf.values()){
+                    HashMap<Integer,Term> termsOfPaper = paper.getTermsById(termsById);
+                    for(Term term : termsOfPaper.values()){
+                        termpaper.addValue(term.getId(),paper.getId(),1.0);
+                    }
+                }
+            }
+        }
         return termpaper;
     }
 
-    private Matrix getConferencePaperMatrix(String confname, String papername){
+    private Matrix getConfPaperMatrixD(ArrayList<String> authors, ArrayList<String> papers, ArrayList<String> terms, ArrayList<String> conferences){
         Matrix conferencepaper = new Matrix();
 
-        if(confname == null && papername ==null) {
+        if(authors == null && papers == null && terms==null && conferences==null){
             for(Conference conf : conferencesById.values()){
                 HashMap<Integer,Paper> papersOfConf = conf.getExposedPapersById(papersById);
                 for(Paper paper : papersOfConf.values()){
@@ -835,32 +744,51 @@ public class DomainMainController {
                 }
             }
         }
-        if(confname != null && papername ==null) {
-            System.out.print("HELLO CONF");
-            Conference conf = conferencesByName.get(confname);
-            HashMap<Integer, Paper> papersOfConf = conf.getExposedPapersById(papersById);
-            for (Paper paper : papersOfConf.values()) {
-                conferencepaper.addValue(conf.getId(), paper.getId(), 1.0);
+        if(authors!=null){
+            for(String authorname : authors){
+                Author author = authorsByName.get(authorname);
+                HashMap<Integer,Paper> papersOfAuthor = author.getPapersById(papersById);
+                for(Paper paper : papersOfAuthor.values()){
+                    Conference conf = paper.getConference();
+                    conferencepaper.addValue(conf.getId(),paper.getId(),1.0);
+                }
             }
         }
-        if(confname == null && papername !=null) {
-            Paper paper = papersByName.get(papername);
-            conferencepaper.addValue(paper.getConference().getId(),paper.getId(), 1.0);
+        if(papers!=null){
+            for(String papername:papers){
+                Paper paper = papersByName.get(papername);
+                Conference conf = paper.getConference();
+                conferencepaper.addValue(conf.getId(),paper.getId(),1.0);
+            }
         }
-        if(confname != null && papername !=null) {
-            Paper paper = papersByName.get(papername);
-            Conference conference = conferencesByName.get(confname);
-            if(conference.getId()==paper.getConference().getId())
-                conferencepaper.addValue(conference.getId(),paper.getId(),1.0);
+        if(terms!=null){
+            for(String termname : terms){
+                Term term = termsByName.get(termname);
+                HashMap<Integer, Paper> papersOfTerm = term.getPapersWhichTalkAboutThisById(papersById);
+                for(Paper paper:papersOfTerm.values()){
+                    Conference conf = paper.getConference();
+                    conferencepaper.addValue(conf.getId(),paper.getId(),1.0);
+                }
+            }
+        }
+        if(conferences!=null){
+            for(String confname:conferences){
+                Conference conf = conferencesByName.get(confname);
+                HashMap<Integer,Paper> papersOfConf = conf.getExposedPapersById(papersById);
+                for(Paper paper:papersOfConf.values()){
+                    conferencepaper.addValue(conf.getId(),paper.getId(),1.0);
+                }
+            }
         }
 
         return conferencepaper;
     }
 
+
     public void updateMatrix(ArrayList<String> authors, ArrayList<String> papers, ArrayList<String> confs, ArrayList<String> terms){
-        authorpaper = getAuthorpaperMatrixFilter(authors,papers);
-        confpaper = getConfpaperMatrixFilter(confs,papers);
-        termpaper = getTermpaperMatrixFilter(terms,papers);
+        authorpaper = getAuthorPaperMatrixD(authors,papers,terms,confs);
+        confpaper = getConfPaperMatrixD(authors,papers,terms,confs);
+        termpaper = getTermPaperMatrixD(authors,papers,terms,confs);
         hetesimController = new DomainHetesimController(authorpaper,authorpaper.transpose(),termpaper,termpaper.transpose(),confpaper,confpaper.transpose());
         edit = false;
     }

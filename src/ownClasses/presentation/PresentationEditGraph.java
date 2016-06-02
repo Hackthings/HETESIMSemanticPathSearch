@@ -25,7 +25,7 @@ public class PresentationEditGraph extends JFrame {
         $$$setupUI$$$();
         setContentPane(panel);
         pack();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
         editNodeButton.addActionListener(e -> editNodeAction());
         deleteNodeButton.addActionListener(e -> deleteNodeAction());
