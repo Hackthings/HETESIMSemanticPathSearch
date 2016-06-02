@@ -12,6 +12,8 @@ import sharedClasses.domain.nodes.Term;
 import org.graphstream.graph.Graph;
 
 import java.util.ArrayList;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 
 public class GraphViewController{
@@ -54,6 +56,13 @@ public class GraphViewController{
 
         Viewer v = graph.display();
         v.setCloseFramePolicy(Viewer.CloseFramePolicy.CLOSE_VIEWER);
+
+        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(8);
+        exec.schedule(() -> {
+            v.disableAutoLayout();
+            System.out.println("layout disabled");
+        }, 1, TimeUnit.SECONDS);
+
     }
 
     public GraphViewController(DomainMainController d, String name, String path, ArrayList<String> sAu, ArrayList<String> sPa, ArrayList<String> sCo, ArrayList<String> sTe){
@@ -82,7 +91,15 @@ public class GraphViewController{
 
         genGraph(d, name, path, true);
         graph.addAttribute("ui.stylesheet", styleSheet);
-        graph.display();
+
+        Viewer v = graph.display();
+        v.setCloseFramePolicy(Viewer.CloseFramePolicy.CLOSE_VIEWER);
+
+        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(8);
+        exec.schedule(() -> {
+            v.disableAutoLayout();
+            System.out.println("layout disabled");
+        }, 1, TimeUnit.SECONDS);
     }
 
     private void genGraph(DomainMainController d, String name, String path, boolean subset){
