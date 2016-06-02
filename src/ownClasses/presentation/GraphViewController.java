@@ -58,11 +58,9 @@ public class GraphViewController{
         v.setCloseFramePolicy(Viewer.CloseFramePolicy.CLOSE_VIEWER);
 
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(8);
-        exec.schedule(new Runnable() {
-            public void run() {
-                v.disableAutoLayout();
-                System.out.println("layout disabled");
-            }
+        exec.schedule(() -> {
+            v.disableAutoLayout();
+            System.out.println("layout disabled");
         }, 1, TimeUnit.SECONDS);
 
     }
@@ -98,11 +96,9 @@ public class GraphViewController{
         v.setCloseFramePolicy(Viewer.CloseFramePolicy.CLOSE_VIEWER);
 
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(8);
-        exec.schedule(new Runnable() {
-            public void run() {
-                v.disableAutoLayout();
-                System.out.println("layout disabled");
-            }
+        exec.schedule(() -> {
+            v.disableAutoLayout();
+            System.out.println("layout disabled");
         }, 1, TimeUnit.SECONDS);
     }
 
