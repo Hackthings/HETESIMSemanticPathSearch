@@ -164,7 +164,7 @@ public class PresentationNewQuery2 extends JFrame {
 
                 new PresentationResult(resultat, path, name, firstlast);
                 if(graph) {
-                    if (subset) {
+                    if ((!authors.isEmpty() || !papers.isEmpty() || !terms.isEmpty() || !conferences.isEmpty()) && subset) {
                         new GraphViewController(mainController, name, path, authors, papers, conferences, terms);
                     } else new GraphViewController(mainController, name, path);
                 }

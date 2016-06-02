@@ -241,8 +241,6 @@ public class PresentationNewQuery extends JFrame {
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         panel.setBorder(BorderFactory.createTitledBorder(""));
-        //Dimension d = new Dimension(6,20);
-        //panel.setMinimumSize(d);
         GridBagConstraints gbc;
         final JLabel label2 = new JLabel();
         label2.setText("Selecciona el teu PATH");
