@@ -1,12 +1,15 @@
 package ownClasses.presentation;
 
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.view.Viewer;
 import ownClasses.domain.domainControllers.DomainMainController;
+import ownClasses.domain.domainControllers.Drivers.Author_driver;
 import sharedClasses.domain.nodes.Author;
 import sharedClasses.domain.nodes.Conference;
 import sharedClasses.domain.nodes.Paper;
 import sharedClasses.domain.nodes.Term;
-import org.graphstream.graph.*;
-import org.graphstream.graph.implementations.*;
+import org.graphstream.graph.Graph;
 
 import java.util.ArrayList;
 
@@ -21,21 +24,21 @@ public class GraphViewController{
     private ArrayList<String> sTe;
 
     private final String styleSheet =
-        "node {" +
-        "	fill-color: black;" +
-        "}" +
-        "node.A {" +
-        "	fill-color: red;" +
-        "}" +
-        "node.P {" +
-        "	fill-color: yellow;" +
-        "}" +
-        "node.C {" +
-        "	fill-color: green;" +
-        "}" +
-        "node.T {" +
-        "	fill-color: blue;" +
-        "}";
+            "node {" +
+                    "	fill-color: black;" +
+                    "}" +
+                    "node.A {" +
+                    "	fill-color: red;" +
+                    "}" +
+                    "node.P {" +
+                    "	fill-color: yellow;" +
+                    "}" +
+                    "node.C {" +
+                    "	fill-color: green;" +
+                    "}" +
+                    "node.T {" +
+                    "	fill-color: blue;" +
+                    "}";
 
     public GraphViewController(DomainMainController d, String name, String path){
         System.out.println("Generating graph for: " + path);
@@ -48,7 +51,9 @@ public class GraphViewController{
 
         genGraph(d, name, path, false);
         graph.addAttribute("ui.stylesheet", styleSheet);
-        graph.display();
+
+        Viewer v = graph.display();
+        v.setCloseFramePolicy(Viewer.CloseFramePolicy.CLOSE_VIEWER);
     }
 
     public GraphViewController(DomainMainController d, String name, String path, ArrayList<String> sAu, ArrayList<String> sPa, ArrayList<String> sCo, ArrayList<String> sTe){
@@ -85,57 +90,54 @@ public class GraphViewController{
         n.addAttribute("ui.class", Character.toString(path.charAt(0)));
         n.addAttribute("ui.label", name);
 
-        if(subset){
-            boolean found = false;
-            switch (path.charAt(0)) {
-                case 'A':
-                    if (sAu.size() > 0) {
-                        for (String nm : sAu) {
-                            if (nm.equals(name)) {
-                                found = true;
-                                break;
-                            }
-                        }
+        if(subset && path.charAt(0) == 'P'){
+            boolean elim = true;
+
+            if (sPa.size() > 0) {
+                elim = true;
+                for (String nm : sPa) {
+                    if (nm.equals(name)) {
+                        elim = false;
+                        break;
                     }
-                    else found = true;
-                    break;
-                case 'P':
-                    if (sPa.size() > 0) {
-                        for (String nm : sPa) {
-                            if (nm.equals(name)) {
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    else found = true;
-                    break;
-                case 'C':
-                    if (sCo.size() > 0) {
-                        for (String nm : sCo) {
-                            if (nm.equals(name)) {
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    else found = true;
-                    break;
-                case 'T':
-                    if (sTe.size() > 0) {
-                        for (String nm : sTe) {
-                            if (nm.equals(name)) {
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    else found = true;
-                    break;
+                }
             }
-            if(!found){
+            if (sAu.size() > 0 && elim) {
+                out_loop:
+                for (String nm : sAu) {
+                    for(Integer aId : d.getPapersByName().get(name).getRelatedAuthors()){
+                        if(nm.equals(d.getAuthorsById().get(aId).getName())){
+                            elim = false;
+                            break out_loop;
+                        }
+                    }
+                }
+            }
+            if (sCo.size() > 0 && elim) {
+                for (String nm : sCo) {
+                    Conference c = d.getPapersByName().get(name).getConference();
+                    if(nm.equals(c.getName())){
+                        elim = false;
+                        break;
+                    }
+                }
+            }
+            if (sTe.size() > 0 && elim) {
+                out_loop:
+                for (String nm : sTe) {
+                    for(Integer tId : d.getPapersByName().get(name).getRelatedTerms()){
+                        if(nm.equals(d.getTermsById().get(tId).getName())){
+                            elim = false;
+                            break out_loop;
+                        }
+                    }
+                }
+            }
+
+
+            if(elim){
                 graph.removeNode(n);
-                System.out.println(n.toString());
+                //System.out.println(n.toString());
                 return;
             }
         }
